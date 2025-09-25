@@ -1,28 +1,26 @@
+// src/components/layout/ThemeToggle.tsx - Floating version
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
-export function ThemeToggle() {
+export function FloatingThemeToggle() {
   const { theme, toggleTheme, mounted } = useTheme();
 
-  // Don't render until mounted to prevent hydration mismatch
   if (!mounted) {
-    return (
-      <div className="p-2 rounded-md w-9 h-9" />
-    );
+    return null;
   }
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="fixed bottom-6 right-6 p-3 bg-primary hover:bg-primary-dark text-white rounded-full shadow-lg transition-all transform hover:scale-110 z-50"
       aria-label="Toggle dark mode"
     >
       {theme === 'light' ? (
-        <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        <Moon className="h-6 w-6" />
       ) : (
-        <Sun className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        <Sun className="h-6 w-6" />
       )}
     </button>
   );

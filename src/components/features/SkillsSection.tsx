@@ -1,4 +1,4 @@
-// src/components/features/SkillsSection.tsx
+// src/components/features/SkillsSection.tsx - Updated styling
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -12,16 +12,16 @@ interface Skill {
 
 const skills: Skill[] = [
   {
-    name: "UX Design",
-    percentage: 88,
-    years: "8+ years",
-    description: "User research, wireframing, prototyping, usability testing"
+    name: "UX Design & User Research",
+    percentage: 95,
+    years: "10+ years",
+    description: "User interviews, personas, journey mapping, usability testing"
   },
   {
-    name: "Phoenix LiveView",
-    percentage: 85,
-    years: "4+ years", 
-    description: "Real-time web apps, server-side rendering"
+    name: "Phoenix LiveView & Elixir",
+    percentage: 64,
+    years: "6+ years", 
+    description: "Real-time applications, interactive prototypes, server-side rendering"
   },
   {
     name: "Frontend Development",
@@ -78,18 +78,18 @@ function SkillBar({ skill, index }: { skill: Skill; index: number }) {
       style={{ transitionDelay: `${index * 100}ms` }}
     >
       <div className="flex justify-between items-center mb-3">
-        <h4 className="text-primary dark:text-orange-400 font-medium">{skill.name}</h4>
+        <h4 className="text-primary font-medium text-lg">{skill.name}</h4>
         <span className="text-sm text-gray-500 dark:text-gray-400">{skill.years}</span>
       </div>
       
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-3">
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
         <div 
-          className="bg-primary dark:bg-orange-400 h-2 rounded-full transition-all duration-1500 ease-out"
+          className="bg-primary h-2 rounded-full transition-all duration-1500 ease-out"
           style={{ width: `${animatedWidth}%` }}
         />
       </div>
       
-      <p className="text-gray-700 dark:text-gray-300 text-sm">
+      <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
         {skill.description}
       </p>
     </div>
@@ -104,17 +104,16 @@ export function SkillsSection() {
           
           {/* Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-4">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-3 inline-block">
               Core Expertise
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              A blend of design thinking and technical implementation, 
-              focused on creating exceptional user experiences.
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Technical skills and design capabilities that drive measurable business results for remote-first teams
             </p>
           </div>
 
           {/* Skills Grid */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {skills.map((skill, index) => (
               <SkillBar key={skill.name} skill={skill} index={index} />
             ))}
