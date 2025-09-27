@@ -36,8 +36,23 @@ export function PassionsSection() {
               <div key={passion.title} className="group">
                 <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
                   <div className="w-full h-full bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
-                    {/* Placeholder - replace with actual images */}
-                    <span className="text-primary text-lg font-medium">{passion.title}</span>
+                    <img 
+                      src={passion.image}
+                      alt={passion.title}
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      onError={(e) => {
+                        // Fallback if image doesn't load
+                        const img = e.target as HTMLImageElement;
+                        img.style.display = 'none';
+                        if (img.parentElement) {
+                          img.parentElement.innerHTML = `
+                            <div class="w-full h-full bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
+                              <span class="text-orange-500 text-lg font-medium">${passion.title}</span>
+                            </div>
+                          `;
+                        }
+                      }}
+                    />
                   </div>
                 </div>
                 <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">

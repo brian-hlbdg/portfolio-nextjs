@@ -47,6 +47,13 @@ const skills: Skill[] = [
     years: "8+ years",
     description: "Distributed teams, async communication, project management",
     icon: "🌍"
+  },
+  {
+    name: "Accessibility & Performance",
+    percentage: 60,
+    years: "2+ years",
+    description: "WCAG compliance, performance optimization, inclusive design",
+    icon: "🌍"
   }
 ];
 
@@ -71,15 +78,20 @@ function InteractiveSkillBar({ skill, index }: { skill: Skill; index: number }) 
           : 'bg-gray-50 dark:bg-gray-800 shadow-sm'
       }`}>
         
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <span className="text-2xl">{skill.icon}</span>
             <div>
-              <h4 className="text-primary font-semibold text-lg">{skill.name}</h4>
-              <span className="text-sm text-gray-500 dark:text-gray-400">{skill.years}</span>
+              <h3 className="text-orange-400 text-lg font-medium">
+                {skill.name}
+              </h3>
+              <span className="text-gray-400 text-sm">
+                {skill.years}
+              </span>
             </div>
           </div>
-          <div className="text-2xl font-bold text-primary">{skill.percentage}%</div>
+          <span className="text-orange-400 text-xl font-bold">
+            {skill.percentage}%
+          </span>
         </div>
         
         <div className="relative w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4 overflow-hidden">
@@ -109,27 +121,23 @@ export function InteractiveSkillsSection() {
   const isInView = useInView(ref, { once: true });
 
   return (
-    <section id="skills" className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+    <section id="skills" className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           
           <motion.div 
             ref={ref}
-            className="text-center mb-16"
+            className="text-left mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+            <h2 className="text-2xl font-light mb-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
               Core Expertise
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary to-orange-500 mx-auto mb-6 rounded-full"></div>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Technical skills and design capabilities that drive measurable business results for remote-first teams
-            </p>
           </motion.div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {skills.map((skill, index) => (
               <InteractiveSkillBar key={skill.name} skill={skill} index={index} />
             ))}

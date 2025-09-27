@@ -31,12 +31,12 @@ export function LookingForward() {
         <div className="max-w-4xl mx-auto">
           
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-4">
+          <div className="text-left mb-16">
+            <h2 className="text-2xl font-light mb-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
               Looking Forward
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              What I'm seeking in my next role and the type of environment where I do my best work.
+            <p className=" text-gray-600 dark:text-gray-300">
+              I'm passionate about creating digital experiences that make a real difference in people's lives. Looking ahead, I'm particularly interested in opportunities with:
             </p>
           </div>
 

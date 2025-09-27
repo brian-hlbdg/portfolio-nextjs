@@ -14,16 +14,16 @@ export function CoreStrengthsSection() {
           <div className="space-y-6">
             
             <div>
-              <h3 className="text-lg font-medium mb-3 text-primary">Empathy</h3>
+              <h3 className="text-lg font-medium mb-3 text-primary">User-Centered Design</h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 I approach every project with a deep understanding of the people who will use the product. By putting users at the center of the design process, I create experiences that feel intuitive and purposeful.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-3 text-primary">Partnership</h3>
+              <h3 className="text-lg font-medium mb-3 text-primary">Frontend Development</h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                My technical expertise in modern web technologies means I understand what's possible, ensuring that the user experience vision is technically achievable from the first playbook.
+                My technical expertise in modern web technologies allows me to bridge the gap between design and implementation, ensuring that the user experience vision is faithfully realized in the final product.
               </p>
             </div>
 

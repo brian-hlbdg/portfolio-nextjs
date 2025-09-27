@@ -103,13 +103,10 @@ export function SkillsSection() {
         <div className="max-w-4xl mx-auto">
           
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-3 inline-block">
+          <div className="text-left mb-16">
+            <h2 className="text-2xl font-light mb-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
               Core Expertise
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Technical skills and design capabilities that drive measurable business results for remote-first teams
-            </p>
           </div>
 
           {/* Skills Grid */}

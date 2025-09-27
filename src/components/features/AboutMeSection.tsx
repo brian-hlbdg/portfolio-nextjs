@@ -42,10 +42,13 @@ export function AboutMeSection() {
             <div className="lg:col-span-1">
               <div className="w-full max-w-sm mx-auto">
                 <div className="aspect-square bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 rounded-lg flex items-center justify-center">
-                  {/* Placeholder for avatar - replace with your actual image */}
-                  <div className="w-32 h-32 bg-primary/20 rounded-full flex items-center justify-center">
-                    <span className="text-primary text-2xl font-bold">BH</span>
-                  </div>
+                  <Image
+                    src="/images/avatar.jpg"
+                    alt="Brian H. - UX Designer"
+                    width={300}
+                    height={300}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
                 </div>
               </div>
             </div>

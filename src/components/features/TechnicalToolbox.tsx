@@ -34,18 +34,15 @@ const toolboxCategories = [
 
 export function TechnicalToolbox() {
   return (
-    <section id="toolbox" className="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="toolbox" className="py-20 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-4">
-              Technical Toolbox
+          <div className="text-left mb-16">
+            <h2 className="text-2xl font-light mb-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+            Technical Toolbox
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Technologies and tools I use to bring ideas to life and solve complex problems.
-            </p>
           </div>
 
           {/* Toolbox Grid */}
