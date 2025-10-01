@@ -14,7 +14,7 @@ export function EnhancedFloatingThemeToggle() {
     <motion.button
       onClick={toggleTheme}
       className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-primary to-orange-500 text-white rounded-full shadow-2xl z-50 group"
-      whileHover={{ scale: 1.1, rotate: 180 }}
+      whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
@@ -39,7 +39,7 @@ export function EnhancedFloatingThemeToggle() {
       
       {/* Tooltip */}
       <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-        Switch to {theme === 'light' ? 'dark' : 'light'} mode
+         {theme === 'light' ? 'dark' : 'light'} mode
       </div>
     </motion.button>
   );

@@ -1,11 +1,11 @@
-// src/app/layout.tsx - Adjusted for single header height
+// src/app/layout.tsx
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { Header } from '@/components/layout/Header';
 import { EnhancedFloatingThemeToggle } from '@/components/layout/EnhancedFloatingThemeToggle';
 import './globals.css';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter'
@@ -25,7 +25,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} [scrollbar-gutter:stable]`}>
+    <html lang="en" className={`${inter.variable} [scrollbar-gutter:stable]`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme');
+                  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const initialTheme = theme || (systemPrefersDark ? 'dark' : 'light');
+                  
+                  if (initialTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.className} bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100 antialiased`}>
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">

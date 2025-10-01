@@ -82,7 +82,7 @@ function SkillBar({ skill, index }: { skill: Skill; index: number }) {
         <span className="text-sm text-gray-500 dark:text-gray-400">{skill.years}</span>
       </div>
       
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-4">
         <div 
           className="bg-primary h-2 rounded-full transition-all duration-1500 ease-out"
           style={{ width: `${animatedWidth}%` }}

@@ -77,7 +77,7 @@ export function HamburgerMenu() {
         onClick={toggleMenu}
         className={`fixed top-6 right-6 z-50 p-3 rounded-lg transition-all duration-300 ${
           isOpen 
-            ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white' 
+            ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white' 
             : 'bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-300 backdrop-blur-sm border border-gray-200 dark:border-gray-700'
         }`}
         aria-label="Toggle navigation menu"

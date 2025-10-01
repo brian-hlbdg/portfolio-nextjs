@@ -34,7 +34,7 @@ const toolboxCategories = [
 
 export function TechnicalToolbox() {
   return (
-    <section id="toolbox" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="toolbox" className="py-20 bg-gray-50 dark:bg-gray-800">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           

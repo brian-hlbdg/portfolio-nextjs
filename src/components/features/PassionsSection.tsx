@@ -34,7 +34,7 @@ export function PassionsSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {passions.map((passion, index) => (
               <div key={passion.title} className="group">
-                <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden mb-4">
+                <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-lg overflow-hidden mb-4">
                   <div className="w-full h-full bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
                     <img 
                       src={passion.image}
@@ -58,7 +58,7 @@ export function PassionsSection() {
                 <h3 className="text-lg font-medium mb-2 text-gray-900 dark:text-white">
                   {passion.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   {passion.description}
                 </p>
               </div>

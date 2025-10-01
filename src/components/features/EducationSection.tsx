@@ -15,7 +15,7 @@ export function EducationSection() {
             
             <div>
               <h3 className="text-lg font-medium mb-2 text-primary">Human Computer Interaction</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-2">Master of Science</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-2">Master of Science</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">DePaul University, Chicago</p>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                 My graduate studies deepened my understanding of user-centered design, cognitive psychology, and the principles that lead to intuitive digital experiences.
@@ -24,7 +24,7 @@ export function EducationSection() {
 
             <div>
               <h3 className="text-lg font-medium mb-2 text-primary">Design</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-2">Bachelor of Arts</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-2">Bachelor of Arts</p>
               <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">Chicago State University 2008</p>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                 My undergraduate education gave me a strong foundation in design principles, visual communication, and creative problem-solving.

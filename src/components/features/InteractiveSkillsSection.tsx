@@ -74,7 +74,7 @@ function InteractiveSkillBar({ skill, index }: { skill: Skill; index: number }) 
     >
       <div className={`p-6 rounded-xl transition-all duration-300 ${
         isHovered 
-          ? 'bg-white dark:bg-gray-700 shadow-xl transform scale-105' 
+          ? 'bg-white dark:bg-gray-900 shadow-xl transform scale-105' 
           : 'bg-gray-50 dark:bg-gray-800 shadow-sm'
       }`}>
         
@@ -94,7 +94,7 @@ function InteractiveSkillBar({ skill, index }: { skill: Skill; index: number }) 
           </span>
         </div>
         
-        <div className="relative w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4 overflow-hidden">
+        <div className="relative w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 mb-4 overflow-hidden">
           <motion.div 
             className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-orange-500 rounded-full"
             initial={{ width: 0 }}

@@ -67,7 +67,7 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
         isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'
       }`}
     >
-      <div className={`absolute w-6 h-6 bg-white dark:bg-gray-800 rounded-full border-2 ${
+      <div className={`absolute w-6 h-6 bg-white dark:bg-gray-900 rounded-full border-2 ${
         experience.current ? 'border-primary dark:border-orange-400' : 'border-gray-300 dark:border-gray-600'
       } -left-3 flex items-center justify-center`}>
         <div className={`w-2 h-2 rounded-full ${
@@ -75,7 +75,7 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
         }`} />
       </div>
       
-      <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
         <h3 className="text-lg font-medium mb-1 dark:text-white">{experience.company}</h3>
         <p className="text-gray-500 dark:text-gray-400 mb-3">{experience.role} ({experience.period})</p>
         <p className="text-gray-700 dark:text-gray-300">{experience.description}</p>
@@ -123,7 +123,7 @@ export function ExperienceTimeline() {
                   {/* Outer circle */}
                   <div className={`w-6 h-6 rounded-full border-2 ${
                     experience.current
-                      ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+                      ? 'border-orange-500 dark:border-orange-400 bg-orange-50 dark:bg-orange-900/20'
                       : 'border-gray-400 dark:border-gray-500 bg-gray-50 dark:bg-gray-800'
                   }`}></div>
                   
@@ -141,7 +141,7 @@ export function ExperienceTimeline() {
                     <span className={`text-xs font-medium px-3 py-1 rounded-full ${
                       experience.current
                         ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400'
                     }`}>
                       {experience.period}
                     </span>

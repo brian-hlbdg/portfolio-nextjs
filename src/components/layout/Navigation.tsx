@@ -30,7 +30,7 @@ export function Navigation() {
             key={item.href}
             href={item.href}
             className={`
-              text-gray-600 dark:text-gray-300 
+              text-gray-600 dark:text-gray-400 
               hover:text-primary dark:hover:text-orange-400 
               transition-colors
               ${isActive ? 'text-primary dark:text-orange-400 font-medium' : ''}

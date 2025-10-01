@@ -1,42 +1,53 @@
 @import "tailwindcss";
 
-/* Custom properties for Tailwind v4 */
-@layer base {
-  :root {
-    --color-primary: 211 84 0;
-    --color-primary-dark: 180 70 0;
-  }
+/* Define dark mode variant for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: rgb(211 84 0);
+  --color-primary-dark: rgb(180 70 0);
+}
+
+/* Targeted smooth transitions - NOT universal selector */
+body,
+header,
+main,
+section,
+div[class*="bg-"],
+div[class*="text-"],
+div[class*="border-"] {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Component-specific transitions */
+.work-item,
+.passion-card,
+button,
+a {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, background-color 0.3s ease;
 }
 
 /* Custom component styles */
-@layer components {
-  .text-primary {
-    color: rgb(211 84 0);
-  }
-  
-  .dark .text-primary {
-    color: rgb(255 138 76);
-  }
-  
-  .bg-primary {
-    background-color: rgb(211 84 0);
-  }
-  
-  .hover\:bg-primary-dark:hover {
-    background-color: rgb(180 70 0);
-  }
-  
-  .border-primary {
-    border-color: rgb(211 84 0);
-  }
+.text-primary {
+  color: rgb(211 84 0);
 }
 
-/* Utilities */
-@layer utilities {
-  .transition-all {
-    transition: all 0.3s ease;
-  }
+.dark .text-primary {
+  color: rgb(255 138 76);
 }
+
+.bg-primary {
+  background-color: rgb(211 84 0);
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: rgb(180 70 0);
+}
+
+.border-primary {
+  border-color: rgb(211 84 0);
+}
+
 /* Enhanced animations */
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(20px); }
@@ -47,8 +58,18 @@
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* Gradient text support */
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

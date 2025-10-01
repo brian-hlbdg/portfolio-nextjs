@@ -10,10 +10,10 @@ export function AboutSection() {
           
           {/* Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-4">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-white mb-4">
               About Me
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               I bring together user experience design and frontend development to create digital products that people actually want to use.
             </p>
           </div>
@@ -41,7 +41,7 @@ export function AboutSection() {
 
             {/* Image */}
             <div className="relative">
-              <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+              <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-lg overflow-hidden">
                 <Image
                   src="/images/web_chicago_skyline.jpg"
                   alt="Chicago skyline"

@@ -9,7 +9,7 @@ export function ContactSection() {
           
           {/* Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-gray-100 mb-4">
+            <h2 className="text-3xl md:text-4xl font-light text-gray-900 dark:text-white mb-4">
               Let's Connect
             </h2>
           </div>
@@ -30,7 +30,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">Email</p>
+                    <p className="font-medium text-gray-900 dark:text-white">Email</p>
                     <a href="mailto:brian.HLBDG@outlook.com" className="text-primary dark:text-orange-400 hover:underline">
                       brian.HLBDG@outlook.com
                     </a>
@@ -44,7 +44,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">LinkedIn</p>
+                    <p className="font-medium text-gray-900 dark:text-white">LinkedIn</p>
                     <a href="https://www.linkedin.com/in/hlbdg/" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
                       Connect with me
                     </a>
@@ -58,7 +58,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-100">GitHub</p>
+                    <p className="font-medium text-gray-900 dark:text-white">GitHub</p>
                     <a href="https://github.com/brian-hlbdg" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
                       View my code
                     </a>
@@ -70,7 +70,7 @@ export function ContactSection() {
             {/* CTA */}
             <div className="bg-white dark:bg-gray-900 rounded-lg p-8">
               <h3 className="text-xl font-medium mb-4 dark:text-white">Ready to start a project?</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Let's discuss how I can help solve your design and development challenges.
               </p>
               <div className="space-y-4">
