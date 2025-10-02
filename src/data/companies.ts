@@ -1,5 +1,15 @@
-// FILE: src/data/companies.ts
-export const companiesData = [
+export interface Company {
+  company: string;
+  period: string;
+  role: string;
+  description: string;
+  contributions: string[];
+  tags: string[];
+  logo?: string;
+  logoAlt?: string;
+}
+
+export const companiesData: Company[] = [
   {
     company: "NFI Industries",
     period: "2017 - Present",
@@ -12,7 +22,7 @@ export const companiesData = [
       "Helped develop and implement accessibility standards across all digital products"
     ],
     tags: ["UX Design", "LiveView", "Phoenix", "Elixir", "Tailwind CSS", "Design Systems"],
-    logo: "https://via.placeholder.com/200x100/1e3a8a/ffffff?text=NFI+Industries",
+    logo: "/images/companies/nfi-project.jpg",
     logoAlt: "NFI Industries Logo"
   },
   {
@@ -27,7 +37,7 @@ export const companiesData = [
       "Executed marketing initiatives by designing and implementing microsites and campaign landing pages with high conversion rates"
     ],
     tags: ["Web Development", "Sitecore CMS", "Bootstrap", "JavaScript", "Data Visualization", "Responsive Design"],
-    logo: "https://via.placeholder.com/200x100/0c4a6e/ffffff?text=Calamos",
+    logo: "/images/companies/calamos-project.jpg",
     logoAlt: "Calamos Investments Logo"
   },
   {
@@ -42,7 +52,7 @@ export const companiesData = [
       "Designed high-converting landing pages for marketing campaigns, contributing to a 25% increase in lead generation"
     ],
     tags: ["Web Design", "HTML/CSS", "WordPress", "Wireframing", "UI Design", "Marketing Design"],
-    logo: "https://via.placeholder.com/200x100/be123c/ffffff?text=GKIC",
+    logo: "/images/companies/gkic-project.jpg",
     logoAlt: "GKIC Logo"
   },
   {
@@ -56,6 +66,8 @@ export const companiesData = [
       "Managed site updates and designed various online materials, including logos and branding materials",
       "Conducted user interviews and usability tests to gather insights, which informed significant UX improvements"
     ],
-    tags: ["E-commerce", "UI Design", "User Research", "Graphic Design", "Usability Testing", "Conversion Optimization"]
+    tags: ["E-commerce", "UI Design", "User Research", "Graphic Design", "Usability Testing", "Conversion Optimization"], 
+    logo: "/images/companies/pmall-project.jpg",
+    logoAlt: "PMall Logo"
   }
 ];

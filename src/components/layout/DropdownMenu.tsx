@@ -12,6 +12,11 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { 
+    href: '/', 
+    label: 'Home',
+    description: 'Go Back to Step One'
+  },
+  { 
     href: '#experience', 
     label: 'Professional Experience',
     description: 'My career journey and roles'
@@ -113,16 +118,6 @@ export function DropdownMenu() {
       >
         <div className="container mx-auto px-6 py-12">
           <div className="max-w-4xl mx-auto">
-            
-            {/* Menu Header */}
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-white dark:text-white mb-4 drop-shadow-lg">
-                Navigation
-              </h2>
-              <p className="text-xl text-white/90 dark:text-white/90 drop-shadow">
-                Explore my work and experience
-              </p>
-            </div>
 
             {/* Menu Items - Vertical Centered Layout */}
             <nav className="mb-12">

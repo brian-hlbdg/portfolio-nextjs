@@ -12,7 +12,12 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { 
-    href: '#experience', 
+    href: '/', 
+    label: 'Home',
+    description: 'Go Back to Step One'
+  },
+  { 
+    href: '/experience', 
     label: 'Professional Experience',
     description: 'My career journey and roles'
   },

@@ -1,5 +1,12 @@
-// FILE: src/data/earlierCareers.ts
-export const earlierCareersData = [
+export interface EarlierCareer {
+  company: string;
+  period: string;
+  role: string;
+  description: string;
+  tags: string[];
+}
+
+export const earlierCareersData: EarlierCareer[] = [
   {
     company: "Slack and Company",
     period: "2010",

@@ -28,18 +28,7 @@ export default function ExperiencePage() {
               industries. Each role has contributed to my growth as a designer and developer, building a 
               unique skill set that combines technical expertise with creative problem-solving.
             </p>
-            <div>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">
-                Filter by skill:
-              </p>
-              <div className="flex flex-wrap">
-                <Tag>UX Design</Tag>
-                <Tag>Frontend Development</Tag>
-                <Tag>Web Design</Tag>
-                <Tag>Content Management</Tag>
-                <Tag>Design Systems</Tag>
-              </div>
-            </div>
+            
           </div>
         </div>
       </section>
