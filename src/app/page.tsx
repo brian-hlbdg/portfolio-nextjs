@@ -8,6 +8,7 @@ import { InteractiveSkillsSection } from '@/components/features/InteractiveSkill
 import { ExperienceTimeline } from '@/components/features/ExperienceTimeline';
 import { LookingForward } from '@/components/features/LookingForward';
 import { ContactSection } from '@/components/features/ContactSection';
+import { Footer } from '@/components/layout/Footer';
 
 export default function HomePage() {
   return (
@@ -22,6 +23,7 @@ export default function HomePage() {
       <ExperienceTimeline />
       <LookingForward />
       <ContactSection />
+      <Footer />
     </>
   );
 }

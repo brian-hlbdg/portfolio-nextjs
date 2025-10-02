@@ -2,7 +2,7 @@ import { ProfessionalTimelineSection } from '@/components/features/ProfessionalT
 import { CompanyExperienceSection } from '@/components/features/CompanyExperienceSection';
 import { EarlierCareerSection } from '@/components/features/EarlierCareerSection';
 import { CareerCTASection } from '@/components/features/CareerCTASection';
-import { Tag } from '@/components/ui/Tag';
+import { Footer } from '@/components/layout/Footer';
 
 import { professionalTimelineData } from '@/data/professionalTimeline';
 import { companiesData } from '@/data/companies';
@@ -38,6 +38,7 @@ export default function ExperiencePage() {
       <CompanyExperienceSection data={companiesData} />
       <EarlierCareerSection data={earlierCareersData} />
       <CareerCTASection />
+      <Footer />
     </>
   );
 }
