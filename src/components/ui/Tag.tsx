@@ -18,7 +18,7 @@ export function Tag({
   
   // Variant styles
   const variantStyles = {
-    default: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200',
+    default: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-primary hover:text-white dark:hover:bg-orange-400 transition-colors cursor-default',
     primary: 'bg-primary/10 dark:bg-orange-400/10 text-primary dark:text-orange-400 border border-primary/20 dark:border-orange-400/20',
     success: 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400',
     warning: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400',
@@ -33,7 +33,7 @@ export function Tag({
   };
   
   // Combine styles
-  const tagStyles = `inline-flex items-center rounded mr-2 mb-2 transition-colors ${variantStyles[variant]} ${sizeStyles[size]}`;
+  const tagStyles = `inline-flex items-center rounded-full mr-2 mb-2 transition-colors ${variantStyles[variant]} ${sizeStyles[size]}`;
   
   return (
     <span className={tagStyles}>
