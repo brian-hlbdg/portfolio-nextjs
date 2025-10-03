@@ -4,7 +4,6 @@ import { RotatingStats } from '@/components/features/case-studies/RotatingStats'
 import { CaseStudyCard } from '@/components/features/case-studies/CaseStudyCard';
 import { ApproachCard } from '@/components/features/case-studies/ApproachCard';
 import { featuredStudies, allCaseStudies, approachItems } from '@/data/caseStudiesData';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
 export default function CaseStudiesPage() {

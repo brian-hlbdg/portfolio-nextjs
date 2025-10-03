@@ -1,8 +1,8 @@
 // src/components/features/InteractiveSkillsSection.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 interface Skill {
   name: string;

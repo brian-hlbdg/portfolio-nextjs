@@ -42,7 +42,7 @@ export function LookingForward() {
 
           {/* Looking Forward Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {lookingForwardItems.map((item, index) => (
+            {lookingForwardItems.map((item, _index) => (
               <div 
                 key={item.title}
                 className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-md transition-shadow"

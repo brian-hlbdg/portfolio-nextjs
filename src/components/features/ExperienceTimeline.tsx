@@ -39,51 +39,6 @@ const experiences: Experience[] = [
   }
 ];
 
-function TimelineItem({ experience, index }: { experience: Experience; index: number }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), index * 200);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [index]);
-
-  return (
-    <div 
-      ref={ref}
-      className={`mb-12 ml-8 transition-all duration-600 ${
-        isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'
-      }`}
-    >
-      <div className={`absolute w-6 h-6 bg-white dark:bg-gray-900 rounded-full border-2 ${
-        experience.current ? 'border-primary dark:border-orange-400' : 'border-gray-300 dark:border-gray-600'
-      } -left-3 flex items-center justify-center`}>
-        <div className={`w-2 h-2 rounded-full ${
-          experience.current ? 'bg-primary dark:bg-orange-400' : 'bg-gray-300 dark:bg-gray-600'
-        }`} />
-      </div>
-      
-      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-sm">
-        <h3 className="text-lg font-medium mb-1 dark:text-white">{experience.company}</h3>
-        <p className="text-gray-500 dark:text-gray-400 mb-3">{experience.role} ({experience.period})</p>
-        <p className="text-gray-700 dark:text-gray-300">{experience.description}</p>
-      </div>
-    </div>
-  );
-}
-
 export function ExperienceTimeline() {
   return (
     <section id="experience" className="py-20 bg-white dark:bg-gray-900">

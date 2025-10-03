@@ -2,8 +2,7 @@
 
 import { Company } from '@/data/companies';
 import { Tag } from './Tag';
-
-interface CompanyCardProps extends Company {}
+import Image from 'next/image';
 
 export function CompanyCard({ 
   company, 
@@ -14,7 +13,7 @@ export function CompanyCard({
   tags, 
   logo, 
   logoAlt 
-}: CompanyCardProps) {
+}: Company) {
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8 transition-all duration-300 hover:shadow-lg">
       <div className="flex flex-col md:flex-row gap-6">
@@ -74,11 +73,13 @@ export function CompanyCard({
         {logo && (
           <div className="flex-shrink-0 md:w-48 flex items-start justify-center">
             <div className="bg-white dark:bg-white rounded-lg p-4 w-full max-w-[200px] shadow-sm">
-              <img 
+              <Image 
                 src={logo} 
                 alt={logoAlt || `${company} logo`}
                 className="w-full h-auto"
                 loading="lazy"
+                width={200}
+                height={200}
               />
             </div>
           </div>
