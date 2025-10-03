@@ -1,5 +1,6 @@
 'use client';
 
+import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/features/case-studies/HeroSection';
@@ -7,27 +8,28 @@ import { TLDRSection } from '@/components/features/case-study-detail/TLDRSection
 import { MetricsGrid } from '@/components/features/case-study-detail/MetricsGrid';
 import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSteps';
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
-import { wineTastingCaseStudyData } from '@/data/palateCollectifCaseStudy'; // Add when ready
+import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 
-// Map slugs to their data
 const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
-  'wine-tasting-app': wineTastingCaseStudyData, 
-  // Add more case studies here
+  'wine-tasting-app': palateCollectifCaseStudyData,
 };
+
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function CaseStudyDetailPage({ params }: PageProps) {
-  const slug = params.slug;
-  // Get the right data based on URL
+  // Unwrap the params Promise using React.use()
+  const { slug } = use(params);
+  
+  // Get data for this slug
   const data = caseStudyDataMap[slug];
 
-  // Show 404 if slug doesn't match any case study
+  // Handle not found
   if (!data) {
     notFound();
   }
