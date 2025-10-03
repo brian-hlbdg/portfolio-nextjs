@@ -21,7 +21,7 @@ export function HeroSection() {
 
           {/* Navigation Links */}
           <div className="flex flex-wrap gap-6 text-gray-600 dark:text-gray-300">
-            <a href="#experience" className="hover:text-primary transition-colors">Professional Experience</a>
+            <a href="/" className="hover:text-primary transition-colors">Professional Experience</a>
             <span className="text-gray-400">•</span>
             <a href="/case-studies" className="hover:text-primary transition-colors">Case Studies</a>
             <span className="text-gray-400">•</span>

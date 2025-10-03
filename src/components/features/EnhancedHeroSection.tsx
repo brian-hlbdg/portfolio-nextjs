@@ -50,7 +50,7 @@ export function EnhancedHeroSection() {
 
           {/* Navigation Links */}
           <div className="flex flex-wrap gap-8 text-gray-600 dark:text-gray-400 mb-16">
-            <a href="#experience" className="hover:text-primary transition-all duration-300 relative group">
+            <a href="/experience" className="hover:text-primary transition-all duration-300 relative group">
               Professional Experience
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
             </a>

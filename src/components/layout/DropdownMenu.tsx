@@ -17,7 +17,7 @@ const menuItems: MenuItem[] = [
     description: 'Go Back to Step One'
   },
   { 
-    href: '#experience', 
+    href: '/experience', 
     label: 'Professional Experience',
     description: 'My career journey and roles'
   },
