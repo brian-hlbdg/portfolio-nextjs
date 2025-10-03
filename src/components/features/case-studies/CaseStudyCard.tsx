@@ -1,4 +1,4 @@
-import { ArrowRight, BarChart3 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { CaseStudy } from '@/components/features/types';
 import { JSX } from 'react';
 

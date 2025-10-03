@@ -1,5 +1,6 @@
 // src/components/features/HeroSection.tsx - Simplified hero
 'use client';
+import Link from 'next/link';
 
 export function HeroSection() {
   return (
@@ -20,15 +21,14 @@ export function HeroSection() {
           </p>
 
           {/* Navigation Links */}
-          <div className="flex flex-wrap gap-6 text-gray-600 dark:text-gray-300">
-            <a href="/" className="hover:text-primary transition-colors">Professional Experience</a>
+            <Link href="/" className="hover:text-primary transition-colors">Professional Experience</Link>
             <span className="text-gray-400">•</span>
-            <a href="/case-studies" className="hover:text-primary transition-colors">Case Studies</a>
+            <Link href="/case-studies" className="hover:text-primary transition-colors">Case Studies</Link>
             <span className="text-gray-400">•</span>
-            <a href="/blog" className="hover:text-primary transition-colors">Blog</a>
+            <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
             <span className="text-gray-400">•</span>
-            <a href="mailto:brian.HLBDG@outlook.com?subject=Schedule Consultation" className="hover:text-primary transition-colors">Schedule Consultation</a>
-          </div>
+            <Link href="mailto:brian.HLBDG@outlook.com?subject=Schedule Consultation" className="hover:text-primary transition-colors">Schedule Consultation</Link>
+          
 
         </div>
       </div>
