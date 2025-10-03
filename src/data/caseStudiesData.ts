@@ -11,7 +11,8 @@ export const featuredStudies: CaseStudy[] = [
     readTime: '12 min',
     icon: 'truck',
     featured: true,
-    badge: 'Featured'
+    badge: 'Featured', 
+    slug: 'nfi-tms-platform'  
   },
   {
     id: '2',
@@ -22,7 +23,8 @@ export const featuredStudies: CaseStudy[] = [
     year: '2025',
     readTime: '15 min',
     icon: 'chart',
-    badge: 'App creation'
+    badge: 'App creation', 
+    slug: 'wine-tasting-app'
   }
 ];
 
@@ -36,7 +38,8 @@ export const allCaseStudies: CaseStudy[] = [
     year: '2010-2012',
     readTime: '8 min',
     icon: 'cart',
-    comingSoon: true
+    comingSoon: true,
+    slug: 'ecommerce-optimization'
   },
   {
     id: '4',
@@ -47,7 +50,8 @@ export const allCaseStudies: CaseStudy[] = [
     year: '2012-2014',
     readTime: '6 min',
     icon: 'megaphone',
-    comingSoon: true
+    comingSoon: true,
+    slug: 'marketing-platform-redesign'
   },
   {
     id: '5',
@@ -58,7 +62,8 @@ export const allCaseStudies: CaseStudy[] = [
     year: '2022-2023',
     readTime: '9 min',
     icon: 'layers',
-    comingSoon: true
+    comingSoon: true,
+    slug: 'design-system-implementation'
   }
 ];
 

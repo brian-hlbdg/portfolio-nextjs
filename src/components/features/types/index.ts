@@ -15,6 +15,7 @@ export interface CaseStudy {
   featured?: boolean;
   badge?: string;
   comingSoon?: boolean;
+  slug: string;
 }
 
 export interface ApproachItem {
