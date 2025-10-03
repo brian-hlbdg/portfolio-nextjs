@@ -16,8 +16,8 @@ export function EnhancedHeroSection() {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <div className="animate-pulse">
-              <div className="h-12 bg-gray-200 dark:bg-gray-600 rounded mb-4"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-8"></div>
+              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-8"></div>
             </div>
           </div>
         </div>
@@ -43,14 +43,14 @@ export function EnhancedHeroSection() {
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl leading-relaxed font-light">
             I help companies build scalable digital experiences that drive measurable business growth. 
             Specializing in Phoenix LiveView with 10+ years of proven results.
           </p>
 
           {/* Navigation Links */}
-          <div className="flex flex-wrap gap-8 text-gray-600 dark:text-gray-400 mb-16">
-            <a href="/experience" className="hover:text-primary transition-all duration-300 relative group">
+          <div className="flex flex-wrap gap-8 text-gray-600 dark:text-gray-300 mb-16">
+            <a href="#experience" className="hover:text-primary transition-all duration-300 relative group">
               Professional Experience
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
             </a>
