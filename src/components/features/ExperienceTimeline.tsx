@@ -1,8 +1,4 @@
-// src/components/features/ExperienceTimeline.tsx
 'use client';
-
-import { useEffect, useRef, useState } from 'react';
-
 interface Experience {
   company: string;
   role: string;

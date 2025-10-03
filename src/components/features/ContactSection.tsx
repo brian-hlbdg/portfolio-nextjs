@@ -1,5 +1,6 @@
-// src/components/features/ContactSection.tsx
 'use client';
+
+import Link from 'next/link';
 
 export function ContactSection() {
   return (
@@ -31,9 +32,9 @@ export function ContactSection() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">Email</p>
-                    <a href="mailto:brian.HLBDG@outlook.com" className="text-primary dark:text-orange-400 hover:underline">
+                    <Link href="mailto:brian.HLBDG@outlook.com" className="text-primary dark:text-orange-400 hover:underline">
                       brian.HLBDG@outlook.com
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 
@@ -45,9 +46,9 @@ export function ContactSection() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">LinkedIn</p>
-                    <a href="https://www.linkedin.com/in/hlbdg/" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
+                    <Link href="https://www.linkedin.com/in/hlbdg/" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
                       Connect with me
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 
@@ -59,9 +60,9 @@ export function ContactSection() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 dark:text-white">GitHub</p>
-                    <a href="https://github.com/brian-hlbdg" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
+                    <Link href="https://github.com/brian-hlbdg" target="_blank" rel="noopener noreferrer" className="text-primary dark:text-orange-400 hover:underline">
                       View my code
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -74,7 +75,7 @@ export function ContactSection() {
                 Let's discuss how I can help solve your design and development challenges.
               </p>
               <div className="space-y-4">
-                <a 
+                <Link
                   href="mailto:brian.HLBDG@outlook.com?subject=Project Discussion"
                   className="w-full inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors"
                 >
@@ -82,13 +83,13 @@ export function ContactSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   Start a Conversation
-                </a>
-                <a 
+                </Link>
+                <Link
                   href="/case-studies"
                   className="w-full inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary dark:hover:border-orange-400 hover:text-primary dark:hover:text-orange-400 rounded-lg transition-colors"
                 >
                   View My Work
-                </a>
+                </Link>
               </div>
             </div>
 

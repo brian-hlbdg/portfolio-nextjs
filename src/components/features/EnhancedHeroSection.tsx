@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export function EnhancedHeroSection() {
   const [mounted, setMounted] = useState(false);
@@ -50,42 +51,42 @@ export function EnhancedHeroSection() {
 
           {/* Navigation Links */}
           <div className="flex flex-wrap gap-8 text-gray-600 dark:text-gray-300 mb-16">
-            <a href="#experience" className="hover:text-primary transition-all duration-300 relative group">
+            <Link href="#experience" className="hover:text-primary transition-all duration-300 relative group">
               Professional Experience
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
-            </a>
+            </Link>
             <span className="text-gray-400">•</span>
-            <a href="/case-studies" className="hover:text-primary transition-all duration-300 relative group">
+            <Link href="/case-studies" className="hover:text-primary transition-all duration-300 relative group">
               Case Studies
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
-            </a>
+            </Link>
             <span className="text-gray-400">•</span>
-            <a href="/blog" className="hover:text-primary transition-all duration-300 relative group">
+            <Link href="/blog" className="hover:text-primary transition-all duration-300 relative group">
               Blog
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
-            </a>
+            </Link>
             <span className="text-gray-400">•</span>
-            <a href="mailto:brian.HLBDG@outlook.com?subject=Schedule Consultation" className="hover:text-primary transition-all duration-300 relative group">
+            <Link href="mailto:brian.HLBDG@outlook.com?subject=Schedule Consultation" className="hover:text-primary transition-all duration-300 relative group">
               Schedule Consultation
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
-            </a>
+            </Link>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <a 
+            <Link 
               href="/case-studies"
               className="px-8 py-4 bg-primary hover:bg-gradient-to-r hover:from-primary hover:to-orange-600 text-white rounded-lg font-medium text-center transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
             >
               View My Work
-            </a>
+            </Link>
             
-            <a 
+            <Link 
               href="mailto:brian.HLBDG@outlook.com?subject=Project Discussion"
               className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:border-primary hover:text-primary hover:shadow-md rounded-lg font-medium transition-all duration-300 text-center transform hover:scale-105"
             >
               Start a Conversation
-            </a>
+            </Link>
           </div>
 
         </div>

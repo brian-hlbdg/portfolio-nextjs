@@ -4,7 +4,6 @@ import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { Footer } from '@/components/layout/Footer';
 import { allPosts } from '@/data/blogPosts';
-import { BlogPost } from '@/components/features/types/blog';
 import  Link from 'next/link';
 
 interface PageProps {
