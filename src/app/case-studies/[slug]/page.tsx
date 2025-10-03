@@ -1,14 +1,36 @@
 'use client';
 
+import { notFound } from 'next/navigation';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/features/case-studies/HeroSection';
 import { TLDRSection } from '@/components/features/case-study-detail/TLDRSection';
 import { MetricsGrid } from '@/components/features/case-study-detail/MetricsGrid';
 import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSteps';
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
+import { wineTastingCaseStudyData } from '@/data/palateCollectifCaseStudy'; // Add when ready
+import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 
-export default function NFICaseStudyPage() {
-  const data = nfiCaseStudyData;
+// Map slugs to their data
+const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
+  'nfi-tms-platform': nfiCaseStudyData,
+  'wine-tasting-app': wineTastingCaseStudyData, 
+  // Add more case studies here
+};
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default function CaseStudyDetailPage({ params }: PageProps) {
+  const slug = params.slug;
+  // Get the right data based on URL
+  const data = caseStudyDataMap[slug];
+
+  // Show 404 if slug doesn't match any case study
+  if (!data) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
