@@ -33,7 +33,7 @@ export function PassionsSection() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {passions.map((passion, index) => (
+            {passions.map((passion) => (
               <div key={passion.title} className="group">
                 <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-lg overflow-hidden mb-4">
                   <div className="w-full h-full bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
