@@ -128,7 +128,7 @@ export function HamburgerMenu() {
           {/* Menu Items */}
           <nav className="flex-1 px-8 py-8">
             <ul className="space-y-6">
-              {menuItems.map((item, _index) => (
+              {menuItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

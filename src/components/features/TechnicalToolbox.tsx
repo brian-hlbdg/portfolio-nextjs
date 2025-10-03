@@ -47,7 +47,7 @@ export function TechnicalToolbox() {
 
           {/* Toolbox Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {toolboxCategories.map((category, index) => (
+            {toolboxCategories.map((category) => (
               <div key={category.title} className="space-y-4">
                 <h4 className="text-gray-800 dark:text-white font-medium mb-4">{category.title}</h4>
                 <div className="flex flex-wrap gap-2">
