@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { Header } from '@/components/layout/Header';
 import { EnhancedFloatingThemeToggle } from '@/components/layout/EnhancedFloatingThemeToggle';
+import type { Metadata } from 'next'
 import './globals.css';
 
 const inter = Inter({
@@ -15,6 +16,14 @@ export const metadata = {
   title: {
     default: 'Brian H. - Senior UX Designer & Frontend Developer | HLB Design Group',
     template: '%s | Brian H. - UX Designer & Frontend Developer',
+  },
+  icons: {
+    icon: [
+      { url: '/icon.png' }
+    ],
+    apple: [
+      { url: '/apple-icon.png' }
+    ],
   },
   description: 'Senior UX Designer and Frontend Developer specializing in LiveView, Phoenix, and Elixir. Creating intuitive interfaces that drive business growth. Chicago-based design professional.',
 };
