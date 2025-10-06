@@ -20,7 +20,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
   overview: {
     challenge: {
       title: 'The Challenge',
-      description: 'NFI Industries needed to replace a collection of aging tools with a cohesive TMS that could scale. The companys 15,000+ employees (drivers, dispatchers, ops) relied on legacy systems and manual workarounds.',
+      description: 'NFI Industries needed to replace a collection of aging tools with a cohesive TMS that could scale. The companys 18,000+ employees (drivers, dispatchers, ops) relied on legacy systems and manual workarounds.',
       problems: [
         'Replace multiple disparate legacy systems',
         'Support complex multi-modal workflows (LTL, dedicated, intermodal, freight, intermodal, and final mile operations)',
@@ -100,7 +100,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
             content: 'Over time, I spoke with dozens of users across roles including account managers, operations staff, and regional brokers. Some sessions happened during design discussions or feature reviews. Recurring pain points included the rigidity of legacy systems and the amount of workarounds users relied on to complete tasks, which pushed us to design more toward more flexible, context-aware interfaces.'
           }
         ],
-        images: ['event-storming-1.jpg', 'event-storming-2.jpg']
+        images: ['/images/case_studies/event-storming-1.jpg', '/images/case_studies/event-storming-2.jpg']
       },
       {
         title: 'Discovery as a Long-Term Practice',
@@ -109,7 +109,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
       {
         title: 'Artifacts & Visual Thinking',
         content: 'Visual thinking played a big role throughout the project. We used wall-sized sticky note boards, Kanban tracking, and physical whiteboards to stay aligned. These tools helped surface friction points, connect technical and business goals, and ground our design conversations in real workflows.',
-        images: ['whiteboard-1.jpg', 'sticky-notes.jpg']
+        images: ['/images/case_studies/whiteboard-1.jpg', '/images/case_studies/sticky-notes.jpg']
       }
     ]
   },
@@ -152,25 +152,25 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
         number: 1,
         title: 'Unified Dashboard',
         description: 'This dashboard brought shipment data, load statistics, exceptions, and recent activity into a single view. Instead of jumping between multiple apps and tools, users could now access the information they needed at a glance, using priority-based filters to cut through noise and focus on what mattered most.',
-        image: 'dashboard.jpg'
+        image: '/images/case_studies/dashboard.jpg'
       },
       {
         number: 2,
         title: 'Consolidated Shipment View',
         description: 'Shipment details, actions, documents, and messaging were redesigned to live in one place. Previously, users had to switch contexts between screens or panels to complete a task. With the new layout, they could manage everything about a shipment — tracking, messaging, and planning — from one unified, continuous interface.',
-        image: 'shipment-view.jpg'
+        image: '/images/case_studies/shipment-view.jpg'
       },
       {
         number: 3,
         title: 'Smarter Exception Handling',
         description: 'Exceptions were previously tracked manually, often lost in context, or buried in outdated tools. We built a categorized exception panel with built-in logic and resolution tools. Users could now identify, categorize, and resolve issues quickly without losing context or relying on offline notes.',
-        image: 'exception-handling.jpg'
+        image: '/images/case_studies/exception-handling.jpg'
       },
       {
         number: 4,
         title: 'Planning and Time Entry Tools',
         description: 'One of the more complex areas was time entry. We simplified entry by creating guided flows that didn\'t require nuanced rules and conditions across departments. We created guided input flows that accounted for regional differences, validation rules, and multi-leg shipments — reducing user errors and saving time.',
-        image: 'time-entry.jpg'
+        image: '/images/case_studies/time-entry.jpg'
       }
     ],
     improvements: [
