@@ -1,11 +1,31 @@
-'use client';
-
 import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { Footer } from '@/components/layout/Footer';
-import { allPosts } from '@/data/blogPosts';
 import  Link from 'next/link';
+import { BlogPostData } from '@/components/features/types/blogPost';
 
+import { uxPrinciplesComplexSystemsData } from '@/data/uxPrinciplesComplexSystems';
+import { chosenFewPicnicData } from '@/data/chosenFewPicnic';
+import { designSystemsScaleData } from '@/data/designSystemsScale';
+import { accessibilityBasicsData } from '@/data/accessibilityBasics';
+import { chicagoDesignCommunityData } from '@/data/chicagoDesignCommunity';
+import { elixirForDesignersData } from '@/data/elixirForDesigners';
+
+
+const blogPostDataMap: Record<string, BlogPostData> = {
+  'ux-principles-complex-systems': uxPrinciplesComplexSystemsData,
+  'chosen-few-picnic': chosenFewPicnicData,
+  'design-systems-scale': designSystemsScaleData,
+  'accessibility-basics': accessibilityBasicsData,
+  'chicago-design-community': chicagoDesignCommunityData,
+  'elixir-for-designers': elixirForDesignersData,
+};
+
+export async function generateStaticParams() {
+  return Object.keys(blogPostDataMap).map((slug) => ({
+    slug,
+  }));
+}
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -16,7 +36,7 @@ export default function BlogPostPage({ params }: PageProps) {
   const { slug } = use(params);
   
   // Find the post
-  const post = allPosts.find(p => p.slug === slug);
+  const post = blogPostDataMap[slug];
 
   if (!post) {
     notFound();

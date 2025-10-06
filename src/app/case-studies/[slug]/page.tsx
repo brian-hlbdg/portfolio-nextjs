@@ -16,6 +16,12 @@ const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'wine-tasting-app': palateCollectifCaseStudyData,
 };
 
+export async function generateStaticParams() {
+  return Object.keys(caseStudyDataMap).map((slug) => ({
+    slug,
+  }));
+}
+
 interface PageProps {
   params: Promise<{
     slug: string;
