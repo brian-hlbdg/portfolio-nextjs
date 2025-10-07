@@ -100,7 +100,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
             content: 'Over time, I spoke with dozens of users across roles including account managers, operations staff, and regional brokers. Some sessions happened during design discussions or feature reviews. Recurring pain points included the rigidity of legacy systems and the amount of workarounds users relied on to complete tasks, which pushed us to design more toward more flexible, context-aware interfaces.'
           }
         ],
-        images: ['/images/case_studies/event-storming-1.jpg', '/images/case_studies/event-storming-2.jpg']
+        images: ['/images/case_studies/event-storming-1.jpeg', '/images/case_studies/event-wall-1.jpeg']
       },
       {
         title: 'Discovery as a Long-Term Practice',
@@ -109,7 +109,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
       {
         title: 'Artifacts & Visual Thinking',
         content: 'Visual thinking played a big role throughout the project. We used wall-sized sticky note boards, Kanban tracking, and physical whiteboards to stay aligned. These tools helped surface friction points, connect technical and business goals, and ground our design conversations in real workflows.',
-        images: ['/images/case_studies/whiteboard-1.jpeg', '/images/case_studies/event-storming-1.jpeg']
+        images: ['/images/case_studies/event-wall-2.jpeg', '/images/case_studies/event-wall-3.jpeg']
       }
     ]
   },
@@ -152,13 +152,13 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
         number: 1,
         title: 'Unified Dashboard',
         description: 'This dashboard brought shipment data, load statistics, exceptions, and recent activity into a single view. Instead of jumping between multiple apps and tools, users could now access the information they needed at a glance, using priority-based filters to cut through noise and focus on what mattered most.',
-        image: '/images/case_studies/dashboard.jpg'
+        image: '/images/case_studies/dashboard-solution.jpeg'
       },
       {
         number: 2,
         title: 'Consolidated Shipment View',
         description: 'Shipment details, actions, documents, and messaging were redesigned to live in one place. Previously, users had to switch contexts between screens or panels to complete a task. With the new layout, they could manage everything about a shipment — tracking, messaging, and planning — from one unified, continuous interface.',
-        image: '/images/case_studies/shipment-solution.jpeg'
+        image: '/images/case_studies/shipment-solution-2.jpeg'
       },
       {
         number: 3,
@@ -170,7 +170,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
         number: 4,
         title: 'Planning and Time Entry Tools',
         description: 'One of the more complex areas was time entry. We simplified entry by creating guided flows that didn\'t require nuanced rules and conditions across departments. We created guided input flows that accounted for regional differences, validation rules, and multi-leg shipments — reducing user errors and saving time.',
-        image: '/images/case_studies/time-entry.jpg'
+        image: '/images/case_studies/planning-solution.jpeg'
       }
     ],
     improvements: [
