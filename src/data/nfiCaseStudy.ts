@@ -109,7 +109,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
       {
         title: 'Artifacts & Visual Thinking',
         content: 'Visual thinking played a big role throughout the project. We used wall-sized sticky note boards, Kanban tracking, and physical whiteboards to stay aligned. These tools helped surface friction points, connect technical and business goals, and ground our design conversations in real workflows.',
-        images: ['/images/case_studies/whiteboard-1.jpg', '/images/case_studies/sticky-notes.jpg']
+        images: ['/images/case_studies/whiteboard-1.jpeg', '/images/case_studies/event-storming-1.jpeg']
       }
     ]
   },
@@ -158,13 +158,13 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
         number: 2,
         title: 'Consolidated Shipment View',
         description: 'Shipment details, actions, documents, and messaging were redesigned to live in one place. Previously, users had to switch contexts between screens or panels to complete a task. With the new layout, they could manage everything about a shipment — tracking, messaging, and planning — from one unified, continuous interface.',
-        image: '/images/case_studies/shipment-view.jpg'
+        image: '/images/case_studies/shipment-solution.jpeg'
       },
       {
         number: 3,
         title: 'Smarter Exception Handling',
         description: 'Exceptions were previously tracked manually, often lost in context, or buried in outdated tools. We built a categorized exception panel with built-in logic and resolution tools. Users could now identify, categorize, and resolve issues quickly without losing context or relying on offline notes.',
-        image: '/images/case_studies/exception-handling.jpg'
+        image: '/images/case_studies/exception-solution.jpeg'
       },
       {
         number: 4,

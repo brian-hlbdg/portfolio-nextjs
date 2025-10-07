@@ -8,6 +8,7 @@ import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSte
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
 import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
+import Image from 'next/image';
 
 const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
@@ -174,7 +175,15 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                 <div className="grid grid-cols-2 gap-4">
                   {section.images.map((img, imgIdx) => (
                     <div key={imgIdx} className="bg-slate-800/30 rounded-lg h-48 flex items-center justify-center">
-                      <span className="text-slate-500">[Image: {img}]</span>
+                      <span className="text-slate-500">
+                        <Image
+                          src={img}
+                          alt={`${section.title} - Image ${imgIdx + 1}`}
+                          width={416}
+                          height={192}
+                          className="w-full h-auto object-cover"
+                        />
+                      </span>
                     </div>
                   ))}
                 </div>
