@@ -216,7 +216,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                 <div className="bg-slate-800/30 rounded-lg h-64 flex items-center justify-center">
                   <span className="text-slate-500">
                     <Image
-                      src={feature.image}
+                      src={feature.image ?? ''}
                       alt={`${feature.title} - Image`}
                       width={416}
                       height={192}
