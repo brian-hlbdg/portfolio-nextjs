@@ -109,7 +109,7 @@ export const palateCollectifCaseStudyData: CaseStudyDetailData = {
             content: 'Analysis of existing apps revealed a gap in the market. Vivino and Delectable focus on social ratings and scanning labels. CellarTracker serves serious collectors with inventory management. Wine Folly offers education but not note-taking. None combine structured tasting guidance with inline learning in a way that reduces intimidation.'
           }
         ],
-        images: ['research-synthesis.jpg', 'interview-insights.jpg']
+        images: ['/images/case_studies/palate-collectif/wine-choices.jpeg', '/images/case_studies/palate-collectif/wine-choices-2.jpeg']
       },
       {
         title: 'Defining the Tasting Vocabulary',
@@ -124,12 +124,12 @@ export const palateCollectifCaseStudyData: CaseStudyDetailData = {
             content: 'Early prototypes required too many decisions before users could save a note. Streamlining involved sensible defaults for common fields (glass type, serving temperature) and allowing users to skip sections that felt less relevant to them. The goal: let someone record a useful note in under two minutes.'
           }
         ],
-        images: ['vocabulary-categories.jpg', 'inline-definitions.jpg']
+        images: ['/images/case_studies/palate-collectif/wine-food-pairing.jpeg', '/images/case_studies/palate-collectif/code-example.jpeg']
       },
       {
         title: 'Information Architecture Testing',
         content: 'Card sorting sessions with eight participants validated the organization of tasting note sections. Users expected a sensory progression: appearance, aroma, taste, structure, and finish. This matched professional tasting methodology while feeling logical to beginners. Navigation hierarchy prioritized personal notes over wine discovery, reflecting that users primarily wanted to capture their own experiences.',
-        images: ['card-sorting.jpg', 'sitemap.jpg']
+        images: ['/images/case_studies/palate-collectif/wine-tasting.jpeg', '/images/case_studies/palate-collectif/wine-tasting-2.png']
       },
       {
         title: 'Admin Surface Requirements',
@@ -181,31 +181,31 @@ export const palateCollectifCaseStudyData: CaseStudyDetailData = {
         number: 1,
         title: 'Guided Tasting Flow',
         description: 'A single-page form organized by sensory stages: appearance (color, clarity, intensity), aroma (fruit, floral, spice, earth), taste (flavor profile), structure (acidity, tannin, body, sweetness), and finish (length, complexity). Each section uses chip selectors for common descriptors with search filtering. Sliders provide intuitive input for structural elements. Users can skip sections or add freeform notes anywhere.',
-        image: 'tasting-flow.jpg'
+        image: '/images/case_studies/palate-collectif/solution-guided-tasting.jpeg'
       },
       {
         number: 2,
         title: 'Inline Glossary',
         description: 'Every structured field includes a help icon that reveals a plain-language definition and examples without leaving the page. For instance, tapping the help icon for "tannin" explains: "The drying sensation you feel on your tongue and gums, like after drinking black tea. Common in red wines, especially Cabernet Sauvignon and Nebbiolo." This just-in-time education reduces intimidation.',
-        image: 'glossary-tooltips.jpg'
+        image: '/images/case_studies/palate-collectif/solution-guided-tasting-1.jpeg'
       },
       {
         number: 3,
         title: 'Wine Profile System',
         description: 'Each wine has a structured profile showing producer, region, grape varieties, vintage, and style characteristics. User notes appear chronologically under the profile, making it easy to see how perceptions change over time or across different bottles. Profiles support rich metadata including appellation, alcohol percentage, and aging information.',
-        image: 'wine-profile.jpg'
+        image: '/images/case_studies/palate-collectif/solution-guided-tasting-2.jpeg'
       },
       {
         number: 4,
         title: 'Personal Library',
         description: 'Users can view their complete tasting history, filter by grape variety or region, and search for specific descriptors. The interface surfaces patterns: "You\'ve noted cherry in 8 Pinot Noirs" or "Wines from Willamette Valley tend to be your favorites." This reflection helps users understand their own palate development.',
-        image: 'personal-library.jpg'
+        image: '/images/case_studies/palate-collectif/solution-guided-tasting-3.jpeg'
       },
       {
         number: 5,
         title: 'Admin Wine Database',
         description: 'The admin interface allows efficient wine profile creation with validation for vintage years, automatic producer matching, region hierarchy navigation, and style categorization. Includes duplicate detection to prevent redundant entries. API-ready for future integrations with wine databases. Preview mode shows how entries will appear to users.',
-        image: 'admin-dashboard.jpg'
+        image: '/images/case_studies/palate-collectif/solution-guided-tasting-4.png'
       }
     ],
     improvements: [
