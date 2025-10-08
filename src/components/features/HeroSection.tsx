@@ -21,7 +21,7 @@ export function HeroSection() {
           </p>
 
           {/* Navigation Links */}
-            <Link href="/" className="hover:text-primary transition-colors">Professional Experience</Link>
+            <Link href="/experience" className="hover:text-primary transition-colors">Professional Experience</Link>
             <span className="text-gray-400">•</span>
             <Link href="/case-studies" className="hover:text-primary transition-colors">Case Studies</Link>
             <span className="text-gray-400">•</span>

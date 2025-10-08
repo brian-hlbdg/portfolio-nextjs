@@ -20,7 +20,7 @@ export function ContactSection() {
             {/* Contact Info */}
             <div>
               <p className="text-gray-700 dark:text-gray-300 mb-6">
-                I'm currently accepting new projects for Q3 2025. Whether you're looking to improve an existing product or build something entirely new, I'd love to discuss how I can help.
+                I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
               </p>
               
               <div className="space-y-4">

@@ -181,7 +181,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                           alt={`${section.title} - Image ${imgIdx + 1}`}
                           width={416}
                           height={192}
-                          className="w-full h-auto object-cover"
+                          className="w-full h-auto object-cover rounded-lg"
                         />
                       </span>
                     </div>
@@ -362,8 +362,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
         <section className="bg-slate-800/30 rounded-2xl p-12 text-center border border-slate-700">
           <h2 className="text-3xl font-bold mb-4">Interested in working together?</h2>
           <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-            I'm currently accepting new projects for Q3 2025. Let's discuss how I can help solve 
-            your design and development challenges.
+            I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2">

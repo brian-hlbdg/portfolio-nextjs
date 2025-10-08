@@ -9,7 +9,7 @@ export const featuredPosts: BlogPost[] = [
     excerpt: 'Designing intuitive interfaces for complex systems requires a different approach than consumer applications. This article explores key principles for simplifying complexity while maintaining power and flexibility.',
     category: 'UX Design',
     tags: ['Systems Design'],
-    image: 'ux-complex-systems.jpg',
+    image: '/images/blog/ux-complex-systems.gif',
     date: '2025-05-01',
     readTime: '6 min read',
     featured: true,
@@ -121,7 +121,7 @@ UX Designer and Frontend Developer specializing in creating intuitive interfaces
     excerpt: 'A first-timer\'s perspective on Chicago\'s most iconic summer tradition. After 35 years, the Chosen Few Picnic continues to prove that the best cultural experiences can\'t be manufactured—they grow organically from community, history, and 12 hours of house music that moves both body and soul.',
     category: 'Personal',
     tags: ['Culture', 'Chicago'],
-    image: 'chosen-few-dj.jpg',
+    image: '/images/blog/chosen-few-picnic.jpeg',
     date: '2025-06-14',
     readTime: '8 min read',
     featured: true
@@ -137,7 +137,7 @@ export const allPosts: BlogPost[] = [
     excerpt: 'Lessons learned from building component libraries for enterprise applications. How to balance consistency with flexibility.',
     category: 'Design Systems',
     tags: ['Component Library', 'Scalability'],
-    image: 'design-system.jpg',
+    image: '/images/blog/design-system.jpg',
     date: '2025-04-15',
     readTime: '12 min read'
   },
@@ -148,7 +148,7 @@ export const allPosts: BlogPost[] = [
     excerpt: 'Practical steps for making your applications usable by everyone. From keyboard navigation to screen readers.',
     category: 'Accessibility',
     tags: ['WCAG', 'Inclusive Design'],
-    image: 'accessibility.jpg',
+    image: '/images/blog/accessibility.svg',
     date: '2025-03-22',
     readTime: '10 min read'
   },
@@ -159,7 +159,7 @@ export const allPosts: BlogPost[] = [
     excerpt: 'Exploring the vibrant design scene in Chicago. From meetups to mentorship opportunities.',
     category: 'Chicago',
     tags: ['Community', 'Personal'],
-    image: 'chicago-skyline.jpg',
+    image: '/images/blog/chicago-skyline.webp',
     date: '2025-02-18',
     readTime: '6 min read'
   },
@@ -170,7 +170,7 @@ export const allPosts: BlogPost[] = [
     excerpt: 'Understanding the tools your developers use can make you a better designer. My journey learning functional programming.',
     category: 'Development',
     tags: ['Elixir', 'Phoenix LiveView'],
-    image: 'elixir-code.jpg',
+    image: '/images/blog/elixir-code.png',
     date: '2025-01-30',
     readTime: '15 min read'
   }

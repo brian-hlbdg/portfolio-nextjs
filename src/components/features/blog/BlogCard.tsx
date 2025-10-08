@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { BlogPost } from '@/components/features/types/blog';
 
 interface BlogCardProps {
@@ -24,7 +25,12 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) =>
       {/* Image */}
       <div className="relative h-64 bg-slate-700/30 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center text-slate-500">
-          [Image: {post.image}]
+          <Image 
+            src={post.image ?? ''}
+            alt={post.title}
+            fill
+            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
         {/* Replace with actual image:
         <img 

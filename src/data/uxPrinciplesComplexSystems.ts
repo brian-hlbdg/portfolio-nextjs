@@ -7,7 +7,7 @@ export const uxPrinciplesComplexSystemsData: BlogPostData = {
     excerpt: 'Designing intuitive interfaces for complex systems requires a different approach than consumer applications. This article explores key principles for simplifying complexity while maintaining power and flexibility.',
     category: 'UX Design',
     tags: ['Systems Design'],
-    image: 'ux-complex-systems.jpg',
+    image: '/images/blog/ux-complex-systems.gif',
     date: '2025-05-01',
     readTime: '6 min read',
     featured: true,
