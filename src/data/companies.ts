@@ -16,10 +16,11 @@ export const companiesData: Company[] = [
     role: "UX Designer & Frontend Developer",
     description: "NFI Industries is a leading supply chain solutions provider offering logistics, distribution, and transportation services across North America. As a key member of their technology team, I've been responsible for transforming complex logistics software into responsive and user-friendly interfaces.",
     contributions: [
-      "Led the UX redesign of their Transportation Management System, improving task completion by 45%, faster onboarding and 97% reduction in user errors",
-      "Created a comprehensive component library using LiveView and Tailwind CSS that accelerated development across multiple projects",
-      "Collaborated with cross-functional teams to implement user-centered design processes, including regular usability testing sessions with actual users",
-      "Helped develop and implement accessibility standards across all digital products"
+      "Led the UX redesign of the Transportation Management System, improving task efficiency and overall usability while aligning design strategy with business and operational goals",
+      "Contributed to the development of a scalable component library in LiveView and Tailwind CSS, improving design consistency and accelerating front-end implementation across multiple projects",
+      "Collaborated with cross-functional teams to integrate user-centered design practices, driving alignment between design, engineering, and operations through workshops and iterative feedback loops",
+      "Championed design standards across digital platforms, helping teams integrate inclusive design practices into both workflow and development pipelines",
+      "Provided design guidance and mentorship within the team, helping strengthen collaboration, improve design quality, and establish shared best practices"
     ],
     tags: ["UX Design", "LiveView", "Phoenix", "Elixir", "Tailwind CSS", "Design Systems"],
     logo: "/images/companies/nfi-project.jpg",

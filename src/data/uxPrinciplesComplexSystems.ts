@@ -12,7 +12,8 @@ export const uxPrinciplesComplexSystemsData: BlogPostData = {
     readTime: '6 min read',
     featured: true,
     content: `
-# UX Principles for Complex Systems
+
+## UX Principles for Complex Systems
 
 Designing intuitive interfaces for complex systems requires a different approach than consumer applications. This article explores key principles for simplifying complexity while maintaining power and flexibility.
 
@@ -30,7 +31,7 @@ Perhaps the most powerful pattern for complex systems is progressive disclosure:
 
 Implementation options include:
 
-- Primary/secondary navigation patterns
+ Primary/secondary navigation patterns
 - Advanced search that reveals complexity gradually
 - Configuration panels that expand on demand
 - Contextual tools that appear based on selection or mode
@@ -41,7 +42,7 @@ Complex systems should be organized around how users actually work rather than a
 
 This often means:
 
-- Highlighting frequent tasks and entry points
+ Highlighting frequent tasks and entry points
 - Designing interfaces for different stages or phases of work
 - Optimizing for efficiency in repetitive operations
 - Supporting flexible workflows rather than forcing rigid steps
@@ -52,7 +53,7 @@ Consistency becomes even more critical in complex interfaces. When users can rel
 
 Focus on:
 
-- Establishing clear, reusable interaction patterns
+ Establishing clear, reusable interaction patterns
 - Maintaining visual consistency across all modules
 - Using familiar mental models where possible
 - Being predictable about where to find controls and information
@@ -63,7 +64,7 @@ Start with sensible defaults that work for most users, but make customization ac
 
 Effective approaches include:
 
-- Preset configurations with the ability to modify
+ Preset configurations with the ability to modify
 - User-specific settings and preferences
 - Customizable dashboards and workspaces
 - Templates as starting points for complex setups
@@ -74,7 +75,7 @@ Even with the best interface design, complex systems require some learning. Embe
 
 Consider incorporating:
 
-- Inline explanations and tooltips
+ Inline explanations and tooltips
 - Interactive onboarding for key features
 - Contextual documentation accessible from the interface
 - Examples and templates that demonstrate best practices
@@ -85,7 +86,7 @@ At NFI Industries, I applied these principles to redesign a Transportation Manag
 
 The key improvements included:
 
-- Role-based interfaces that presented only relevant tools to each type of user
+ Role-based interfaces that presented only relevant tools to each type of user
 - A task-oriented dashboard that prioritized current work and common actions
 - Progressive complexity in forms and configuration screens
 - Consistent patterns for data tables, filters, and actions
@@ -98,17 +99,5 @@ The result was a significant reduction in training time, fewer support requests,
 The art of designing complex systems lies in finding the right balance between power and simplicity. Each decision involves tradeoffs, and there's no one-size-fits-all approach. The best designs emerge from a deep understanding of users' actual work, careful prioritization, and thoughtful information architecture.
 
 While we can't eliminate complexity entirely (nor should we), we can create interfaces that help users manage it more effectively - revealing complexity progressively, maintaining consistency, and providing the right information at the right time.
-
----
-
-**Brian Hall**  
-UX Designer and Frontend Developer specializing in creating intuitive interfaces for complex systems.
-
-[LinkedIn](#) · [Email](#)
-
-## Related Articles
-
-- Building Design Systems: Component Libraries vs. Style Guides - March 22, 2025
-- Bridging the Gap: From Design to Development - February 15, 2025
 `
   };

@@ -18,7 +18,7 @@ export function AboutMeSection() {
             {/* Content */}
             <div className="lg:col-span-2 space-y-6">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                Born and raised in Chicago, I've always had a deep connection to the city that shaped me. From cheering on the White Sox at Rate Field(aka Comiskey Park) to browsing at Soldier Field for Bears games, my Chicago roots run deep. That Midwestern work ethic and straightforward approach to problem-solving influences everything I do.
+                Born and raised in Chicago, I've always had a deep connection to the city that shaped me. From cheering on the White Sox at Rate Field (aka Comiskey Park) to browsing at Soldier Field for Bears games, my Chicago roots run deep. That Midwestern work ethic and straightforward approach to problem-solving influences everything I do.
               </p>
               
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
