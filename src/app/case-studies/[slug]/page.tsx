@@ -9,6 +9,7 @@ import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
 import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
@@ -41,14 +42,21 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
+      
 
 
       <div className="max-w-4xl mx-auto px-6 py-16">
+        <Link href="/case-studies" className="text-slate-400 hover:text-orange-400 transition-colors mb-8 inline-block">
+          ← Back to Case Studies
+        </Link>
+
         {/* Hero Section */}
         <HeroSection hero={data.hero} />
 
         {/* TL;DR */}
         <TLDRSection tldr={data.tldr} />
+
+        
 
         {/* Project Overview */}
         <section className="mb-16">
@@ -365,13 +373,19 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
             I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <button className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2">
+            <Link 
+              href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+            >
               <span>💬</span>
               Start a Conversation
-            </button>
-            <button className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors">
+            </Link>
+            <Link
+              href="/case-studies"
+              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors inline-block text-center"
+            >
               View More Case Studies
-            </button>
+            </Link>
           </div>
         </section>
       </div>

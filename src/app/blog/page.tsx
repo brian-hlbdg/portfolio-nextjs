@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { BlogCard } from '@/components/features/blog/BlogCard';
 import { CategoryFilter } from '@/components/features/blog/CategoryFilter';
 import { featuredPosts, allPosts, categories } from '@/data/blogPosts';
+import Link from 'next/link';
 
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -79,13 +80,19 @@ export default function BlogPage() {
             I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <button className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center gap-2">
+            <Link 
+              href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+            >
               <span>💬</span>
               Start a Conversation
-            </button>
-            <button className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors">
-              View Case Studies
-            </button>
+            </Link>
+            <Link
+              href="/blog"
+              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors inline-block text-center"
+            >
+              View More Blogs
+            </Link>
           </div>
         </section>
       </div>

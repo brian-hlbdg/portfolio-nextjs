@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export function CareerCTASection() {
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-800">
@@ -12,10 +14,17 @@ export function CareerCTASection() {
               something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience 
               could benefit your team or project.
             </p>
-            <button className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded inline-flex items-center transition-colors">
-              Get in Touch
-              <span className="ml-2">→</span>
-            </button>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Link 
+                href="mailto:brian.HLBDG@outlook.com?subject=Get In Touch"
+                className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+              >
+                Get in Touch
+                <span className="ml-2">→</span>
+              </Link>
+            </div>
+              
+
           </div>
         </div>
       </div>

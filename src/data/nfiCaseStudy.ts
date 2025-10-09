@@ -203,11 +203,11 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
     description: 'After rollout of the new TMS interface, we tracked improvements across onboarding, task speed, and user satisfaction. These results were based on internal reporting, user feedback, and operational data shared by product leads and department managers.',
     metrics: [
       {
-        label: 'Onboarding Time',
-        value: '-45%',
-        change: 'from 4 weeks vs. 8 weeks',
-        description: 'Reduction',
-        color: 'orange'
+        label: 'Design Consistency',
+        value: '+55%',
+        change: 'post-adoption of unified component library',
+        description: 'Increase',
+        color: 'green'
       },
       {
         label: 'User Errors',
@@ -217,48 +217,48 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
         color: 'orange'
       },
       {
-        label: 'Task Completion',
-        value: '+42%',
-        change: 'from 4.1 min vs. 7.1 min',
-        description: 'Increase',
+        label: 'Cross-Team Adoption',
+        value: '80%',
+        change: 'of internal tools now using shared design patterns',
+        description: 'Adoption Rate',
         color: 'green'
       },
       {
-        label: 'User Satisfaction',
-        value: '+68%',
-        change: 'from 4.8/5 vs. 2.8/5',
+        label: 'Feature Adoption',
+        value: '+25%',
+        change: 'growth within first 60 days of release',
         description: 'Increase',
         color: 'green'
       }
     ],
     businessOutcomes: [
       {
-        text: '+23% throughput: Dispatchers handled more loads per day with fewer blockers.',
+        text: '+30% design–dev alignment: Shared components and documentation improved collaboration and delivery speed.',
         icon: 'check'
       },
       {
-        text: '-35% overtime: More efficient workflows reduced late-hour interventions.',
+        text: '+22% feature adoption: User-centered design and testing led to higher engagement within the first 60 days.',
         icon: 'check'
       },
       {
-        text: '-42% help desk tickets: Fewer user support requests post-deployment.',
+        text: '-40% duplicate work: Centralized design assets reduced redundancy across parallel projects.',
         icon: 'check'
       },
       {
-        text: '-28% data correction: Better input validation reduced cleanup and rework.',
+        text: '+18% stakeholder satisfaction: Clearer visibility into design progress improved trust and communication.',
         icon: 'check'
       }
     ],
     userFeedback: [
-      {
-        quote: 'New hires are productive much faster. The interface is intuitive, and the training load is lower.',
-        author: 'Michael T.',
-        role: 'Training Manager'
+     {
+        quote: "The new system definitely cuts down on the back-and-forth, but some of the newer workflows still take time to get used to.",
+        author: "L.R.",
+        role: "Operations Lead"
       },
       {
-        quote: 'I can find everything I need without jumping around anymore. The new system makes it easy to fix problems as they happen.',
-        author: 'Sarah J.',
-        role: 'Senior Dispatcher'
+        quote: "We\'re moving faster on daily tasks, though I\'d like to see more options for customizing views by role.",
+        author: "J.P.",
+        role: "Fleet Manager"
       }
     ],
     longTermValue: [
@@ -316,7 +316,7 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
     keyTakeaways: [
       {
         title: 'Context is Everything',
-        description: 'Every team, tool, and workflow has a reason behind it. Design that honors that context isn\'t just more usable — it\'s more likely to be adopted and improved upon.'
+        description: 'Every team, tool, and workflow has a reason behind it. Design that honors that context isn\'t just more usable, it\'s more likely to be adopted and improved upon.'
       },
       {
         title: 'Design as a System',
