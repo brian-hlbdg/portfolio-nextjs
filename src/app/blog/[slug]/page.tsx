@@ -208,13 +208,13 @@ export default function BlogPostPage({ params }: PageProps) {
                 UX Designer and Frontend Developer specializing in creating intuitive interfaces for complex systems.
               </p>
               <div className="flex gap-4 text-sm">
-                <a href="#" className="text-orange-500 hover:text-orange-400 transition-colors">
+                <Link href="https://www.linkedin.com/in/hlbdg/" className="text-orange-500 hover:text-orange-400 transition-colors">
                   LinkedIn
-                </a>
+                </Link>
                 <span className="text-slate-600">·</span>
-                <a href="#" className="text-orange-500 hover:text-orange-400 transition-colors">
+                <Link href="mailto:brian.HLBDG@outlook.com" className="text-orange-500 hover:text-orange-400 transition-colors">
                   Email
-                </a>
+                </Link>
               </div>
             </div>
           </div>
