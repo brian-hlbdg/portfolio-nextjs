@@ -10,6 +10,7 @@ import { designSystemsScaleData } from '@/data/designSystemsScale';
 import { accessibilityBasicsData } from '@/data/accessibilityBasics';
 import { chicagoDesignCommunityData } from '@/data/chicagoDesignCommunity';
 import { elixirForDesignersData } from '@/data/elixirForDesigners';
+import {growingup104thparnellpart1Data} from '@/data/growing-up-104th-parnell-part-1';
 
 
 const blogPostDataMap: Record<string, BlogPostData> = {
@@ -19,6 +20,7 @@ const blogPostDataMap: Record<string, BlogPostData> = {
   'accessibility-basics': accessibilityBasicsData,
   'chicago-design-community': chicagoDesignCommunityData,
   'elixir-for-designers': elixirForDesignersData,
+  'growing-up-104th-parnell-part-1': growingup104thparnellpart1Data,
 };
 
 export async function generateStaticParams() {
