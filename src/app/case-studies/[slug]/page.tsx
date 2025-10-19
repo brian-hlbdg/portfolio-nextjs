@@ -8,12 +8,14 @@ import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSte
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
 import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
+import { nfiRelayExceptionHandlingCaseStudyData } from '@/data/nfiRelayExceptionHandlingCaseStudy';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
   'wine-tasting-app': palateCollectifCaseStudyData,
+  'nfi-relay-exception-handling': nfiRelayExceptionHandlingCaseStudyData,
 };
 
 export async function generateStaticParams() {

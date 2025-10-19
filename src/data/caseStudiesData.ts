@@ -29,8 +29,20 @@ export const featuredStudies: CaseStudy[] = [
 ];
 
 export const allCaseStudies: CaseStudy[] = [
-  {
+    {
     id: '3',
+    title: 'Exception Handling in Relay TMS',
+    description: 'Redesigned exception workflows to reduce context switching and standardize how logistics teams resolve shipment issues. Improved resolution times by 30% and enhanced user satisfaction.',
+    tags: ['Exception Handling', 'LiveView', 'Design System', 'User Workflows'],
+    client: 'NFI Industries',
+    year: '2022-2023',
+    readTime: '8 min',
+    icon: 'layers',
+    comingSoon: false,
+    slug: 'nfi-relay-exception-handling'
+  },
+  {
+    id: '4',
     title: 'E-commerce Platform Optimization',
     description: 'Complete redesign of checkout flow and product discovery for major retailer. Improved conversion rates by 28% and reduced cart abandonment by 40%.',
     tags: ['E-commerce', 'Conversion Optimization', 'A/B Testing', 'Mobile First'],
@@ -42,7 +54,7 @@ export const allCaseStudies: CaseStudy[] = [
     slug: 'ecommerce-optimization'
   },
   {
-    id: '4',
+    id: '5',
     title: 'Marketing Platform Redesign',
     description: 'Complete redesign of GKiC\'s marketing website and resource hub. Increased lead generation by 50% and improved content engagement metrics.',
     tags: ['Marketing', 'Lead Generation', 'Content Strategy', 'Information Architecture'],
@@ -54,7 +66,7 @@ export const allCaseStudies: CaseStudy[] = [
     slug: 'marketing-platform-redesign'
   },
   {
-    id: '5',
+    id: '6',
     title: 'Design System Implementation',
     description: 'Built a design system across platforms. Reduced development time by 40% and ensured consistent user experience across multiple applications.',
     tags: ['Design Systems', 'Component Library', 'Scalability', 'Documentation'],
