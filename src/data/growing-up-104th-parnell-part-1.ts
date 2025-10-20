@@ -7,7 +7,7 @@ export const growingup104thparnellpart1Data: BlogPostData = {
   excerpt: 'A nostalgic journey through the vibrant neighborhood of Fernwood, exploring its rich history, diverse culture, and the unique experiences that shaped my upbringing in this iconic Chicago locale.',
   category: 'Personal',
   tags: ['Chicago', 'Neighborhood', 'Culture'],
-  image: '/images/blog/growing-up-104th-parnell.jpeg',
+  image: '/images/blog/chicago1990.jpeg',
   date: '2025-10-05',
   readTime: '10 min read',
   featured: false, 

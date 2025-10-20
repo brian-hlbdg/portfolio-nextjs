@@ -178,6 +178,7 @@ export const allPosts: BlogPost[] = [
   id: '7',
   slug: 'growing-up-104th-parnell-part-1',
   title: 'Growing Up on 104th and Parnell, Part 1: The 90s Chicago Experience',
+  image: '/images/blog/chicago1990.jpeg',
   excerpt: 'A personal dive into 1990s Chicago—where the Bulls were ascending, Black television was thriving, hip-hop was everywhere, and a block in Fernwood was its own complete world.',
   content: `# Growing Up on 104th and Parnell, Part 1: The 90s Chicago Experience
 
@@ -260,7 +261,6 @@ That's the 1990s Chicago that made me. That's the foundation everything else is 
 *Part 2 coming: The Hall Household—How an Electrician and a Federal Investigator Built a Foundation*`,
   category: 'Personal',
   tags: ['Chicago', '1990s', 'Culture', 'Hip-Hop', 'Television', 'Sports'],
-  image: '104th-parnell-90s.jpg',
   date: '2025-03-15',
   readTime: '12 min read',
   featured: false
