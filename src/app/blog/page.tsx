@@ -1,29 +1,72 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Footer } from '@/components/layout/Footer';
 import { BlogCard } from '@/components/features/blog/BlogCard';
-import { CategoryFilter } from '@/components/features/blog/CategoryFilter';
-import { featuredPosts, allPosts, categories } from '@/data/blogPosts';
-import Link from 'next/link';
+import { BlogFilterPanel } from '@/components/features/blog/BlogFilterPanel';
+import { FeaturedPostsSection } from '@/components/features/blog/FeaturedPostsSection';
+import { allPosts } from '@/data/blogPosts';
+
+
+interface FilterState {
+  selectedTags: string[];
+  dateSort: 'newest' | 'oldest';
+  readTimeSort: 'longest' | 'shortest';
+}
 
 export default function BlogPage() {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [filters, setFilters] = useState<FilterState>({
+    selectedTags: [],
+    dateSort: 'newest',
+    readTimeSort: 'shortest',
+  });
 
-  // Filter posts based on active category
-  const filteredPosts = activeCategory === 'All' 
-    ? allPosts 
-    : allPosts.filter(post => post.category === activeCategory);
+  // Extract all unique tags from all posts
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    allPosts.forEach(post => {
+      post.tags.forEach(tag => tags.add(tag));
+    });
+    return Array.from(tags).sort();
+  }, []);
 
-  // Remove featured posts from filtered list to avoid duplication
-  const nonFeaturedPosts = filteredPosts.filter(
-    post => !post.featured
-  );
+  // Parse reading time to minutes for sorting
+  const parseReadTime = (readTime: string): number => {
+    const match = readTime.match(/(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  };
+
+  // Filter and sort posts (excluding featured posts from main grid)
+  const filteredAndSortedPosts = useMemo(() => {
+    // Start with all non-featured posts
+    let posts = allPosts.filter(post => !post.featured);
+
+    // Apply tag filter - show posts matching ANY selected tag
+    if (filters.selectedTags.length > 0) {
+      posts = posts.filter(post =>
+        post.tags.some(tag => filters.selectedTags.includes(tag))
+      );
+    }
+
+    // Sort by date
+    posts.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return filters.dateSort === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+
+    // Sort by reading time (secondary sort)
+    if (filters.readTimeSort === 'longest') {
+      posts.sort((a, b) => parseReadTime(b.readTime) - parseReadTime(a.readTime));
+    } else {
+      posts.sort((a, b) => parseReadTime(a.readTime) - parseReadTime(b.readTime));
+    }
+
+    return posts;
+  }, [filters]);
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
-
-
       <div className="max-w-6xl mx-auto px-6 py-16">
         {/* Hero Section */}
         <section className="mb-12">
@@ -33,67 +76,42 @@ export default function BlogPage() {
           </p>
         </section>
 
-        {/* Category Filter */}
-        <CategoryFilter 
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
+        {/* Featured Posts Section - Shows 2 random featured posts */}
+        <FeaturedPostsSection posts={allPosts} />
+
+        {/* Filter Panel - Tags, Date Sort, Reading Time Sort */}
+        <BlogFilterPanel 
+          allTags={allTags}
+          filters={filters}
+          onFiltersChange={setFilters}
         />
 
-        {/* Featured Posts */}
-        {activeCategory === 'All' && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-semibold mb-6">Featured Posts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {featuredPosts.map(post => (
-                <BlogCard key={post.id} post={post} featured />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* All Posts */}
+        {/* All Posts - Filtered & Sorted */}
         <section>
-          <h2 className="text-2xl font-semibold mb-6">
-            {activeCategory === 'All' ? 'All Posts' : `${activeCategory} Posts`}
-          </h2>
+          <h2 className="text-2xl font-semibold mb-6 text-white">All Posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(activeCategory === 'All' ? nonFeaturedPosts : filteredPosts).map(post => (
+            {filteredAndSortedPosts.map(post => (
               <BlogCard key={post.id} post={post} />
             ))}
           </div>
-        </section>
 
-        {/* Empty State */}
-        {filteredPosts.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-slate-400 text-lg">
-              No posts found in this category yet.
-            </p>
-          </div>
-        )}
+          {/* Empty State */}
+          {filteredAndSortedPosts.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-slate-400 text-lg">
+                No posts found matching your filters.
+              </p>
+            </div>
+          )}
+        </section>
 
         {/* CTA Section */}
         <section className="mt-16 bg-slate-800/30 rounded-2xl p-12 text-center border border-slate-700">
           <h2 className="text-3xl font-bold mb-4">Want to discuss a project?</h2>
           <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-            I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
+            I'm currently accepting new projects for Q3 2025. Let's talk about how I can help solve 
+            your design and development challenges.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link 
-              href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
-              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <span>💬</span>
-              Start a Conversation
-            </Link>
-            <Link
-              href="/blog"
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors inline-block text-center"
-            >
-              View More Blogs
-            </Link>
-          </div>
         </section>
       </div>
 
