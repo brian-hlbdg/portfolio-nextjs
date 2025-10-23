@@ -2,6 +2,7 @@
 'use client';
 
 import Image from 'next/image';
+import { ChicagoSportsDrawer } from './ChicagoSportsDrawer';
 
 
 const passions = [
@@ -18,7 +19,8 @@ const passions = [
   {
     title: "Chicago Sports",
     description: "Dedicated White Sox and Bears fan through thick and thin",
-    image: "/images/passions/sports.jpg"
+    image: "/images/passions/sports.jpg",
+    isInteractive: true
   }
 ];
 
@@ -35,6 +37,10 @@ export function PassionsSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {passions.map((passion) => (
               <div key={passion.title} className="group">
+                {passion.isInteractive ? (
+                  <ChicagoSportsDrawer />
+                ) : ( 
+                  <>
                 <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-lg overflow-hidden mb-4">
                   <div className="w-full h-full bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
                     <Image 
@@ -64,6 +70,8 @@ export function PassionsSection() {
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   {passion.description}
                 </p>
+                </>
+                )}
               </div>
             ))}
           </div>
