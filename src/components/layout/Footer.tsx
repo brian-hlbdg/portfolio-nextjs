@@ -42,7 +42,7 @@ export function Footer() {
 
           <div className="text-center">
             <p className="text-sm">
-              © 2025 Brian L. Hall. All rights reserved.
+              © 2025 Brian Hall. All rights reserved.
             </p>
             <p className="text-gray-400 text-xs mt-2">
               Designed and developed by B. Hall

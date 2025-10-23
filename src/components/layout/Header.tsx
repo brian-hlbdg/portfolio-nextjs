@@ -35,7 +35,7 @@ export function Header() {
       <header className="fixed w-full bg-white/90 backdrop-blur-sm z-30 border-b border-gray-100 dark:bg-gray-900/90 dark:border-gray-800">
         <div className="container mx-auto px-6 py-3 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
           <span>{currentDateTime}</span>
-          <span className="font-medium">Brian L. Hall</span>
+          <span className="font-medium">Brian Hall</span>
         </div>
       </header>
 
