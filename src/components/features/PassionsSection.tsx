@@ -18,7 +18,7 @@ const passions = [
   },
   {
     title: "Chicago Sports",
-    description: "Dedicated White Sox and Bears fan through thick and thin",
+    description: "Dedicated Chicago sports fan through thick and thin (click to view teams' stats)",
     image: "/images/passions/sports.jpg",
     isInteractive: true
   }

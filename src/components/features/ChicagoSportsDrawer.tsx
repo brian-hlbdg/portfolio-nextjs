@@ -83,7 +83,7 @@ export function ChicagoSportsDrawer() {
           Chicago Sports
         </h3>
         <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-          Dedicated White Sox and Bears fan through thick and thin
+          Dedicated Chicago sports fan through thick and thin (click to view teams' stats)
         </p>
       </button>
 
