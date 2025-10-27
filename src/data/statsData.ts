@@ -12,5 +12,13 @@ export const allStats: StatItem[] = [
   { value: '15+', label: 'Cross-Functional Teams Collaborated With' },
   { value: '200+', label: 'Design Prototypes Created' },
   { value: '8+', label: 'Leadership & Mentorship Roles' },
-  { value: '10+', label: 'Years in UX Strategy & Research' }
+  { value: '10+', label: 'Years in UX Strategy & Research' },
+  { value: '6+', label: 'Frameworks Mastered (React, LiveView, Vue, Next.js, Tailwind, Node)' },
+  { value: '12+', label: 'Frontend Products Launched' },
+  { value: '50%', label: 'Average Reduction in User Workload Through Redesigns' },
+  { value: '30%', label: 'Increase in Adoption from UX System Integration' },
+  { value: '3+', label: 'End-to-End Design Systems Architected' },
+  { value: '2+', label: 'Real-Time Platforms Built (WebSocket / LiveView)' },
+  { value: '5+', label: 'Conferences or Workshops Presented At' },
+  { value: '10+', label: 'Tools Integrated into Daily Workflow' }
 ];
