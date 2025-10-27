@@ -6,28 +6,34 @@ const toolboxCategories = [
     title: "Design & UX",
     tools: [
       "Figma", "Sketch", "Adobe Creative Suite", "Miro", "Whimsical",
-      "User Research", "Prototyping", "Usability Testing"
+      "User Research", "Prototyping", "Usability Testing", "Design Systems", 
+      "Information Architecture", "Interaction Design", "Wireframing", "User Flows", 
+      "Accessibility Standards", "Design Tokens"
     ]
   },
   {
     title: "Frontend Development", 
     tools: [
       "Phoenix LiveView", "HTML/CSS", "JavaScript", "React", "Tailwind CSS",
-      "Bootstrap", "Responsive Design", "Web Performance"
+      "Bootstrap", "Responsive Design", "Web Performance", "Next.js",
+      "Vue.js", "Typescript", "Component Architecture", "State Management", "Progressive Web Apps"
     ]
   },
   {
     title: "Backend & Systems",
     tools: [
       "Elixir", "Phoenix Framework", "PostgreSQL", "GraphQL",
-      "Agile/Scrum", "Remote Collaboration Tools", "NodeJS", "Docker"
+      "Agile/Scrum", "Remote Collaboration Tools", "NodeJS", "Docker", 
+      "API Integration / REST", "CI/CD Pipelines", "System Architecture"
     ]
   },
   {
     title: "Tools & Methods",
     tools: [
       "Performance Monitoring", "A/B Testing", "VS Code", "Git/GitHub",
-      "User Research", "Prototyping", "Usability Testing"
+      "User Research", "Prototyping", "Usability Testing", "Workshop Facilitation", 
+      "Stakeholder Communication", "Product Strategy Alignment", "Agile Methodologies",
+      "Design Sprints", "Version Control", "Design QA"
     ]
   }
 ];
