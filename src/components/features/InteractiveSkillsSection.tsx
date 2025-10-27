@@ -54,6 +54,27 @@ const skills: Skill[] = [
     years: "2+ years",
     description: "WCAG compliance, performance optimization, inclusive design",
     icon: "🌍"
+  },
+  {
+    name: "Cross-Framework Frontend Development",
+    percentage: 80,
+    years: "5+ years",
+    description: "React, Next.js, Vue, Tailwind CSS, component architecture",
+    icon: "⚛️"
+  },
+  {
+    name: "UX Strategy & System Thinking",
+    percentage: 88,
+    years: "10+ years",
+    description: "Bridging user goals and business outcomes through design systems, scalable frameworks, and team alignment.",
+    icon: "🎨"
+  },
+  {
+    name: "Prototyping & Design Tools",
+    percentage: 85,
+    years: "8+ years",
+    description: "Figma, Adobe Creative Suite, Miro — creating high-fidelity interactive prototypes and system documentation.",
+    icon: "🚀"
   }
 ];
 

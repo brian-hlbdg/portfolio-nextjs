@@ -40,6 +40,30 @@ const skills: Skill[] = [
     percentage: 90,
     years: "5+ years",
     description: "Distributed teams, async communication, project management"
+  },
+  {
+    name: "Accessibility & Performance",
+    percentage: 60,
+    years: "2+ years",
+    description: "WCAG compliance, performance optimization, inclusive design"
+  },
+  {
+    name: "Cross-Framework Frontend Development",
+    percentage: 80,
+    years: "5+ years",
+    description: "React, Next.js, Vue, Tailwind CSS, component architecture"
+  },
+  {
+    name: "UX Strategy & System Thinking",
+    percentage: 88,
+    years: "10+ years",
+    description: "Bridging user goals and business outcomes through design systems, scalable frameworks, and team alignment."
+  },
+  {
+    name: "Prototyping & Design Tools",
+    percentage: 85,
+    years: "8+ years",
+    description: "Figma, Adobe Creative Suite, Miro — creating high-fidelity interactive prototypes and system documentation."
   }
 ];
 
