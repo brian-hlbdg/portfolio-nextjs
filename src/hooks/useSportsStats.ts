@@ -17,7 +17,8 @@ export interface TeamStats {
   ties?: number;
   record: string;
   lastUpdated: string;
-  source?: 'live' | 'cache' | 'fallback';
+  source: 'live' | 'cache' | 'fallback';
+  cachedAt?: number; // Add optional cachedAt to match CachedTeamStats
 }
 
 export interface UseSportsStatsReturn {
@@ -358,8 +359,8 @@ export function useSportsStats(): UseSportsStatsReturn {
         hasErrors = true;
       }
 
-      // Merge live data with cache (pass as any to avoid type issue, mergeWithCache handles it)
-      const mergedTeams = mergeWithCache(liveTeams as any);
+      // Merge live data with cache - now properly typed
+      const mergedTeams = mergeWithCache(liveTeams);
 
       // If we got ANY live data, cache it
       if (liveTeams.length > 0) {
