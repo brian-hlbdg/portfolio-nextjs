@@ -45,7 +45,6 @@ export function ScheduleSection({ team }: ScheduleSectionProps) {
   }
 
   const upcomingGames = scheduleData.games.filter(game => game.status === 'scheduled');
-  const today = new Date();
 
   return (
     <div className="text-white space-y-6">
@@ -76,7 +75,7 @@ export function ScheduleSection({ team }: ScheduleSectionProps) {
       {/* Games List */}
       {upcomingGames.length > 0 ? (
         <div className="space-y-3">
-          {upcomingGames.map((game, index) => (
+          {upcomingGames.map((game) => (
             <div
               key={game.id}
               className="p-4 rounded-lg border transition-all hover:shadow-lg"

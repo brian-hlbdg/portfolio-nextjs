@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { ChicagoTeam } from '@/data/chicagoTeams';
 import { useGameData } from '@/hooks/useGameData';
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { ChicagoSportsBanners } from '@/components/features/chicago-sports/ChicagoSportsBanners';
 
 export default function ChicagoSportsPage() {

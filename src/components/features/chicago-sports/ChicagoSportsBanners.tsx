@@ -18,8 +18,8 @@ export function ChicagoSportsBanners() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-900 p-4 flex items-center justify-center">
+      <div className="w-full max-w-7xl">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-white mb-2">
@@ -30,8 +30,8 @@ export function ChicagoSportsBanners() {
           </p>
         </div>
 
-        {/* Banners Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max">
+        {/* Banners Grid - Full height on desktop, square on mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max lg:auto-rows-[calc(100vh-200px)]">
           {chicagoTeams.map((team) => {
             const stats = getTeamStats(team.fullName);
             
@@ -39,7 +39,7 @@ export function ChicagoSportsBanners() {
               <button
                 key={team.id}
                 onClick={() => handleBannerClick(team.id)}
-                className="group relative h-48 overflow-hidden rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900"
+                className="group relative aspect-square lg:aspect-auto overflow-hidden rounded-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900"
                 style={{
                   backgroundColor: team.colors.primary,
                   borderColor: team.colors.secondary,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface GameScore {
   period: number;
@@ -25,21 +25,38 @@ export interface GameData {
   venue: string;
 }
 
+interface Competitor {
+  team: { id: string; displayName: string; logo: string };
+  score: number;
+  linescores?: Array<{ value: number }>;
+}
+
+interface Event {
+  id: string;
+  date: string;
+  competitions: Array<{
+    competitors: Competitor[];
+    status?: { type?: { name?: string } };
+    linescores?: Array<{ value: number }>;
+    venue?: { fullName?: string; city?: string };
+    summary?: string;
+  }>;
+}
+
+interface ScheduleResponse {
+  events?: Event[];
+}
+
 export function useGameData(teamId: string) {
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchLastGame();
-  }, [teamId]);
-
-  const fetchLastGame = async () => {
+  const fetchLastGame = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Map team IDs to ESPN team codes
       const teamCodeMap: Record<string, string> = {
         bears: '3',
         cubs: '16',
@@ -56,20 +73,18 @@ export function useGameData(teamId: string) {
         return;
       }
 
-      // Fetch recent games from ESPN
       const res = await fetch(
-        `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamCode}/schedule` // Adjust sport based on team
+        `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${teamCode}/schedule`
       );
 
       if (!res.ok) {
         throw new Error('Failed to fetch game data');
       }
 
-      const data = await res.json();
+      const data = (await res.json()) as ScheduleResponse;
       const events = data.events || [];
 
-      // Find last completed game
-      const lastGame = events.find((e: any) => {
+      const lastGame = events.find((e: Event) => {
         const status = e.competitions?.[0]?.status?.type?.name;
         return status === 'STATUS_FINAL' || status === 'Final';
       });
@@ -80,16 +95,14 @@ export function useGameData(teamId: string) {
         const homeTeam = competitors[0];
         const awayTeam = competitors[1];
 
-        // Determine which is our team
         const isHome = homeTeam.team.id === teamCode;
         const ourTeam = isHome ? homeTeam : awayTeam;
         const opponent = isHome ? awayTeam : homeTeam;
 
-        // Build score progression (simplified for now)
         const scoreProgression: GameScore[] = [];
         const quarters = competition.linescores || [];
 
-        quarters.forEach((score: any, index: number) => {
+        quarters.forEach((score, index: number) => {
           scoreProgression.push({
             period: index + 1,
             teamScore: ourTeam.linescores?.[index]?.value || 0,
@@ -98,7 +111,6 @@ export function useGameData(teamId: string) {
           });
         });
 
-        // Determine result
         const ourScore = ourTeam.score;
         const oppScore = opponent.score;
         const result = ourScore > oppScore ? 'W' : ourScore < oppScore ? 'L' : 'T';
@@ -131,8 +143,11 @@ export function useGameData(teamId: string) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [teamId]);
+
+  useEffect(() => {
+    fetchLastGame();
+  }, [fetchLastGame]);
 
   return { gameData, loading, error, refetch: fetchLastGame };
 }
-

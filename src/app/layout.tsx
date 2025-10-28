@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { Header } from '@/components/layout/Header';
 import { EnhancedFloatingThemeToggle } from '@/components/layout/EnhancedFloatingThemeToggle';
-import type { Metadata } from 'next'
 import './globals.css';
 
 const inter = Inter({
