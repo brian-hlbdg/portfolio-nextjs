@@ -2,10 +2,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useSportsStats } from '@/hooks/useSportsStats';
+import Image from 'next/image';
 
 export function ChicagoSportsDrawer() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { teams, loading, error, lastFetch, refetch } = useSportsStats();
 
@@ -42,6 +44,16 @@ export function ChicagoSportsDrawer() {
       WNBA: { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300', border: 'border-orange-300 dark:border-orange-700' }
     };
     return colors[sport] || colors.NFL;
+  };
+
+  const handleTeamClick = (teamName: string) => {
+    // Convert team name to URL-friendly ID
+    const teamId = teamName.toLowerCase()
+      .replace('chicago ', '')
+      .replace(/\s+/g, '');
+    
+    router.push(`/chicago-sports/${teamId}`);
+    setIsOpen(false);
   };
 
   return (
@@ -83,7 +95,7 @@ export function ChicagoSportsDrawer() {
           Chicago Sports
         </h3>
         <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-          Dedicated Chicago sports fan through thick and thin (click to view teams' stats)
+          Dedicated White Sox and Bears fan through thick and thin
         </p>
       </button>
 
@@ -116,20 +128,32 @@ export function ChicagoSportsDrawer() {
 
         {/* Content */}
         <div className="overflow-y-auto px-6 pb-8" style={{ maxHeight: 'calc(90vh - 60px)' }}>
-          {/* Header */}
+          {/* Header with Dashboard Link */}
           <div className="flex items-center justify-between mb-6 sticky top-0 bg-white dark:bg-gray-900 pt-2 z-10">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Chicago Sports
             </h2>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              aria-label="Close drawer"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  router.push('/chicago-sports');
+                  setIsOpen(false);
+                }}
+                className="px-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
+                title="View Full Dashboard"
+              >
+                Dashboard →
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                aria-label="Close drawer"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Loading State */}
@@ -168,9 +192,10 @@ export function ChicagoSportsDrawer() {
                       {sportTeams.map((team) => {
                         const colors = getSportColor(team.sport);
                         return (
-                          <div
+                          <button
                             key={team.name}
-                            className={`${colors.bg} ${colors.border} border rounded-lg p-4 transition-all duration-200 hover:shadow-md`}
+                            onClick={() => handleTeamClick(team.name)}
+                            className={`w-full text-left ${colors.bg} ${colors.border} border rounded-lg p-4 transition-all duration-200 hover:shadow-md cursor-pointer`}
                           >
                             <div className="flex items-center justify-between mb-2">
                               <h4 className={`font-semibold ${colors.text}`}>
@@ -200,7 +225,7 @@ export function ChicagoSportsDrawer() {
                                 {team.sport}
                               </span>
                             </div>
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
