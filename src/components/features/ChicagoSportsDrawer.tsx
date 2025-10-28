@@ -235,7 +235,7 @@ export function ChicagoSportsDrawer() {
 
               {/* Last Updated */}
               <div className="text-xs text-gray-500 dark:text-gray-400 text-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                Last updated: {lastFetch?.toLocaleDateString() || 'Never'}
+                Last updated: {lastFetch ? new Date(lastFetch).toLocaleDateString() : 'Never'}
               </div>
             </div>
           )}
