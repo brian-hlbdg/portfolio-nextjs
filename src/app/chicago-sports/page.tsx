@@ -1,11 +1,6 @@
 'use client';
 
-import { ChicagoSportsBanners } from '@/components/features/chicago-sports/ChicagoSportsBanners';
-
-export default function ChicagoSportsPage() {
-  return (
-    <div className="min-h-screen">
-      <ChicagoSportsBanners />
-    </div>
-  );
+import ChicagoSportsDashboard from '@/components/features/ChicagoSportsDashboard';
+export default function Page() {
+  return <ChicagoSportsDashboard />;
 }
