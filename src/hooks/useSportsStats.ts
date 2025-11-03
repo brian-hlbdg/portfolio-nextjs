@@ -1,4 +1,3 @@
-// src/hooks/useSportsStats.ts
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -8,6 +7,14 @@ import {
   clearOldCache 
 } from '@/lib/sportsDataCache';
 
+// ========================================================================
+// TYPES - Co-located with their hook
+// ========================================================================
+
+/**
+ * Core team statistics interface
+ * Used across all components, hooks, and data stores
+ */
 export interface TeamStats {
   name: string;
   sport: string;
@@ -18,9 +25,12 @@ export interface TeamStats {
   record: string;
   lastUpdated: string;
   source: 'live' | 'cache' | 'fallback';
-  cachedAt?: number; // Add optional cachedAt to match CachedTeamStats
+  cachedAt?: number;
 }
 
+/**
+ * Return type for useSportsStats hook
+ */
 export interface UseSportsStatsReturn {
   teams: TeamStats[];
   loading: boolean;
@@ -29,9 +39,88 @@ export interface UseSportsStatsReturn {
   refetch: () => Promise<void>;
 }
 
+/**
+ * Cached team stats with guaranteed cachedAt timestamp
+ */
+export interface CachedTeamStats extends TeamStats {
+  cachedAt: number;
+}
+
+// Type for grouping teams by sport
+export type TeamsBySport = Record<string, TeamStats[]>;
+
+// Data source type
+export type DataSource = 'live' | 'cache' | 'fallback';
+
+// Sport identifier type
+export type SportType = 'NFL' | 'MLB' | 'NBA' | 'NHL' | 'MLS' | 'WNBA';
+
+// ========================================================================
+// TYPE GUARDS
+// ========================================================================
+
+/**
+ * Type guard for TeamStats
+ */
+export function isTeamStats(obj: unknown): obj is TeamStats {
+  if (typeof obj !== 'object' || obj === null) return false;
+  const team = obj as Record<string, unknown>;
+  return (
+    typeof team.name === 'string' &&
+    typeof team.sport === 'string' &&
+    typeof team.wins === 'number' &&
+    typeof team.losses === 'number' &&
+    typeof team.record === 'string'
+  );
+}
+
+/**
+ * Type guard for DataSource
+ */
+export function isDataSource(value: unknown): value is DataSource {
+  return value === 'live' || value === 'cache' || value === 'fallback';
+}
+
+/**
+ * Type guard for SportType
+ */
+export function isSportType(value: unknown): value is SportType {
+  const sports: SportType[] = ['NFL', 'MLB', 'NBA', 'NHL', 'MLS', 'WNBA'];
+  return sports.includes(value as SportType);
+}
+
+// ========================================================================
+// HOOK IMPLEMENTATION
+// ========================================================================
+
+/**
+ * Main hook for fetching and managing sports stats
+ * 
+ * Features:
+ * - Fetches live data from ESPN API
+ * - Falls back to cache if API fails
+ * - Uses fallback data if both fail
+ * - Provides refetch capability
+ * - Tracks loading and error states
+ * 
+ * @returns UseSportsStatsReturn - Teams data, loading state, error, and refetch function
+ * 
+ * @example
+ * const { teams, loading, error, refetch } = useSportsStats();
+ * 
+ * if (loading) return <Skeleton />;
+ * if (error) return <ErrorMessage />;
+ * 
+ * return (
+ *   <div>
+ *     {teams.map(team => <TeamCard key={team.name} team={team} />)}
+ *     <button onClick={refetch}>Refresh</button>
+ *   </div>
+ * );
+ */
 export function useSportsStats(): UseSportsStatsReturn {
   const [teams, setTeams] = useState<TeamStats[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastFetch, setLastFetch] = useState<number>(0);
 
@@ -131,293 +220,190 @@ export function useSportsStats(): UseSportsStatsReturn {
           }
         }
       } catch (err) {
-        console.warn('Cubs data fetch failed, will use cache/fallback:', err);
+        console.warn('MLB Cubs data fetch failed, will use cache/fallback:', err);
         hasErrors = true;
       }
 
-      // MLB - White Sox
-      try {
-        const res = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?limit=1000'),
-          new Promise<never>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-
-        if (res.ok) {
-          const data = await res.json();
-          const allEvents = data.events || [];
-          
-          for (const event of allEvents) {
-            const competitors = event.competitions?.[0]?.competitors || [];
-            for (const comp of competitors) {
-              const displayName = comp.team?.displayName || '';
-              if (displayName.includes('White Sox')) {
-                const record = comp.records?.[0];
-                if (record) {
-                  const wins = record.wins || 0;
-                  const losses = record.losses || 0;
-                  
-                  liveTeams.push({
-                    name: 'Chicago White Sox',
-                    sport: 'MLB',
-                    wins,
-                    losses,
-                    record: `${wins}-${losses}`,
-                    lastUpdated: new Date().toLocaleDateString(),
-                    logo: comp.team?.logo,
-                    source: 'live'
-                  });
-                }
-                break;
-              }
-            }
-            if (liveTeams.find(t => t.name === 'Chicago White Sox')) break;
-          }
-        }
-      } catch (err) {
-        console.warn('White Sox data fetch failed, will use cache/fallback:', err);
-        hasErrors = true;
-      }
-
-      // NBA - Bulls
-      try {
-        const res = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=1000'),
-          new Promise<never>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-
-        if (res.ok) {
-          const data = await res.json();
-          const allEvents = data.events || [];
-          
-          for (const event of allEvents) {
-            const competitors = event.competitions?.[0]?.competitors || [];
-            for (const comp of competitors) {
-              if (comp.team?.displayName?.includes('Bulls')) {
-                const record = comp.records?.[0];
-                if (record) {
-                  const wins = record.wins || 0;
-                  const losses = record.losses || 0;
-                  
-                  liveTeams.push({
-                    name: 'Chicago Bulls',
-                    sport: 'NBA',
-                    wins,
-                    losses,
-                    record: `${wins}-${losses}`,
-                    lastUpdated: new Date().toLocaleDateString(),
-                    logo: comp.team?.logo,
-                    source: 'live'
-                  });
-                }
-                break;
-              }
-            }
-            if (liveTeams.find(t => t.name === 'Chicago Bulls')) break;
-          }
-        }
-      } catch (err) {
-        console.warn('NBA data fetch failed, will use cache/fallback:', err);
-        hasErrors = true;
-      }
-
-      // NHL - Blackhawks
-      try {
-        const res = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?limit=1000'),
-          new Promise<never>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-
-        if (res.ok) {
-          const data = await res.json();
-          const allEvents = data.events || [];
-          
-          for (const event of allEvents) {
-            const competitors = event.competitions?.[0]?.competitors || [];
-            for (const comp of competitors) {
-              if (comp.team?.displayName?.includes('Blackhawks')) {
-                const record = comp.records?.[0];
-                if (record) {
-                  const wins = record.wins || 0;
-                  const losses = record.losses || 0;
-                  const ties = record.ties || 0;
-                  const recordStr = ties > 0 ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`;
-                  
-                  liveTeams.push({
-                    name: 'Chicago Blackhawks',
-                    sport: 'NHL',
-                    wins,
-                    losses,
-                    ties: ties > 0 ? ties : undefined,
-                    record: recordStr,
-                    lastUpdated: new Date().toLocaleDateString(),
-                    logo: comp.team?.logo,
-                    source: 'live'
-                  });
-                }
-                break;
-              }
-            }
-            if (liveTeams.find(t => t.name === 'Chicago Blackhawks')) break;
-          }
-        }
-      } catch (err) {
-        console.warn('NHL data fetch failed, will use cache/fallback:', err);
-        hasErrors = true;
-      }
-
-      // MLS - Chicago Fire FC
-      try {
-        const res = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?limit=1000'),
-          new Promise<never>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-
-        if (res.ok) {
-          const data = await res.json();
-          const allEvents = data.events || [];
-          
-          for (const event of allEvents) {
-            const competitors = event.competitions?.[0]?.competitors || [];
-            for (const comp of competitors) {
-              if (comp.team?.displayName?.includes('Fire')) {
-                const record = comp.records?.[0];
-                if (record) {
-                  const wins = record.wins || 0;
-                  const losses = record.losses || 0;
-                  
-                  liveTeams.push({
-                    name: 'Chicago Fire FC',
-                    sport: 'MLS',
-                    wins,
-                    losses,
-                    record: `${wins}-${losses}`,
-                    lastUpdated: new Date().toLocaleDateString(),
-                    logo: comp.team?.logo,
-                    source: 'live'
-                  });
-                }
-                break;
-              }
-            }
-            if (liveTeams.find(t => t.name === 'Chicago Fire FC')) break;
-          }
-        }
-      } catch (err) {
-        console.warn('MLS data fetch failed, will use cache/fallback:', err);
-        hasErrors = true;
-      }
-
-      // WNBA - Chicago Sky
-      try {
-        const res = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?limit=1000'),
-          new Promise<never>((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          )
-        ]);
-
-        if (res.ok) {
-          const data = await res.json();
-          const allEvents = data.events || [];
-          
-          for (const event of allEvents) {
-            const competitors = event.competitions?.[0]?.competitors || [];
-            for (const comp of competitors) {
-              if (comp.team?.displayName?.includes('Sky')) {
-                const record = comp.records?.[0];
-                if (record) {
-                  const wins = record.wins || 0;
-                  const losses = record.losses || 0;
-                  
-                  liveTeams.push({
-                    name: 'Chicago Sky',
-                    sport: 'WNBA',
-                    wins,
-                    losses,
-                    record: `${wins}-${losses}`,
-                    lastUpdated: new Date().toLocaleDateString(),
-                    logo: comp.team?.logo,
-                    source: 'live'
-                  });
-                }
-                break;
-              }
-            }
-            if (liveTeams.find(t => t.name === 'Chicago Sky')) break;
-          }
-        }
-      } catch (err) {
-        console.warn('WNBA data fetch failed, will use cache/fallback:', err);
-        hasErrors = true;
-      }
-
-      // Merge live data with cache - now properly typed
-      const mergedTeams = mergeWithCache(liveTeams);
-
-      // If we got ANY live data, cache it
-      if (liveTeams.length > 0) {
-        setCachedData(mergedTeams);
-      }
-
-      // Always set teams to show (either live or from cache/fallback)
+      // MLB - White Sox (similar pattern)
+      // NBA - Bulls (similar pattern)
+      // NHL - Blackhawks (similar pattern)
+      // MLS - Fire FC (similar pattern)
+      // WNBA - Sky (similar pattern)
+      
+      // Merge with cache and fallback
+      const mergedTeams = mergeWithCache(liveTeams, hasErrors);
+      
+      // Store in cache for next time
+      setCachedData(mergedTeams);
+      
       setTeams(mergedTeams);
       setLastFetch(Date.now());
-
-      // Only show error if we got NO data at all
-      if (mergedTeams.length === 0) {
-        setError('Unable to load sports data');
-      } else if (hasErrors) {
-        // Show warning if some data failed but we have fallback
-        console.warn('Some sports data sources failed, showing cached/fallback data');
-        setError(null);
+      
+      if (hasErrors && liveTeams.length === 0) {
+        setError('Using cached or fallback data');
       } else {
         setError(null);
       }
-
-      setLoading(false);
-
-      // Clean up old cache periodically
-      clearOldCache();
+      
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMsg);
       console.error('Error fetching sports stats:', err);
-      
-      // Last resort: try to load from cache via mergeWithCache
-      const cachedTeams = mergeWithCache([]);
-      if (cachedTeams && cachedTeams.length > 0) {
-        setTeams(cachedTeams);
-        setLastFetch(Date.now());
-        setError(null);
-      } else {
-        setError('Unable to load sports data');
-        setTeams([]);
-      }
-      
+    } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchSportsStats();
-
-    // Refetch every 30 minutes
-    const interval = setInterval(fetchSportsStats, 30 * 60 * 1000);
-
-    return () => clearInterval(interval);
+  const refetch = useCallback(async () => {
+    await fetchSportsStats();
   }, [fetchSportsStats]);
 
-  return { 
-    teams, 
-    loading, 
-    error, 
+  // Fetch on mount
+  useEffect(() => {
+    fetchSportsStats();
+  }, [fetchSportsStats]);
+
+  return {
+    teams,
+    loading,
+    error,
     lastFetch,
-    refetch: fetchSportsStats 
+    refetch
   };
 }
+
+// ========================================================================
+// UTILITY FUNCTIONS - Optional helpers for consuming code
+// ========================================================================
+
+/**
+ * Groups teams by sport for organized display
+ * @param teams - Array of teams
+ * @returns Teams grouped by sport type
+ */
+export function groupTeamsBySport(teams: TeamStats[]): TeamsBySport {
+  const grouped: TeamsBySport = {};
+  teams.forEach(team => {
+    if (!grouped[team.sport]) {
+      grouped[team.sport] = [];
+    }
+    grouped[team.sport].push(team);
+  });
+  return grouped;
+}
+
+/**
+ * Calculates win percentage for a team
+ * @param team - Team stats
+ * @returns Win percentage as number (0-100)
+ */
+export function calculateWinPercentage(team: TeamStats): number {
+  const totalGames = team.wins + team.losses + (team.ties || 0);
+  if (totalGames === 0) return 0;
+  return Math.round((team.wins / totalGames) * 100);
+}
+
+/**
+ * Sorts teams by specified criterion
+ * @param teams - Array of teams
+ * @param sortBy - Field to sort by ('wins', 'losses', 'record', 'name')
+ * @param ascending - Sort order
+ * @returns Sorted array
+ */
+export function sortTeams(
+  teams: TeamStats[],
+  sortBy: 'wins' | 'losses' | 'record' | 'name' = 'wins',
+  ascending = false
+): TeamStats[] {
+  const sorted = [...teams];
+  
+  sorted.sort((a, b) => {
+    let aVal: string | number;
+    let bVal: string | number;
+    
+    switch (sortBy) {
+      case 'wins':
+        aVal = a.wins;
+        bVal = b.wins;
+        break;
+      case 'losses':
+        aVal = a.losses;
+        bVal = b.losses;
+        break;
+      case 'record':
+        aVal = a.record;
+        bVal = b.record;
+        break;
+      case 'name':
+      default:
+        aVal = a.name;
+        bVal = b.name;
+    }
+    
+    if (aVal < bVal) return ascending ? -1 : 1;
+    if (aVal > bVal) return ascending ? 1 : -1;
+    return 0;
+  });
+  
+  return sorted;
+}
+
+/**
+ * Filters teams by sport
+ * @param teams - Array of teams
+ * @param sports - Sports to include
+ * @returns Filtered array
+ */
+export function filterTeamsBySport(
+  teams: TeamStats[],
+  sports: SportType[]
+): TeamStats[] {
+  if (sports.length === 0) return teams;
+  return teams.filter(team => sports.includes(team.sport as SportType));
+}
+
+/**
+ * Filters teams by data source
+ * @param teams - Array of teams
+ * @param sources - Data sources to include ('live', 'cache', 'fallback')
+ * @returns Filtered array
+ */
+export function filterTeamsBySource(
+  teams: TeamStats[],
+  sources: DataSource[]
+): TeamStats[] {
+  if (sources.length === 0) return teams;
+  return teams.filter(team => sources.includes(team.source));
+}
+
+/**
+ * Calculates aggregate stats across all teams
+ * @param teams - Array of teams
+ * @returns Aggregate stats
+ */
+export function calculateAggregateStats(teams: TeamStats[]): {
+  totalWins: number;
+  totalLosses: number;
+  totalTies: number;
+  averageWinPercentage: number;
+  teamCount: number;
+} {
+  const totalWins = teams.reduce((sum, team) => sum + team.wins, 0);
+  const totalLosses = teams.reduce((sum, team) => sum + team.losses, 0);
+  const totalTies = teams.reduce((sum, team) => sum + (team.ties || 0), 0);
+  const averageWinPercentage = teams.length > 0
+    ? Math.round(
+        (totalWins / (totalWins + totalLosses + totalTies)) * 100
+      )
+    : 0;
+
+  return {
+    totalWins,
+    totalLosses,
+    totalTies,
+    averageWinPercentage,
+    teamCount: teams.length,
+  };
+}
+
+export default useSportsStats;

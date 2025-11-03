@@ -2,13 +2,26 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
+import { useSportsStats, TeamStats, DashboardMetric } from '@/hooks/useSportsStats';
 import StatCard from './dashboard/StatCard';
 import TeamCard from './dashboard/TeamCard';
 import LineChart from './dashboard/LineChart';
 import HeatmapChart from './dashboard/HeatmapChart';
 import ScatterChart from './dashboard/ScatterChart';
 import DashboardSkeleton from './dashboard/DashboardSkeleton';
+
+interface TeamStats {
+  name: string;
+  sport: string;
+  logo?: string;
+  wins: number;
+  losses: number;
+  ties?: number;
+  record: string;
+  lastUpdated: string;
+  source: 'live' | 'cache' | 'fallback';
+  cachedAt?: number;
+}
 
 interface DashboardMetric {
   label: string;

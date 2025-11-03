@@ -3,12 +3,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSportsStats } from '@/hooks/useSportsStats';
+import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
 import Image from 'next/image';
 
 export function ChicagoSportsDrawer() {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { teams, loading, error, lastFetch, refetch } = useSportsStats();
 
   // Close drawer on escape key

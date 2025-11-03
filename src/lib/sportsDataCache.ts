@@ -1,5 +1,6 @@
 // src/lib/sportsDataCache.ts
 // Persistent cache for sports stats with fallback logic
+import { CachedTeamStats, TeamStats } from '@/hooks/useSportsStats';
 
 interface CachedTeamStats {
   name: string;
