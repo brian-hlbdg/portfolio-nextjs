@@ -145,7 +145,7 @@ export function setCachedData(teams: CachedTeamStats[]): void {
  * Merge live data with cache
  * Keeps any data that's still valid, adds new data
  */
-export function mergeWithCache(liveTeams: CachedTeamStats[]): CachedTeamStats[] {
+export function mergeWithCache(liveTeams: CachedTeamStats[], hasErrors: boolean): CachedTeamStats[] {
   const cached = getCachedData();
   const merged: Record<string, CachedTeamStats> = {};
 
