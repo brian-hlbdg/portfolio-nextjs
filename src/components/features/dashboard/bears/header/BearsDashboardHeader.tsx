@@ -70,7 +70,7 @@ export default function BearsDashboardHeader({
               <h1 className="text-4xl font-bold tracking-tighter bg-gradient-to-r from-orange-500 via-orange-400 to-orange-600 bg-clip-text text-transparent">
                 CHICAGO BEARS
               </h1>
-              <p className="text-slate-400 text-sm">NFL • 2024 Season</p>
+              <p className="text-slate-400 text-sm">NFL • 2025 Season</p>
             </div>
           </div>
 

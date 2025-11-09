@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { useBearsStats } from '@/hooks/useBearsStats';
+import React, { useMemo } from 'react';
+import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
@@ -9,8 +9,16 @@ import PlayerStatsSection from './sections/PlayerStatsSection';
 import DebugESPNData from '@/components/debug/DebugESPNData';
 
 export default function BearsDashboard() {
-  // Call hook¸¸¸
-  const stats = useBearsStats();
+  // ✅ Call useSportsStats directly - no intermediate hook needed!
+  const { teams, loading, error, refetch } = useSportsStats();
+
+  // ✅ Find Bears in the teams array
+  const bearsStats = useMemo((): TeamStats | null => {
+    return teams.find((team: TeamStats) => team.name === 'Chicago Bears') ?? null;
+  }, [teams]);
+
+  // Format last updated
+  const lastUpdated = bearsStats?.lastUpdated || new Date().toLocaleDateString();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
@@ -23,47 +31,53 @@ export default function BearsDashboard() {
 
       {/* Header */}
       <BearsDashboardHeader
-        error={stats.error}
-        onRefetch={stats.refetch}
-        lastUpdated={stats.lastUpdated}
-        loading={stats.loading}
+        error={error}
+        onRefetch={refetch}
+        lastUpdated={lastUpdated}
+        loading={loading}
       />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8 relative z-10">
         {/* Overview Section */}
         <section>
-          <OverviewSection stats={stats.seasonStats} loading={stats.loading} />
+          <OverviewSection stats={bearsStats} loading={loading} />
         </section>
 
         {/* Schedule Section */}
         <section>
           <ScheduleSection
-            upcomingGames={stats.upcomingGames}
-            recentGames={stats.recentGames}
-            loading={stats.loading}
+            upcomingGames={[]}
+            recentGames={[]}
+            loading={loading}
           />
         </section>
 
         {/* Player Stats Section */}
         <section>
-          <PlayerStatsSection playerStats={stats.playerStats} loading={stats.loading} />
+          <PlayerStatsSection playerStats={[]} loading={loading} />
         </section>
 
         {/* Debug Info */}
         {process.env.NODE_ENV === 'development' && (
           <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-xs text-gray-400 space-y-2">
             <p>
-              <strong>Stats:</strong> {stats.seasonStats ? 'Loaded' : 'None'}
+              <strong>Bears Data:</strong> {bearsStats ? 'Loaded' : 'None'}
             </p>
             <p>
-              <strong>Games:</strong> {stats.upcomingGames.length + stats.recentGames.length} total
+              <strong>Record:</strong> {bearsStats?.record || 'N/A'}
             </p>
             <p>
-              <strong>Loading:</strong> {stats.loading ? 'Yes' : 'No'}
+              <strong>Source:</strong> {bearsStats?.source || 'N/A'}
             </p>
             <p>
-              <strong>Error:</strong> {stats.error || 'None'}
+              <strong>Loading:</strong> {loading ? 'Yes' : 'No'}
+            </p>
+            <p>
+              <strong>Error:</strong> {error || 'None'}
+            </p>
+            <p>
+              <strong>Total Teams Loaded:</strong> {teams.length}
             </p>
           </div>
         )}
