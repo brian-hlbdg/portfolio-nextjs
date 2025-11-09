@@ -9,6 +9,7 @@ import LineChart from './dashboard/LineChart';
 import HeatmapChart from './dashboard/HeatmapChart';
 import ScatterChart from './dashboard/ScatterChart';
 import DashboardSkeleton from './dashboard/DashboardSkeleton';
+import DebugESPNData from '@/components/debug/DebugESPNData';
 
 interface TeamStats {
   name: string;
@@ -40,9 +41,12 @@ interface DashboardMetric {
  * 5. Advanced card borders with glowing effects
  */
 
+
 export default function ChicagoSportsDashboard() {
   const { teams, loading, error, refetch } = useSportsStats();
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+
+
 
   // Compute aggregate metrics
   const metrics = useMemo<DashboardMetric[]>(() => {
@@ -82,19 +86,21 @@ export default function ChicagoSportsDashboard() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
+      
 
       {/* HEADER - ENHANCED */}
       <header className="border-b border-slate-800/50 bg-gradient-to-b from-slate-950/80 to-slate-950/40 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
-              CHICAGO SPORTS DATA DASHBOARD
+              CHICAGO SPORTS DATA DASHBOARD - 2024
             </h1>
             <div className="w-1 h-12 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full shadow-lg shadow-cyan-400/50" />
           </div>
           <p className="text-slate-400 text-sm tracking-wide">Real-time stats powered by ESPN • 7 Professional Teams</p>
         </div>
       </header>
+      <DebugESPNData />test
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8 relative z-10">
         {/* ERROR STATE */}

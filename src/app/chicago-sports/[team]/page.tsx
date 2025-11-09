@@ -1,3 +1,5 @@
+'use client';
+
 import { use } from 'react';
 import { useSportsStats } from '@/hooks/useSportsStats';
 import { chicagoTeams } from '@/data/chicagoTeams';

@@ -6,14 +6,16 @@ import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
 import PlayerStatsSection from './sections/PlayerStatsSection';
+import DebugESPNData from '@/components/debug/DebugESPNData';
 
 export default function BearsDashboard() {
-  // Call hook
+  // Call hook¸¸¸
   const stats = useBearsStats();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
       {/* Background Glow Elements */}
+      <DebugESPNData />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
