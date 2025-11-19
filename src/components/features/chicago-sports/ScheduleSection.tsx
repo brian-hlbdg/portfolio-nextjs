@@ -9,7 +9,7 @@ interface ScheduleSectionProps {
 }
 
 export function ScheduleSection({ team }: ScheduleSectionProps) {
-  const { scheduleData, loading, error } = useTeamSchedule(team.id, team.sport);
+  const { scheduleData, loading, error } = useTeamSchedule(team.id);
 
   if (loading) {
     return (
