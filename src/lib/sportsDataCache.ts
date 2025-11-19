@@ -1,6 +1,4 @@
 // src/lib/sportsDataCache.ts
-// Persistent cache for sports stats with fallback logic
-import { CachedTeamStats, TeamStats } from '@/hooks/useSportsStats';
 
 interface CachedTeamStats {
   name: string;
@@ -145,7 +143,7 @@ export function setCachedData(teams: CachedTeamStats[]): void {
  * Merge live data with cache
  * Keeps any data that's still valid, adds new data
  */
-export function mergeWithCache(liveTeams: CachedTeamStats[], hasErrors: boolean): CachedTeamStats[] {
+export function mergeWithCache(liveTeams: CachedTeamStats[]): CachedTeamStats[] {
   const cached = getCachedData();
   const merged: Record<string, CachedTeamStats> = {};
 

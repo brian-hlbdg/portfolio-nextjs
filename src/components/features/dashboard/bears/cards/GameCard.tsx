@@ -21,7 +21,7 @@ interface GameCardProps {
  * Shows game details with opponent, date/time, and result
  * Adapts display based on game status
  */
-export default function GameCard({ game, variant = 'upcoming' }: GameCardProps) {
+export default function GameCard({ game }: GameCardProps) {
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', {

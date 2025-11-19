@@ -17,8 +17,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
   setCachedData, 
-  mergeWithCache,
-  clearOldCache 
+  mergeWithCache
 } from '@/lib/sportsDataCache';
 
 // ========================================================================

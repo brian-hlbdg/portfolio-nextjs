@@ -250,7 +250,7 @@ function parseGame(
 // LOGGING HELPERS
 // ========================================================================
 
-function logDebugInfo(event: ESPNEvent, competition: ESPNCompetition, teamId: string): void {
+function logDebugInfo(event: ESPNEvent, competition: ESPNCompetition): void {
   console.log(`   Event:`, {
     id: event.id,
     date: event.date,
@@ -279,7 +279,7 @@ interface UseTeamScheduleReturn {
 /**
  * Hook to fetch team schedule from ESPN with debug logging
  */
-export function useTeamSchedule(teamId: string, sport: string): UseTeamScheduleReturn {
+export function useTeamSchedule(teamId: string): UseTeamScheduleReturn {
   const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -332,7 +332,7 @@ export function useTeamSchedule(teamId: string, sport: string): UseTeamScheduleR
           continue;
         }
 
-        logDebugInfo(event, competition, config.bearTeamId);
+        logDebugInfo(event, competition);
 
         const game = parseGame(event, competition, config.sport, config.bearTeamId);
         games.push(game);
@@ -356,9 +356,9 @@ export function useTeamSchedule(teamId: string, sport: string): UseTeamScheduleR
   }, [teamId]);
 
   const refetch = useCallback(async (): Promise<void> => {
-    console.log(`🔄 Refetching ${teamId} schedule...`);
+    console.log(`🔄 Refetching schedule...`);
     await fetchSchedule();
-  }, [fetchSchedule, teamId]);
+  }, [fetchSchedule]);
 
   useEffect((): void => {
     void fetchSchedule();
