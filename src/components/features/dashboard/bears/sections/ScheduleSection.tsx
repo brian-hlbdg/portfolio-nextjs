@@ -23,8 +23,7 @@ export default function ScheduleSection({
   loading: propLoading = false,
 }: ScheduleSectionProps) {
   const { scheduleData, loading: hookLoading, error } = useTeamSchedule(
-    'bears',
-    'NFL'
+    'bears'
   );
 
   const { teams } = useSportsStats();
