@@ -374,7 +374,7 @@ export function useSportsStats(): UseSportsStatsReturn {
 
       // Merge with cache
       const hasErrors = liveTeams.length < totalTeams;
-      const mergedTeams = mergeWithCache(liveTeams, hasErrors);
+      const mergedTeams = mergeWithCache(liveTeams);
 
       setCachedData(mergedTeams);
       setTeams(mergedTeams);
