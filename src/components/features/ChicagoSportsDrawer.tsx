@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
+import { useSportsStats } from '@/hooks/useSportsStats';
 import Image from 'next/image';
 
 export function ChicagoSportsDrawer() {
