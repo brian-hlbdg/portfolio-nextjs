@@ -1,5 +1,4 @@
 // src/data/chicagoTeams.ts
-import { ChicagoTeam } from "@/hooks/useSportsStats";
 
 export interface ChicagoTeam {
   id: string;
