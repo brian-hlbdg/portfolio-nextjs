@@ -12,6 +12,28 @@
 
 import { useState, useCallback } from 'react';
 
+interface TeamDataInfo {
+  id: string;
+  displayName: string;
+  logo?: string;
+  record?: string;
+  wins?: number;
+  losses?: number;
+  ties?: number;
+  sport?: string;
+  name: string;
+  hasLogo?: boolean;
+  recordData?: {
+    type: string;
+    summary: string;
+    displayValue: string;
+    wins?: number;
+    losses?: number;
+    ties?: number;
+  } | undefined;
+  
+}
+
 /**
  * Raw ESPN API response structure
  */
@@ -73,7 +95,7 @@ export interface DebugInfo {
  */
 export function useDebugESPNData() {
   const [debugInfo, setDebugInfo] = useState<DebugInfo | null>(null);
-  const [allTeamsInfo, setAllTeamsInfo] = useState<any[]>([]);
+  const [allTeamsInfo, setAllTeamsInfo] = useState<TeamDataInfo[]>([]);
 
   /**
    * Fetch and log NFL data
@@ -109,7 +131,7 @@ export function useDebugESPNData() {
       // Find Bears data
       let bearsFound = false;
       let bearsData = null;
-      const teams: any[] = [];
+      const teams: TeamDataInfo[] = [];
 
       if (data.events) {
         for (const event of data.events) {
@@ -122,38 +144,41 @@ export function useDebugESPNData() {
             console.log(`%c👥 Found Team: ${teamName}`, 'color: purple; font-size: 11px;');
             
             teams.push({
+              id: comp.team?.id || comp.id || 'unknown-id',
+              displayName: comp.team?.displayName || comp.displayName || teamName,
               name: teamName,
               hasLogo: !!comp.team?.logo,
               logo: comp.team?.logo,
               recordData: comp.records?.[0],
+              record: comp.records?.[0]?.displayValue || undefined,
             });
 
             // Check if this is Bears
-            if (teamName.includes('Bears') || comp.team?.displayName?.includes('Bears')) {
-              bearsFound = true;
-              const record = comp.records?.[0];
-
-              bearsData = {
-                displayName: comp.team?.displayName || 'NOT FOUND',
-                team: {
-                  displayName: comp.team?.displayName,
-                  logo: comp.team?.logo || 'NO LOGO',
-                },
-                record: record
-                  ? {
-                      summary: record.summary,
-                      displayValue: record.displayValue,
-                      wins: record.wins ?? null,
-                      losses: record.losses ?? null,
-                      ties: record.ties ?? null,
-                    }
-                  : null,
-              };
-
-              console.log('%c🐻 BEARS DATA FOUND!', 'color: orange; font-size: 14px; font-weight: bold;');
-              console.log('%cBears Record:', 'color: orange; font-weight: bold;');
-              console.log(bearsData);
-            }
+                        if (teamName.includes('Bears') || comp.team?.displayName?.includes('Bears')) {
+                          bearsFound = true;
+                          const record = comp.records?.[0];
+            
+                          bearsData = {
+                            displayName: comp.team?.displayName ?? null,
+                            team: {
+                              displayName: comp.team?.displayName ?? null,
+                              logo: comp.team?.logo ?? null,
+                            },
+                            record: record
+                              ? {
+                                  summary: record.summary ?? null,
+                                  displayValue: record.displayValue ?? null,
+                                  wins: record.wins ?? null,
+                                  losses: record.losses ?? null,
+                                  ties: record.ties ?? null,
+                                }
+                              : null,
+                          };
+            
+                          console.log('%c🐻 BEARS DATA FOUND!', 'color: orange; font-size: 14px; font-weight: bold;');
+                          console.log('%cBears Record:', 'color: orange; font-weight: bold;');
+                          console.log(bearsData);
+                        }
           }
         }
       }
