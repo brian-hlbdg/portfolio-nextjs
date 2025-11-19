@@ -30,7 +30,7 @@ export default function BearsDashboard() {
     loading: scheduleLoading,
     error: scheduleError,
     refetch: refetchSchedule,
-  } = useTeamSchedule('bears', 'NFL');
+  } = useTeamSchedule('bears');
 
   // ✅ Find Bears in teams array (return null when not found to match OverviewSection prop)
   const bearsStats = useMemo((): TeamStats | null => {
