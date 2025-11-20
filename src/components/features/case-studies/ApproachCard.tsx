@@ -15,11 +15,11 @@ export const ApproachCard: React.FC<ApproachCardProps> = ({ item }) => {
 
   return (
     <div className="text-center">
-      <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-800 rounded-full text-orange-500 mb-4">
+      <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-slate-800 rounded-full text-orange-500 mb-4">
         {iconMap[item.icon]}
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-      <p className="text-slate-400 text-sm">{item.description}</p>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+      <p className="text-gray-600 dark:text-slate-400 text-sm">{item.description}</p>
     </div>
   );
 };
