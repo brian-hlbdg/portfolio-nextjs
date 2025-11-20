@@ -20,10 +20,10 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) =>
   return (
     <Link 
       href={`/blog/${post.slug}`}
-      className={`block bg-slate-800/40 border border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group ${featured ? '' : ''}`}
+      className={`block bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-gray-300 dark:hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group ${featured ? '' : ''}`}
     >
       {/* Image */}
-      <div className="relative h-64 bg-slate-700/30 overflow-hidden">
+      <div className="relative h-64 bg-gray-100 dark:bg-slate-700/30 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center text-slate-500">
           <Image 
             src={post.image ?? ''}
@@ -45,13 +45,13 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) =>
       <div className="p-6">
         {/* Category Tags */}
         <div className="flex flex-wrap gap-2 mb-3">
-          <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-full">
+          <span className="px-3 py-1 bg-gray-200 dark:bg-slate-700/50 text-gray-700 dark:text-slate-300 text-xs rounded-full">
             {post.category}
           </span>
           {post.tags.slice(0, 2).map((tag, idx) => (
             <span 
               key={idx}
-              className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-full"
+              className="px-3 py-1 bg-gray-200 dark:bg-slate-700/50 text-gray-700 dark:text-slate-300 text-xs rounded-full"
             >
               {tag}
             </span>
@@ -59,17 +59,17 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) =>
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-orange-500 transition-colors">
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-orange-500 transition-colors duration-300">
           {post.title}
         </h3>
 
         {/* Excerpt */}
-        <p className="text-slate-400 text-sm mb-4 line-clamp-3">
+        <p className="text-gray-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
           {post.excerpt}
         </p>
 
         {/* Meta */}
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-700">
+        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-slate-500 pt-4 border-t border-gray-200 dark:border-slate-700">
           <span>{formatDate(post.date)}</span>
           <span className="flex items-center gap-2">
             {post.readTime}
