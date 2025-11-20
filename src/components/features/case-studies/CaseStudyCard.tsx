@@ -33,12 +33,12 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           }`}>
             {/* Badge - Top Right - Show either category badge OR coming soon */}
               {study.comingSoon ? (
-                <span className="absolute top-3 right-3 px-2.5 py-1 bg-orange-500 text-gray-900 dark:text-white rounded-md text-xs font-semibold">
+                <span className="absolute top-3 right-3 px-2.5 py-1 bg-orange-500 text-gray-300 dark:text-white rounded-md text-xs font-semibold">
                   COMING SOON
                 </span>
               ) : study.badge && (
                 <span className={`absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold ${
-                  study.badge === 'Featured' ? 'bg-green-600 text-gray-900 dark:text-white' : 'bg-blue-600 text-gray-900 dark:text-white'
+                  study.badge === 'Featured' ? 'bg-green-600 text-gray-300 dark:text-white' : 'bg-blue-600 text-gray-300 dark:text-white'
                 }`}>
                   {study.badge}
                 </span>
@@ -102,7 +102,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           {/* Badge - Top Right */}
           {study.badge && (
             <span className={`absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold ${
-              study.badge === 'Featured' ? 'bg-green-600 text-gray-900 dark:text-white' : 'bg-blue-600 text-gray-900 dark:text-white'
+              study.badge === 'Featured' ? 'bg-green-600 text-gray-300 dark:text-white' : 'bg-blue-600 text-gray-300 dark:text-white'
             }`}>
               {study.badge}
             </span>
