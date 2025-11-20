@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-800 dark:text-white">
       <style>{`
         @keyframes fadeIn {
           from {
@@ -29,7 +29,7 @@ export default function CaseStudiesPage() {
         {/* Hero Section */}
         <section className="mb-16">
           <h1 className="text-5xl font-bold mb-4">Case Studies</h1>
-          <p className="text-xl text-slate-400 max-w-3xl">
+          <p className="text-xl text-gray-900 dark:text-slate-400 max-w-3xl">
             Deep dives into real projects where design meets measurable business impact. 
             Each case study explores the challenges, process, and quantifiable results.
           </p>
@@ -69,7 +69,7 @@ export default function CaseStudiesPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-slate-800/30 rounded-2xl p-12 text-center border border-slate-700">
+        <section className="bg-gray-100 dark:bg-slate-800/30 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
           <h2 className="text-3xl font-bold mb-4">Want to discuss a project?</h2>
           <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
             I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
@@ -77,14 +77,14 @@ export default function CaseStudiesPage() {
           <div className="flex gap-4 justify-center flex-wrap">
             <Link 
               href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
-              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-gray-800 dark:text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
             >
               <span>💬</span>
               Start a Conversation
             </Link>
             <Link
               href="/experience"
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors inline-block text-center"
+              className="px-6 py-3 bg-gray-50 dark:bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white rounded-lg font-semibold transition-colors inline-block text-center"
             >
               View Professional Experience
             </Link>
