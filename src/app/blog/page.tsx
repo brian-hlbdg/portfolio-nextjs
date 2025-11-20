@@ -66,7 +66,7 @@ export default function BlogPage() {
   }, [filters]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-800 dark:text-white transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-6 py-16">
         {/* Hero Section */}
         <section className="mb-12">
@@ -98,7 +98,7 @@ export default function BlogPage() {
           {/* Empty State */}
           {filteredAndSortedPosts.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-slate-400 text-lg">
+              <p className="text-gray-500 dark:text-slate-400 text-lg">
                 No posts found matching your filters.
               </p>
             </div>
@@ -106,10 +106,10 @@ export default function BlogPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="mt-16 bg-slate-800/30 rounded-2xl p-12 text-center border border-slate-700">
+        <section className="mt-16 bg-gray-50 dark:bg-slate-800/30 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
           <h2 className="text-3xl font-bold mb-4">Want to discuss a project?</h2>
-          <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-            I'm currently accepting new projects for Q3 2025. Let's talk about how I can help solve 
+          <p className="text-gray-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
+            I'm currently accepting new projects for Q3 2025. Let's talk about how I can help solve
             your design and development challenges.
           </p>
         </section>

@@ -57,11 +57,11 @@ export default function BlogPostPage({ params }: PageProps) {
   const renderContent = (content?: string) => {
     if (!content) {
       return (
-        <div className="space-y-6 text-slate-300">
+        <div className="space-y-6 text-gray-900 dark:text-slate-300">
           <p className="text-lg leading-relaxed">
             {post.excerpt}
           </p>
-          <p className="text-slate-400 italic">
+          <p className="text-gray-900 dark:text-slate-400 italic">
             Full article content coming soon...
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function BlogPostPage({ params }: PageProps) {
       // Section heading (h2)
       if (section.startsWith('## ')) {
         return (
-          <h2 key={idx} className="text-2xl font-bold text-white mt-12 mb-4">
+          <h2 key={idx} className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">
             {section.replace('## ', '')}
           </h2>
         );
@@ -89,7 +89,7 @@ export default function BlogPostPage({ params }: PageProps) {
       // Subsection heading (h3)
       if (section.startsWith('### ')) {
         return (
-          <h3 key={idx} className="text-xl font-semibold text-white mt-8 mb-3">
+          <h3 key={idx} className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">
             {section.replace('### ', '')}
           </h3>
         );
@@ -101,7 +101,7 @@ export default function BlogPostPage({ params }: PageProps) {
         return (
           <ul key={idx} className="space-y-2 my-6 ml-6">
             {items.map((item, i) => (
-              <li key={i} className="text-slate-300 leading-relaxed flex items-start gap-3">
+              <li key={i} className="text-gray-600 dark:text-slate-300 leading-relaxed flex items-start gap-3">
                 <span className="text-orange-500 mt-2">•</span>
                 <span>{item.trim()}</span>
               </li>
@@ -112,7 +112,7 @@ export default function BlogPostPage({ params }: PageProps) {
       
       // Horizontal rule
       if (section.trim() === '---') {
-        return <hr key={idx} className="border-slate-700 my-12" />;
+        return <hr key={idx} className="border-gray-200 dark:border-slate-700 my-12" />;
       }
       
       // Bold text in paragraphs
@@ -120,7 +120,7 @@ export default function BlogPostPage({ params }: PageProps) {
         const parts = text.split(/(\*\*.*?\*\*)/g);
         return parts.map((part, i) => {
           if (part.startsWith('**') && part.endsWith('**')) {
-            return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
+            return <strong key={i} className="font-semibold text-gray-900 dark:text-white">{part.slice(2, -2)}</strong>;
           }
           return part;
         });
@@ -129,7 +129,7 @@ export default function BlogPostPage({ params }: PageProps) {
       // Regular paragraph
       if (section.trim()) {
         return (
-          <p key={idx} className="text-slate-300 leading-relaxed my-6">
+          <p key={idx} className="text-gray-600 dark:text-slate-300 leading-relaxed my-6">
             {renderParagraphWithBold(section)}
           </p>
         );
@@ -140,7 +140,7 @@ export default function BlogPostPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
 
 
       <article className="max-w-3xl mx-auto px-6 py-16">
@@ -148,13 +148,13 @@ export default function BlogPostPage({ params }: PageProps) {
         <header className="mb-8">
           {/* Category */}
           <div className="flex gap-2 mb-6">
-            <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-md font-medium">
+            <span className="px-3 py-1 bg-gray-100 dark:bg-slate-800/40 text-gray-600 dark:text-slate-300 text-sm rounded-md font-medium">
               {post.category}
             </span>
             {post.tags.map((tag, idx) => (
               <span 
                 key={idx}
-                className="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-md"
+                className="px-3 py-1 bg-gray-100 dark:bg-slate-800/40 text-gray-600 dark:text-slate-300 text-sm rounded-md"
               >
                 {tag}
               </span>
@@ -167,7 +167,7 @@ export default function BlogPostPage({ params }: PageProps) {
           </h1>
 
           {/* Meta */}
-          <div className="flex items-center gap-4 text-slate-400 text-sm">
+          <div className="flex items-center gap-4 text-gray-600 dark:text-slate-400 text-sm">
             <span>{formatDate(post.date)}</span>
             <span>•</span>
             <span>{post.readTime}</span>
@@ -175,20 +175,20 @@ export default function BlogPostPage({ params }: PageProps) {
         </header>
 
         {/* Featured Image Placeholder */}
-        <div className="mb-12 rounded-lg overflow-hidden bg-slate-800/30 border border-slate-700 h-96 flex items-center justify-center">
+        <div className="mb-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 h-96 flex items-center justify-center">
           <div className="text-center">
             <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
               </svg>
             </div>
-            <span className="text-slate-500 text-sm">{post.title}</span>
+            <span className="text-gray-900 dark:text-slate-500 text-sm">{post.title}</span>
           </div>
         </div>
 
         {/* Lead paragraph */}
         <div className="mb-12">
-          <p className="text-xl text-slate-300 leading-relaxed">
+          <p className="text-xl text-gray-400 dark:text-slate-300 leading-relaxed">
             {post.excerpt}
           </p>
         </div>
@@ -201,11 +201,11 @@ export default function BlogPostPage({ params }: PageProps) {
         {/* Author Bio */}
         <div className="mt-16 pt-8 border-t border-slate-700">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0">
+            <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-gray-900 dark:text-white font-bold flex-shrink-0">
               BH
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-1">Brian Hall</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Brian Hall</h3>
               <p className="text-slate-400 text-sm mb-3">
                 UX Designer and Frontend Developer specializing in creating intuitive interfaces for complex systems.
               </p>
@@ -223,12 +223,12 @@ export default function BlogPostPage({ params }: PageProps) {
         </div>
 
         {/* Related Articles */}
-        <div className="mt-16 pt-8 border-t border-slate-700">
+        <div className="mt-16 pt-8 border-t border-gray-100 dark:border-slate-700">
           <h3 className="text-xl font-semibold mb-6">Related Articles</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link 
               href="#"
-              className="flex gap-4 p-4 bg-slate-800/40 border border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
+              className="flex gap-4 p-4 bg-gray=100 dark:bg-slate-800/40 border border-gray-100 dark:border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
             >
               <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                 <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
@@ -236,7 +236,7 @@ export default function BlogPostPage({ params }: PageProps) {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-white mb-1 group-hover:text-orange-500 transition-colors">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
                   Building Design Systems: Component Libraries vs. Style Guides
                 </h4>
                 <p className="text-slate-500 text-sm">March 22, 2025</p>
@@ -245,7 +245,7 @@ export default function BlogPostPage({ params }: PageProps) {
 
             <Link 
               href="#"
-              className="flex gap-4 p-4 bg-slate-800/40 border border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
+              className="flex gap-4 p-4 bg-gray-50 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
             >
               <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                 <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
@@ -253,10 +253,10 @@ export default function BlogPostPage({ params }: PageProps) {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-white mb-1 group-hover:text-orange-500 transition-colors">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
                   Bridging the Gap: From Design to Development
                 </h4>
-                <p className="text-slate-500 text-sm">February 15, 2025</p>
+                <p className="text-gray-900 dark:text-slate-500 text-sm">February 15, 2025</p>
               </div>
             </Link>
           </div>

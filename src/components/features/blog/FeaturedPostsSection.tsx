@@ -20,7 +20,7 @@ export const FeaturedPostsSection: React.FC<FeaturedPostsSectionProps> = ({ post
 
   return (
     <section className="mb-16">
-      <h2 className="text-2xl font-semibold mb-6 text-white">Featured Posts</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">Featured Posts</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {randomFeatured.map(post => (
           <BlogCard key={post.id} post={post} featured />
