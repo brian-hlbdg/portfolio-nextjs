@@ -215,96 +215,99 @@ export default function RosterDiagnostic() {
         </p>
 
         <div className="space-y-6">
-          {Object.entries(results).map(([key, result]) => (
-            <div
-              key={key}
-              className="bg-slate-800 border border-slate-700 rounded-lg p-4 space-y-3"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="font-bold text-white">{key}</h3>
-                  <p className="text-xs text-slate-400 mt-1 break-all">{result.endpoint}</p>
-                </div>
+          {Object.entries(results as Record<string, DiagnosticResult>).map(([key, result]) => {
+            const r = result as DiagnosticResult;
+            return (
+              <div
+                key={key}
+                className="bg-slate-800 border border-slate-700 rounded-lg p-4 space-y-3"
+              >
 
-                {result.status === 'loading' && (
-                  <div className="text-blue-400">Loading...</div>
-                )}
-                {result.status === 'error' && (
-                  <div className="text-red-400">❌ Error</div>
-                )}
-                {result.status === 'success' && (
-                  <div className="text-green-400">✅ Success</div>
-                )}
-              </div>
-
-              {/* Error */}
-              {result.error && (
-                <div className="bg-red-500/10 border border-red-500/50 rounded p-3">
-                  <p className="text-red-300 text-sm">{result.error}</p>
-                </div>
-              )}
-
-              {/* Success Details */}
-              {result.status === 'success' && (
-                <div className="space-y-3">
-                  {/* Structure */}
-                  <div className="bg-slate-700/30 rounded p-3">
-                    <p className="text-xs text-slate-400 mb-1">Response Structure:</p>
-                    <p className="text-white font-mono text-sm">{result.structure}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white">{key}</h3>
+                    <p className="text-xs text-slate-400 mt-1 break-all">{r.endpoint}</p>
                   </div>
 
-                  {/* Stats */}
-                  {result.rosterArray && result.rosterArray.length > 0 && (
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-slate-700/30 rounded p-3">
-                        <p className="text-xs text-slate-400">Total Items</p>
-                        <p className="text-lg font-bold text-white">
-                          {result.rosterArray.length}
-                        </p>
-                      </div>
-                      <div className="bg-slate-700/30 rounded p-3">
-                        <p className="text-xs text-slate-400">Valid Players</p>
-                        <p className="text-lg font-bold text-green-400">
-                          {result.validPlayers}
-                        </p>
-                      </div>
-                    </div>
+                  {r.status === 'loading' && (
+                    <div className="text-blue-400">Loading...</div>
                   )}
-
-                  {/* Sample Player */}
-                  {result.samplePlayer && (
-                    <div className="bg-slate-700/20 rounded p-3">
-                      <p className="text-xs text-slate-400 mb-2">Sample Player:</p>
-                      <pre className="text-xs text-slate-300 overflow-x-auto max-h-64">
-                        {JSON.stringify(result.samplePlayer, null, 2)}
-                      </pre>
-                    </div>
+                  {r.status === 'error' && (
+                    <div className="text-red-400">❌ Error</div>
                   )}
-
-                  {/* No Valid Players Warning */}
-                  {result.rosterArray && result.rosterArray.length > 0 && result.validPlayers === 0 && (
-                    <div className="bg-yellow-500/10 border border-yellow-500/50 rounded p-3">
-                      <p className="text-yellow-300 text-sm">
-                        ⚠️ Found roster array but no valid players. Data structure might be different.
-                        Check sample above for available fields.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* No Roster Array Warning */}
-                  {(!result.rosterArray || result.rosterArray.length === 0) && (
-                    <div className="bg-yellow-500/10 border border-yellow-500/50 rounded p-3">
-                      <p className="text-yellow-300 text-sm">
-                        ⚠️ Could not find roster array in response. Endpoint might be returning
-                        unexpected format. Check raw data in browser console.
-                      </p>
-                    </div>
+                  {r.status === 'success' && (
+                    <div className="text-green-400">✅ Success</div>
                   )}
                 </div>
-              )}
-            </div>
-          ))}
+
+
+                {r.error && (
+                  <div className="bg-red-500/10 border border-red-500/50 rounded p-3">
+                    <p className="text-red-300 text-sm">{r.error}</p>
+                  </div>
+                )}
+
+
+                {r.status === 'success' && (
+                  <div className="space-y-3">
+                    {/* Structure */}
+                    <div className="bg-slate-700/30 rounded p-3">
+                      <p className="text-xs text-slate-400 mb-1">Response Structure:</p>
+                      <p className="text-white font-mono text-sm">{r.structure}</p>
+                    </div>
+
+
+                    {Array.isArray(r.rosterArray) && r.rosterArray.length > 0 && (
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-slate-700/30 rounded p-3">
+                          <p className="text-xs text-slate-400">Total Items</p>
+                          <p className="text-lg font-bold text-white">
+                            {r.rosterArray.length}
+                          </p>
+                        </div>
+                        <div className="bg-slate-700/30 rounded p-3">
+                          <p className="text-xs text-slate-400">Valid Players</p>
+                          <p className="text-lg font-bold text-green-400">
+                            {r.validPlayers}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sample Player */}
+                    {r.samplePlayer != null && (
+                      <div className="bg-slate-700/20 rounded p-3">
+                        <p className="text-xs text-slate-400 mb-2">Sample Player:</p>
+                        <pre className="text-xs text-slate-300 overflow-x-auto max-h-64">
+                          {JSON.stringify(r.samplePlayer, null, 2)}
+                        </pre>
+                      </div>
+                    )}
+
+                    {/* No Valid Players Warning */}
+                    {Array.isArray(r.rosterArray) && r.rosterArray.length > 0 && r.validPlayers === 0 && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/50 rounded p-3">
+                        <p className="text-yellow-300 text-sm">
+                          ⚠️ Found roster array but no valid players. Data structure might be different.
+                          Check sample above for available fields.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* No Roster Array Warning */}
+                    {(!Array.isArray(r.rosterArray) || r.rosterArray.length === 0) && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/50 rounded p-3">
+                        <p className="text-yellow-300 text-sm">
+                          ⚠️ Could not find roster array in response. Endpoint might be returning
+                          unexpected format. Check raw data in browser console.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
