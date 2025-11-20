@@ -45,7 +45,7 @@ export default function GameCard({ game }: GameCardProps) {
   const bearsWon = bearsScore !== undefined && opponentScore !== undefined && bearsScore > opponentScore;
 
   return (
-    <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 hover:bg-slate-800/60 transition-all duration-300">
+    <div className="bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4 hover:bg-slate-800/60 transition-all duration-300">
       {/* Game Week & Date */}
       <div className="flex justify-between items-start mb-3">
         <div>
@@ -79,7 +79,7 @@ export default function GameCard({ game }: GameCardProps) {
 
       {/* Opponent & Location */}
       <div className="mb-3">
-        <p className="text-slate-400 text-xs mb-1">
+        <p className="text-gray-700 dark:text-slate-400 text-xs mb-1">
           {game.isBearsHome ? 'vs' : '@'} {game.opponent.name}
         </p>
       </div>
@@ -88,17 +88,17 @@ export default function GameCard({ game }: GameCardProps) {
       {(game.status === 'final' || game.status === 'live') && (
         <div className="flex items-center justify-between">
           <div className="text-center flex-1">
-            <p className="text-xs text-slate-500 mb-1">Bears</p>
-            <p className={`text-2xl font-bold ${bearsWon ? 'text-green-400' : 'text-slate-300'}`}>
+            <p className="text-xs text-gray-700 dark:text-slate-500 mb-1">Bears</p>
+            <p className={`text-2xl font-bold ${bearsWon ? 'text-green-400' : 'text-gray-700 dark:text-slate-300'}`}>
               {bearsScore}
             </p>
           </div>
 
-          <div className="px-3 text-slate-500 font-semibold">-</div>
+          <div className="px-3 text-gray-600 dark:text-slate-500 font-semibold">-</div>
 
           <div className="text-center flex-1">
-            <p className="text-xs text-slate-500 mb-1">{game.opponent.name}</p>
-            <p className={`text-2xl font-bold ${!bearsWon ? 'text-red-400' : 'text-slate-300'}`}>
+            <p className="text-xs text-gray-700 dark:text-slate-500 mb-1">{game.opponent.name}</p>
+            <p className={`text-2xl font-bold ${!bearsWon ? 'text-red-400' : 'text-gray-700 dark:text-slate-300'}`}>
               {opponentScore}
             </p>
           </div>
@@ -107,7 +107,7 @@ export default function GameCard({ game }: GameCardProps) {
 
       {/* Game Time (if upcoming) */}
       {game.status === 'scheduled' && (
-        <p className="text-sm font-semibold text-white">
+        <p className="text-sm font-semibold text-gray-700 dark:text-white">
           {formatTime(game.date)}
         </p>
       )}

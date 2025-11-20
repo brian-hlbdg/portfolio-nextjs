@@ -61,15 +61,15 @@ export default function OverviewSection({
   if (loading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">2025 Season Overview</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">2025 Season Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-5 animate-pulse"
+              className="bg-white dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-5 animate-pulse"
             >
-              <div className="h-4 bg-slate-700 rounded w-1/3 mb-2" />
-              <div className="h-8 bg-slate-700 rounded w-1/2" />
+              <div className="h-4 bg-gray-50 dark:bg-slate-700 rounded w-1/3 mb-2" />
+              <div className="h-8 bg-gray-50 dark:bg-slate-700 rounded w-1/2" />
             </div>
           ))}
         </div>
@@ -80,8 +80,8 @@ export default function OverviewSection({
   // NO DATA STATE
   if (!stats) {
     return (
-      <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-6 text-center">
-        <p className="text-slate-400">Season stats currently unavailable</p>
+      <div className="bg-white dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-6 text-center">
+        <p className="text-gray-600 dark:text-slate-300">Season stats currently unavailable</p>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function OverviewSection({
   // RENDER
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-white">2025 Season Overview</h2>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">2025 Season Overview</h2>
 
       {/* Main Stats Grid - 4 columns */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -125,7 +125,7 @@ export default function OverviewSection({
       </div>
 
       {/* Data Source Info */}
-      <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+      <div className="flex items-center justify-between text-xs text-gray-600 dark:text-slate-300 px-1">
         <div className="flex items-center gap-2">
           <span
             className="inline-block w-2 h-2 rounded-full"

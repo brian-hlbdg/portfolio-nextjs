@@ -49,7 +49,7 @@ export default function BearsDashboardHeader({
   };
 
   return (
-    <header className="border-b border-slate-800/50 bg-gradient-to-b from-slate-950/80 to-slate-950/40 backdrop-blur-xl sticky top-0 z-40">
+    <header className="border-b border-gray-200 dark:border-slate-800/50 bg-gradient-to-b from-white to-gray-50 dark:from-slate-950/80 dark:to-slate-950/40 backdrop-blur-xl sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Main Header */}
         <div className="flex items-center justify-between mb-4">
@@ -70,7 +70,7 @@ export default function BearsDashboardHeader({
               <h1 className="text-4xl font-bold tracking-tighter bg-gradient-to-r from-orange-500 via-orange-400 to-orange-600 bg-clip-text text-transparent">
                 CHICAGO BEARS
               </h1>
-              <p className="text-slate-400 text-sm">NFL • 2025 Season</p>
+              <p className="text-gray-600 dark:text-slate-400 text-sm">NFL • 2025 Season</p>
             </div>
           </div>
 

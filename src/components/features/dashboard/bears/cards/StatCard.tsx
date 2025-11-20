@@ -55,8 +55,8 @@ export default function StatCard({
         rounded-lg p-5 transition-all duration-300
         ${
           variant === 'highlight'
-            ? 'bg-gradient-to-br from-orange-600/20 to-orange-700/10 border border-orange-500/50 shadow-lg shadow-orange-600/20'
-            : 'bg-slate-800/40 border border-slate-700/50 hover:bg-slate-800/60'
+            ? 'bg-orange-100 dark:bg-gradient-to-br dark:from-orange-600/20 dark:to-orange-700/10 border border-orange-300 dark:border-orange-500/50 shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30'
+            : 'bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 hover:bg-gray-200 dark:hover:bg-slate-800/60'
         }
       `}
     >
@@ -70,15 +70,15 @@ export default function StatCard({
       )}
 
       {/* Label */}
-      <p className="text-slate-400 text-sm font-medium tracking-wide mb-1">
+      <p className="text-gray-600 dark:text-slate-400 text-sm font-medium tracking-wide mb-1">
         {label}
       </p>
 
       {/* Value */}
-      <p className="text-3xl font-bold text-white mb-1">{value}</p>
+      <p className="text-3xl font-bold text-gray-800 dark:text-white mb-1">{value}</p>
 
       {/* Subtext */}
-      {subtext && <p className="text-xs text-slate-500">{subtext}</p>}
+      {subtext && <p className="text-xs text-gray-600 dark:text-slate-500">{subtext}</p>}
     </div>
   );
 }

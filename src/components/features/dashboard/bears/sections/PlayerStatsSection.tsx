@@ -36,17 +36,17 @@ export default function PlayerStatsSection({
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="h-6 bg-slate-700 rounded w-1/4 animate-pulse" />
+        <div className="h-6 bg-gray-100 dark:bg-slate-700 rounded w-1/4 animate-pulse" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 animate-pulse"
+              className="bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4 animate-pulse"
             >
-              <div className="h-4 bg-slate-700 rounded mb-3" />
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded mb-3" />
               <div className="space-y-2">
-                <div className="h-3 bg-slate-700 rounded w-3/4" />
-                <div className="h-3 bg-slate-700 rounded w-1/2" />
+                <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-3/4" />
+                <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/2" />
               </div>
             </div>
           ))}
@@ -60,20 +60,20 @@ export default function PlayerStatsSection({
   if (playerStats.length === 0) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">Player Statistics</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Player Statistics</h2>
 
         <div className="bg-blue-500/10 border border-blue-500/50 rounded-lg p-6 text-center">
           <div className="mb-3">
-            <p className="text-blue-200 font-semibold mb-2">
+            <p className="text-blue-500 dark:text-blue-200 font-semibold mb-2">
               Player statistics currently unavailable
             </p>
-            <p className="text-blue-300 text-sm">
+            <p className="text-blue-500 dark:text-blue-300 text-sm">
               ESPN API has limited player-level statistics access. We're working on
               alternative sources to bring you detailed player performance data.
             </p>
           </div>
 
-          <div className="text-xs text-blue-400 mt-4 border-t border-blue-500/30 pt-4">
+          <div className="text-xs text-blue-600 dark:text-blue-400 mt-4 border-t border-blue-500/30 pt-4">
             <p>
               When available, you'll see stats for passing yards, rushing yards,
               receiving statistics, and defensive performance.
@@ -93,13 +93,13 @@ export default function PlayerStatsSection({
         {playerStats.map((player) => (
           <div
             key={player.id}
-            className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 hover:bg-slate-800/60 transition-all"
+            className="bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4 hover:bg-slate-800/60 transition-all"
           >
             {/* Player Info */}
             <div className="flex items-center gap-3 mb-3">
               <div>
-                <p className="font-semibold text-white">{player.name}</p>
-                <p className="text-sm text-slate-400">
+                <p className="font-semibold text-gray-800 dark:text-white">{player.name}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">
                   #{player.number} {player.position}
                 </p>
               </div>
@@ -108,27 +108,27 @@ export default function PlayerStatsSection({
             {/* Stats (dynamic based on position) */}
             <div className="space-y-2 text-sm">
               {player.stats.passing && (
-                <div className="text-slate-300">
-                  <span className="text-slate-500">Passing:</span>{' '}
+                <div className="text-gray-600 dark:text-slate-300">
+                  <span className="text-gray-800 dark:text-slate-500">Passing:</span>{' '}
                   {player.stats.passing.completions}/{player.stats.passing.attempts}{' '}
                   {player.stats.passing.yards} yds
                 </div>
               )}
               {player.stats.rushing && (
-                <div className="text-slate-300">
-                  <span className="text-slate-500">Rushing:</span>{' '}
+                <div className="text-gray-800 dark:text-slate-300">
+                  <span className="text-gray-700 dark:text-slate-500">Rushing:</span>{' '}
                   {player.stats.rushing.attempts} att, {player.stats.rushing.yards} yds
                 </div>
               )}
               {player.stats.receiving && (
-                <div className="text-slate-300">
-                  <span className="text-slate-500">Receiving:</span>{' '}
+                <div className="text-gray-800 dark:text-slate-300">
+                  <span className="text-gray-700 dark:text-slate-500">Receiving:</span>{' '}
                   {player.stats.receiving.receptions} rec, {player.stats.receiving.yards} yds
                 </div>
               )}
               {player.stats.defense && (
-                <div className="text-slate-300">
-                  <span className="text-slate-500">Defense:</span>{' '}
+                <div className="text-gray-800 dark:text-slate-300">
+                  <span className="text-gray-700 dark:text-slate-500">Defense:</span>{' '}
                   {player.stats.defense.tackles} tackles
                 </div>
               )}

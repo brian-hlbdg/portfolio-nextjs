@@ -57,12 +57,12 @@ export default function ScheduleSection({
   if (loading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">Upcoming Games</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upcoming Games</h2>
         <div className="grid grid-cols-5 gap-4">
           {[...Array(10)].map((_, i) => (
             <div
               key={i}
-              className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 animate-pulse aspect-square"
+              className="bg-gray-200 dark:bg-slate-800/40 border border-gray-300 dark:border-slate-700/50 rounded-lg p-4 animate-pulse aspect-square"
             />
           ))}
         </div>
@@ -74,8 +74,8 @@ export default function ScheduleSection({
   if (error) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">Upcoming Games</h2>
-        <div className="bg-slate-800/40 border border-red-700/50 rounded-lg p-6 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upcoming Games</h2>
+        <div className="bg-white dark:bg-slate-800/40 border border-red-200 dark:border-red-700/50 rounded-lg p-6 text-center">
           <p className="text-red-400">Error loading schedule: {error}</p>
         </div>
       </div>
@@ -86,9 +86,9 @@ export default function ScheduleSection({
   if (!upcomingGames || upcomingGames.length === 0) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">Upcoming Games</h2>
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-8 text-center">
-          <p className="text-slate-400">No upcoming games scheduled</p>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Upcoming Games</h2>
+        <div className="bg-gray-200 dark:bg-slate-800/40 border border-gray-300 dark:border-slate-700/50 rounded-lg p-8 text-center">
+          <p className="text-gray-600 dark:text-slate-300">No upcoming games scheduled</p>
         </div>
       </div>
     );
@@ -98,7 +98,7 @@ export default function ScheduleSection({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
           Upcoming Games ({upcomingGames.length})
         </h2>
       </div>
@@ -129,19 +129,19 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
   const winProbability = 52; // Placeholder - can be calculated later
 
   return (
-    <div className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border border-slate-700/50 rounded-lg p-4 hover:border-orange-500/50 transition-all hover:shadow-lg hover:shadow-orange-500/20 flex flex-col h-full">
+    <div className="bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-800/60 dark:to-slate-700/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4 hover:border-orange-500/50 transition-all hover:shadow-lg hover:shadow-orange-500/20 flex flex-col h-full">
       {/* Top: Date & Home/Away Badge */}
       <div className="flex items-start justify-between mb-2">
         <div>
-          <p className="text-xs text-slate-400">{game.date}</p>
-          <p className="text-sm font-bold text-white">{game.time}</p>
+          <p className="text-xs text-gray-800 dark:text-slate-300">{game.date}</p>
+          <p className="text-sm font-bold text-gray-900 dark:text-white">{game.time}</p>
         </div>
 
         <span
           className={`text-xs font-semibold px-2 py-1 rounded whitespace-nowrap ${
             isHome
-              ? 'bg-green-500/30 border border-green-500/50 text-green-300'
-              : 'bg-blue-500/30 border border-blue-500/50 text-blue-300'
+              ? 'bg-green-500/30 border border-green-500/50 text-green-900 dark:text-green-300'
+              : 'bg-blue-500/30 border border-blue-500/50 text-blue-900 dark:text-blue-300'
           }`}
         >
           {isHome ? 'HOME' : 'AWAY'}
@@ -149,7 +149,7 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
       </div>
 
       {/* Opponent Section */}
-      <div className="mb-3 pb-3 border-b border-slate-600/30">
+      <div className="mb-3 pb-3 border-b border-gray-200 dark:border-slate-600/30">
         {/* Opponent Logo */}
         {game.opponentLogo && (
           <Image
@@ -166,7 +166,7 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
         )}
 
         {/* Opponent Name */}
-        <p className="text-sm font-semibold text-white mb-1 line-clamp-2">
+        <p className="text-sm font-semibold text-gray-800 dark:text-white mb-1 line-clamp-2">
           {game.opponent}
         </p>
 
@@ -177,22 +177,22 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
               Record: <span className="text-orange-400 font-semibold">{opponentRecord.record}</span>
             </p>
             <p className="text-slate-400">
-              <span className="text-green-400">{opponentRecord.wins}W</span>
+              <span className="text-green-800 dark:text-green-400">{opponentRecord.wins}W</span>
               {' '}
-              <span className="text-red-400">{opponentRecord.losses}L</span>
+              <span className="text-red-800 dark:text-red-400">{opponentRecord.losses}L</span>
             </p>
           </div>
         ) : (
-          <p className="text-xs text-slate-500 italic">Record: TBD</p>
+          <p className="text-xs text-gray-400 dark:text-slate-500 italic">Record: TBD</p>
         )}
       </div>
 
       {/* Venue */}
-      <div className="mb-3 pb-3 border-b border-slate-600/30">
-        <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Venue</p>
-        <p className="text-xs font-semibold text-white line-clamp-1">{game.venue}</p>
+      <div className="mb-3 pb-3 border border-gray-200 dark:border-slate-600/30">
+        <p className="text-xs text-gray-600 dark:text-slate-400 uppercase tracking-wider mb-1">Venue</p>
+        <p className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-1">{game.venue}</p>
         {game.location && (
-          <p className="text-xs text-slate-500">{game.location}</p>
+          <p className="text-xs text-gray-600 dark:text-slate-500">{game.location}</p>
         )}
       </div>
 
@@ -201,16 +201,16 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
         {/* Broadcast */}
         {game.broadcast && (
           <div className="flex items-center justify-between">
-            <p className="text-xs text-slate-400">Broadcasting:</p>
-            <p className="text-xs font-semibold text-orange-400">{game.broadcast}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">Broadcasting:</p>
+            <p className="text-xs font-semibold text-orange-700 dark:text-orange-400">{game.broadcast}</p>
           </div>
         )}
 
         {/* Win Probability (Placeholder) */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-600/30">
-          <p className="text-xs text-slate-400">Bears Chance:</p>
+        <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-slate-600/30">
+          <p className="text-xs text-gray-600 dark:text-slate-400">Bears Chance:</p>
           <div className="flex items-center gap-1">
-            <div className="w-12 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+            <div className="w-12 h-1.5 bg-gray-50 dark:bg-slate-700 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"
                 style={{ width: `${winProbability}%` }}

@@ -59,16 +59,16 @@ export default function PlayerDetailPanel({
 
       {/* Panel - Slides in from right */}
       <div
-        className="fixed right-0 top-0 h-full w-full sm:w-96 z-50 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800/50 shadow-2xl overflow-y-auto"
+        className="fixed right-0 top-0 h-full w-full sm:w-96 z-50 bg-gradient-to-b from-gray-50 to-gray-200 dark:from-slate-900 dark:to-slate-950 border-l border-slate-800/50 shadow-2xl overflow-y-auto"
         role="dialog"
         aria-label={`${player.name} details`}
       >
         {/* Close Button */}
         <div className="sticky top-0 z-50 bg-gradient-to-b from-slate-900 to-slate-900/80 backdrop-blur-sm border-b border-slate-800/30 p-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white">{player.name}</h2>
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">{player.name}</h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="text-gray-500 dark:text-slate-400 hover:text-white transition-colors p-1"
             aria-label="Close player details"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@ export default function PlayerDetailPanel({
           {/* Status Banner */}
           {isInjured && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-              <p className="text-sm text-red-300 font-semibold">
+              <p className="text-sm text-red-500 dark:text-red-300 font-semibold">
                 ⚠️ Currently on injury report
               </p>
             </div>
@@ -95,20 +95,20 @@ export default function PlayerDetailPanel({
 
           {/* Core Information */}
           <div className="space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-slate-400">
               Core Information
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
               {/* Jersey Number */}
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase tracking-wider">Jersey</p>
+                <p className="text-xs text-gray-600 dark:text-slate-500 uppercase tracking-wider">Jersey</p>
                 <p className="text-2xl font-bold text-orange-400">{player.number}</p>
               </div>
 
               {/* Position */}
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase tracking-wider">Position</p>
+                <p className="text-xs text-gray-600 dark:text-slate-500 uppercase tracking-wider">Position</p>
                 <p className="text-2xl font-bold text-white">{player.position}</p>
               </div>
             </div>
@@ -118,14 +118,14 @@ export default function PlayerDetailPanel({
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-800/50">
                 {player.height && (
                   <div className="space-y-1">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider">Height</p>
-                    <p className="text-sm text-slate-200">{player.height}</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-500 uppercase tracking-wider">Height</p>
+                    <p className="text-sm text-gray-700 dark:text-slate-200">{player.height}</p>
                   </div>
                 )}
                 {player.weight && (
                   <div className="space-y-1">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider">Weight</p>
-                    <p className="text-sm text-slate-200">{player.weight} lbs</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-500 uppercase tracking-wider">Weight</p>
+                    <p className="text-sm text-gray-700 dark:text-slate-200">{player.weight} lbs</p>
                   </div>
                 )}
               </div>
@@ -135,20 +135,20 @@ export default function PlayerDetailPanel({
           {/* College (if available) */}
           {player.college && typeof player.college === 'string' && (
             <div className="space-y-2 border-t border-slate-800/50 pt-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-slate-400">
                 College
               </h3>
-              <p className="text-sm text-slate-200">{player.college}</p>
+              <p className="text-sm text-gray-700 dark:text-slate-200">{player.college}</p>
             </div>
           )}
 
           {/* Placeholder for Future Stat Sections */}
           <div className="space-y-2 border-t border-slate-800/50 pt-4">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-slate-400">
               Statistics
             </h3>
-            <div className="bg-slate-800/20 border border-slate-700/30 rounded-lg p-4 text-center">
-              <p className="text-sm text-slate-400">
+            <div className="bg-gray-50 dark:bg-slate-800/20 border border-slate-700/30 rounded-lg p-4 text-center">
+              <p className="text-sm text-gray-600 dark:text-slate-400">
                 Position-specific stats coming soon.
               </p>
             </div>
@@ -161,7 +161,7 @@ export default function PlayerDetailPanel({
                 href={`https://www.nfl.com/players/${player.nflId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded-lg transition-all text-sm text-blue-300"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded-lg transition-all text-sm text-blue-300"
               >
                 View on NFL.com
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
