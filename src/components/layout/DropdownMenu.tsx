@@ -134,11 +134,11 @@ export function DropdownMenu() {
                       onClick={closeMenu}
                       className="group block p-8 rounded-xl hover:bg-white/10 dark:hover:bg-black/20 transition-all duration-200 text-center backdrop-blur-sm"
                     >
-                      <h3 className="text-2xl md:text-3xl font-bold text-white dark:text-white group-hover:text-primary group-hover:scale-105 transition-all duration-200 drop-shadow-lg">
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white group-hover:text-primary group-hover:scale-105 transition-all duration-200 drop-shadow-lg">
                         {item.label}
                       </h3>
                       {item.description && (
-                        <p className="text-white/80 dark:text-white/80 group-hover:text-white mt-2 drop-shadow">
+                        <p className="text-gray-600 dark:text-white/80 group-hover:text-white mt-2 drop-shadow">
                           {item.description}
                         </p>
                       )}
@@ -155,12 +155,12 @@ export function DropdownMenu() {
               <a 
                 href="mailto:brian.HLBDG@outlook.com?subject=Project Discussion"
                 onClick={closeMenu}
-                className="inline-block px-8 py-4 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-2xl mb-8 drop-shadow-lg"
+                className="inline-block px-8 py-4 bg-primary hover:bg-primary-dark text-gray-800 dark:text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-2xl mb-8 drop-shadow-lg"
               >
                 Start a Conversation
               </a>
               
-              <div className="flex justify-center space-x-6 text-white/70 dark:text-white/70">
+              <div className="flex justify-center space-x-6 text-gray-900 dark:text-white/70">
                 <a 
                   href="https://www.linkedin.com/in/hlbdg/" 
                   target="_blank" 
