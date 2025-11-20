@@ -23,27 +23,27 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
   // For coming soon cards, use a div instead of Link
   if (study.comingSoon) {
     return (
-      <div className={`bg-slate-800/40 border border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative ${featured ? 'md:col-span-1' : ''}`}>
+      <div className={`bg-gray-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative ${featured ? 'md:col-span-1' : ''}`}>
         <div className={`flex ${featured ? 'flex-col' : 'flex-col sm:flex-row'} h-full`}>
           {/* Icon Section */}
-          <div className={`relative bg-slate-700/30 flex items-center justify-center ${
+          <div className={`relative bg-gray-100 dark:bg-slate-800/40 flex items-center justify-center ${
             featured 
               ? 'h-48 w-full' 
               : 'h-32 sm:h-auto sm:w-40 md:w-48 shrink-0'
           }`}>
             {/* Badge - Top Right - Show either category badge OR coming soon */}
               {study.comingSoon ? (
-                <span className="absolute top-3 right-3 px-2.5 py-1 bg-orange-500 text-white rounded-md text-xs font-semibold">
+                <span className="absolute top-3 right-3 px-2.5 py-1 bg-orange-500 text-gray-900 dark:text-white rounded-md text-xs font-semibold">
                   COMING SOON
                 </span>
               ) : study.badge && (
                 <span className={`absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold ${
-                  study.badge === 'Featured' ? 'bg-green-600 text-white' : 'bg-blue-600 text-white'
+                  study.badge === 'Featured' ? 'bg-green-600 text-gray-900 dark:text-white' : 'bg-blue-600 text-gray-900 dark:text-white'
                 }`}>
                   {study.badge}
                 </span>
               )}
-            <div className="bg-slate-700 p-4 rounded-lg text-orange-500">
+            <div className="bg-slate-200 dark:bg-slate-700 p-4 rounded-lg text-orange-500">
               {iconMap[study.icon] || iconMap.cart}
             </div>
           </div>
@@ -52,13 +52,13 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           <div className="p-4 sm:p-6 flex flex-col justify-between flex-grow">
             <div>
               <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="text-lg sm:text-xl font-semibold text-white group-hover:text-orange-500 transition-colors flex-1">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors flex-1">
                   {study.title}
                 </h3>
-                <ArrowRight className="text-slate-400 flex-shrink-0 mt-1 hidden sm:block" size={20} />
+                <ArrowRight className="text-slate-600 dark:text-slate-300 flex-shrink-0 mt-1 hidden sm:block" size={20} />
               </div>
               
-              <p className="text-slate-400 text-sm mb-3 sm:mb-4 leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-3 sm:mb-4 leading-relaxed">
                 {study.description}
               </p>
 
@@ -67,7 +67,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
                 {study.tags.map((tag) => (
                   <span 
                     key={tag}
-                    className="px-2.5 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-md"
+                    className="px-2.5 py-1 bg-gray-100 dark:bg-slate-700/50 text-gray-600 dark:text-slate-300 text-xs rounded-md"
                   >
                     {tag}
                   </span>
@@ -76,7 +76,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between text-xs text-slate-500 pt-3 sm:pt-4 border-t border-slate-700">
+            <div className="flex items-center justify-between text-xs text-slate-500 pt-3 sm:pt-4 border-t border-slate-200 dark:border-slate-700">
               <span>{study.client} • {study.year}</span>
               <span className="hidden sm:inline">{study.readTime}</span>
             </div>
@@ -90,11 +90,11 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
   return (
     <Link 
       href={`/case-studies/${study.slug}`}
-      className={`block bg-slate-800/40 border border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative ${featured ? 'md:col-span-1' : ''}`}
+      className={`block bg-gray-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-slate-600 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative ${featured ? 'md:col-span-1' : ''}`}
     >
       <div className={`flex ${featured ? 'flex-col' : 'flex-col sm:flex-row'} h-full`}>
         {/* Icon Section */}
-        <div className={`relative bg-slate-700/30 flex items-center justify-center ${
+        <div className={`relative bg-gray-100 dark:bg-slate-800/40 flex items-center justify-center ${
           featured 
             ? 'h-48 w-full' 
             : 'h-32 sm:h-auto sm:w-40 md:w-48 shrink-0'
@@ -102,12 +102,12 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           {/* Badge - Top Right */}
           {study.badge && (
             <span className={`absolute top-3 right-3 px-3 py-1 rounded-md text-xs font-semibold ${
-              study.badge === 'Featured' ? 'bg-green-600 text-white' : 'bg-blue-600 text-white'
+              study.badge === 'Featured' ? 'bg-green-600 text-gray-900 dark:text-white' : 'bg-blue-600 text-gray-900 dark:text-white'
             }`}>
               {study.badge}
             </span>
           )}
-          <div className="bg-slate-700 p-4 rounded-lg text-orange-500">
+          <div className="bg-slate-200 dark:bg-slate-700 p-4 rounded-lg text-orange-500">
             {iconMap[study.icon] || iconMap.cart}
           </div>
         </div>
@@ -116,13 +116,13 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
         <div className="p-4 sm:p-6 flex flex-col justify-between flex-grow">
           <div>
             <div className="flex items-start justify-between gap-2 mb-2">
-              <h3 className="text-lg sm:text-xl font-semibold text-white group-hover:text-orange-500 transition-colors flex-1">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors flex-1">
                 {study.title}
               </h3>
-              <ArrowRight className="text-slate-400 flex-shrink-0 mt-1 hidden sm:block" size={20} />
+              <ArrowRight className="text-slate-600 dark:text-slate-300 flex-shrink-0 mt-1 hidden sm:block" size={20} />
             </div>
             
-            <p className="text-slate-400 text-sm mb-3 sm:mb-4 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm mb-3 sm:mb-4 leading-relaxed">
               {study.description}
             </p>
 
@@ -131,7 +131,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
               {study.tags.map((tag) => (
                 <span 
                   key={tag}
-                  className="px-2.5 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-md"
+                  className="px-2.5 py-1 bg-gray-100 dark:bg-slate-700/50 text-gray-600 dark:text-slate-300 text-xs rounded-md"
                 >
                   {tag}
                 </span>
@@ -140,7 +140,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between text-xs text-slate-500 pt-3 sm:pt-4 border-t border-slate-700">
+          <div className="flex items-center justify-between text-xs text-gray-900 dark:text-slate-300 pt-3 sm:pt-4 border-t border-gray-200 dark:border-slate-700">
             <span>{study.client} • {study.year}</span>
             <span className="hidden sm:inline">{study.readTime}</span>
           </div>
