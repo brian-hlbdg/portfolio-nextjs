@@ -14,6 +14,7 @@ import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
 import PlayerStatsSection from './sections/PlayerStatsSection';
+import RosterSection from './sections/RosterSection';
 
 export default function BearsDashboard() {
   // ✅ Fetch season stats
@@ -89,6 +90,13 @@ export default function BearsDashboard() {
         <section>
           <PlayerStatsSection playerStats={[]} loading={false} />
         </section>
+
+        {/* Section 5: Roster */}
+        <section>
+          <RosterSection />
+        </section>
+      
+
 
         {/* Debug Info (Development Only) */}
         {process.env.NODE_ENV === 'development' && (
