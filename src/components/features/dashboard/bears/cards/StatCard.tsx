@@ -55,7 +55,7 @@ export default function StatCard({
         rounded-lg p-5 transition-all duration-300
         ${
           variant === 'highlight'
-            ? 'bg-orange-100 dark:bg-gradient-to-br dark:from-orange-600/20 dark:to-orange-700/10 border border-orange-300 dark:border-orange-500/50 shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30'
+            ? 'bg-orange-700/10 dark:bg-gradient-to-br dark:from-orange-600/20 dark:to-orange-700/10 border border-orange-300 dark:border-orange-500/50 shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30'
             : 'bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 hover:bg-gray-200 dark:hover:bg-slate-800/60'
         }
       `}
