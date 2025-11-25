@@ -184,6 +184,13 @@ interface TeamOverviewSectionProps {
     wins: number;
     losses: number;
     ties?: number;
+    passingYards: number;
+    rushingYards: number;
+    turnovers: number;
+    thirdDownConversion: number;
+    redZoneEfficiency: number;
+    pointsFor: number;
+    pointsAgainst: number;
   };
 }
 

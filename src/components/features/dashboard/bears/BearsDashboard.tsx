@@ -15,6 +15,8 @@ import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
 import PlayerStatsSection from './sections/PlayerStatsSection';
 import RosterSection from './sections/RosterSection';
+import { TeamStatsSection } from './sections/TeamStatsSection';
+
 
 export default function BearsDashboard() {
   // ✅ Fetch season stats
@@ -79,12 +81,17 @@ export default function BearsDashboard() {
           <OverviewSection stats={bearsStats} loading={statsLoading} />
         </section>
 
+        {/* Section 3: Recent Results */}
+        <section>
+          <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
+        </section>
+
         {/* Section 2: Upcoming Games */}
         <section>
           <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} />
         </section>
 
-        {/* Section 3: Recent Results */}
+        
 
         {/* Section 4: Player Stats */}
         <section>
