@@ -41,6 +41,11 @@ interface FallbackStats {
   thirdDownConversions: number;
   thirdDownAttempts: number;
   thirdDownPercentage: number;
+  passingTouchdowns: number;
+  rushingTouchdowns: number;
+  receivingTouchdowns: number;
+  interceptions: number;
+  fumblesLost: number;
 }
 
 /**
@@ -64,6 +69,11 @@ const FALLBACK_STATS: FallbackStats = {
   thirdDownConversions: 35,
   thirdDownAttempts: 95,
   thirdDownPercentage: 37,
+  passingTouchdowns: 20,
+  rushingTouchdowns: 15,
+  receivingTouchdowns: 10,
+  interceptions: 5,
+  fumblesLost: 3,
 };
 
 const SKELETON_CONFIG: SkeletonConfig = {
@@ -138,6 +148,11 @@ interface StatsGridProps {
   thirdDownConversions: number;
   thirdDownAttempts: number;
   thirdDownPercentage: number;
+  passingTouchdowns: number;
+  rushingTouchdowns: number;
+  receivingTouchdowns: number;
+  interceptions: number;
+  fumblesLost: number;
 }
 
 function StatsGrid(props: StatsGridProps): React.ReactElement {
@@ -150,6 +165,11 @@ function StatsGrid(props: StatsGridProps): React.ReactElement {
     thirdDownConversions,
     thirdDownAttempts,
     thirdDownPercentage,
+    passingTouchdowns,
+    rushingTouchdowns,
+    receivingTouchdowns,
+    interceptions,
+    fumblesLost,
   } = props;
 
   return (
@@ -210,6 +230,70 @@ function StatsGrid(props: StatsGridProps): React.ReactElement {
         badgeColor="gray"
         variant="default"
       />
+
+      <StatCard
+        label="Interceptions"
+        value={`${interceptions}`}
+        subtext="Thrown"
+        badge="Special Teams"
+        badgeColor="gray"
+        variant="default"
+      />
+
+      <StatCard
+        label="Fumbles Lost"
+        value={`${fumblesLost}`}
+        subtext="Lost"
+        badge="Special Teams"
+        badgeColor="gray"
+        variant="default"
+      />
+
+      <StatCard
+        label="Passing Touchdowns"
+        value={`${passingTouchdowns}`}
+        subtext="Thrown"
+        badge="Offense"
+        badgeColor="blue"
+        variant="default"
+      />
+
+      <StatCard
+        label="Rushing Touchdowns"
+        value={`${rushingTouchdowns}`}
+        subtext="Scored"
+        badge="Offense"
+        badgeColor="blue"
+        variant="default"
+      />
+
+      <StatCard
+        label="Receiving Touchdowns"
+        value={`${receivingTouchdowns}`}
+        subtext="Caught"
+        badge="Offense"
+        badgeColor="blue"
+        variant="default"
+      />
+
+      <StatCard
+        label="Interceptions"
+        value={`${interceptions}`}
+        subtext="Thrown"
+        badge="Defense"
+        badgeColor="orange"
+        variant="default"
+      />
+
+      <StatCard
+        label="Fumbles Lost"
+        value={`${fumblesLost}`}
+        subtext="Lost"
+        badge="Defense"
+        badgeColor="orange"
+        variant="default"
+      />
+
     </div>
   );
 }
@@ -320,6 +404,11 @@ export function TeamStatsSection(props: TeamStatsSectionProps): React.ReactEleme
         thirdDownConversions={displayStats.thirdDownConversions}
         thirdDownAttempts={displayStats.thirdDownAttempts}
         thirdDownPercentage={displayStats.thirdDownPercentage}
+        passingTouchdowns={displayStats.passingTouchdowns}
+        rushingTouchdowns={displayStats.rushingTouchdowns}
+        receivingTouchdowns={displayStats.receivingTouchdowns}
+        interceptions={displayStats.interceptions}
+        fumblesLost={displayStats.fumblesLost}
       />
 
       {/* Debug Info */}

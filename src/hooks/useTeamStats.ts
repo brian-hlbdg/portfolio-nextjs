@@ -62,6 +62,11 @@ export interface TeamStats {
   thirdDownConversions: number;
   thirdDownAttempts: number;
   thirdDownPercentage: number;
+  passingTouchdowns: number;
+  rushingTouchdowns: number;
+  receivingTouchdowns: number;
+  interceptions: number;
+  fumblesLost: number; 
   sacks: number;
 }
 
@@ -84,6 +89,11 @@ const EMPTY_STATS: TeamStats = {
   thirdDownConversions: 0,
   thirdDownAttempts: 0,
   thirdDownPercentage: 0,
+  passingTouchdowns: 0,
+  rushingTouchdowns: 0,
+  receivingTouchdowns: 0,
+  interceptions: 0,
+  fumblesLost: 0,
   sacks: 0,
 };
 
@@ -297,6 +307,11 @@ function parseStatisticsWithLogging(data: ESPNStatisticsResponse): TeamStats {
       thirdDownConversions: thirdDownConvsResult.value,
       thirdDownAttempts: thirdDownAttemptsResult.value,
       thirdDownPercentage,
+      passingTouchdowns: findStat(allStats, ['passingtouchdowns']).value,
+      rushingTouchdowns: findStat(allStats, ['rushingtouchdowns']).value,
+      receivingTouchdowns: findStat(allStats, ['receivingtouchdowns']).value,
+      interceptions: findStat(allStats, ['interceptions']).value,
+      fumblesLost: findStat(allStats, ['fumbleslost']).value,
       sacks: findStat(allStats, ['sacks']).value,
     };
 
