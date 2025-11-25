@@ -59,6 +59,8 @@ interface TeamConfig {
   name: string;
   sport: string;
   abbreviation: string;
+  useDemo?: boolean; // For teams without ESPN API
+  logo?: string; // Optional override logo URL
 }
 
 // ========================================================================
@@ -174,10 +176,12 @@ const CHICAGO_TEAMS: Record<string, TeamConfig> = {
     abbreviation: 'CHI',
   },
   fire: {
-    endpoint: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182',
+    endpoint: '',
     name: 'Chicago Fire FC',
     sport: 'MLS',
     abbreviation: 'CHI',
+    useDemo: true, // No ESPN API available
+    logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/182.png',
   },
 };
 
@@ -263,11 +267,25 @@ async function fetchTeamStats(
   config: TeamConfig,
   timeoutMs: number = 5000
 ): Promise<TeamStats | null> {
-  try {
-    console.log(`📡 Fetching ${config.name} from ${config.sport}...`);
+  // Handle demo data for teams without ESPN API
+  if (config.useDemo) {
+    console.log(`📡 Using demo data for ${config.name}...`);
+    const finalLogo = config.logo ?? undefined;
+    return {
+      name: config.name,
+      sport: config.sport,
+      wins: 0,
+      losses: 0,
+      ties: 0,
+      record: '0-0',
+      lastUpdated: new Date().toLocaleDateString(),
+      logo: finalLogo,
+      source: 'fallback'
+    };
+  }
 
-    // Fetch with timeout protection
-    const response = await Promise.race<Response>([
+  try {
+    const response = await Promise.race([
       fetch(config.endpoint),
       new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('Timeout')), timeoutMs);
