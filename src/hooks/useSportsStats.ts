@@ -150,7 +150,7 @@ const CHICAGO_TEAMS: Record<string, TeamConfig> = {
     abbreviation: 'CHC',
   },
   whitesox: {
-    endpoint: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/cws',
+    endpoint: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/chw',
     name: 'Chicago White Sox',
     sport: 'MLB',
     abbreviation: 'CWS',
@@ -174,7 +174,7 @@ const CHICAGO_TEAMS: Record<string, TeamConfig> = {
     abbreviation: 'CHI',
   },
   fire: {
-    endpoint: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/chi',
+    endpoint: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams/182',
     name: 'Chicago Fire FC',
     sport: 'MLS',
     abbreviation: 'CHI',
