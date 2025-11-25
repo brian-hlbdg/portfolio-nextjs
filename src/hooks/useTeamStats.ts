@@ -62,6 +62,7 @@ export interface TeamStats {
   thirdDownConversions: number;
   thirdDownAttempts: number;
   thirdDownPercentage: number;
+  sacks: number;
 }
 
 interface UseTeamStatsReturn {
@@ -83,6 +84,7 @@ const EMPTY_STATS: TeamStats = {
   thirdDownConversions: 0,
   thirdDownAttempts: 0,
   thirdDownPercentage: 0,
+  sacks: 0,
 };
 
 // ========================================================================
@@ -295,6 +297,7 @@ function parseStatisticsWithLogging(data: ESPNStatisticsResponse): TeamStats {
       thirdDownConversions: thirdDownConvsResult.value,
       thirdDownAttempts: thirdDownAttemptsResult.value,
       thirdDownPercentage,
+      sacks: findStat(allStats, ['sacks']).value,
     };
 
     console.log(
