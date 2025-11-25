@@ -126,7 +126,7 @@ export const chicagoTeams: ChicagoTeam[] = [
     name: 'Fire',
     fullName: 'Chicago Fire FC',
     sport: 'MLS',
-    logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/401.png',
+    logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/182.png',
     colors: {
       primary: '#ED1C24',
       secondary: '#FFFFFF',

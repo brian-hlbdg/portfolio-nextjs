@@ -47,14 +47,16 @@ export function ChicagoSportsDrawer() {
   };
 
   const handleTeamClick = (teamName: string) => {
-    // Convert team name to URL-friendly ID
+  // Only Bears dashboard is active for now
+  if (teamName === 'Chicago Bears') {
     const teamId = teamName.toLowerCase()
       .replace('chicago ', '')
       .replace(/\s+/g, '');
     
     router.push(`/chicago-sports/${teamId}`);
     setIsOpen(false);
-  };
+  }
+};
 
   return (
     <>
@@ -133,27 +135,15 @@ export function ChicagoSportsDrawer() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Chicago Sports
             </h2>
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  router.push('/chicago-sports');
-                  setIsOpen(false);
-                }}
-                className="px-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
-                title="View Full Dashboard"
-              >
-                Dashboard →
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                aria-label="Close drawer"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              aria-label="Close drawer"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {/* Loading State */}
@@ -192,11 +182,17 @@ export function ChicagoSportsDrawer() {
                       {sportTeams.map((team) => {
                         const colors = getSportColor(team.sport);
                         return (
-                          <button
-                            key={team.name}
-                            onClick={() => handleTeamClick(team.name)}
-                            className={`w-full text-left ${colors.bg} ${colors.border} border rounded-lg p-4 transition-all duration-200 hover:shadow-md cursor-pointer`}
-                          >
+                          <div key={team.name} className="relative group">
+                            <button
+                              key={team.name}
+                              onClick={() => handleTeamClick(team.name)}
+                              disabled={team.name !== 'Chicago Bears'}
+                              className={`w-full text-left ${colors.bg} ${colors.border} border rounded-lg p-4 transition-all duration-200 ${
+                                team.name === 'Chicago Bears' 
+                                  ? 'hover:shadow-md cursor-pointer' 
+                                  : 'opacity-60 cursor-not-allowed'
+                              }`}
+                            >
                             <div className="flex items-center justify-between mb-2">
                               <h4 className={`font-semibold ${colors.text}`}>
                                 {team.name}
@@ -226,6 +222,12 @@ export function ChicagoSportsDrawer() {
                               </span>
                             </div>
                           </button>
+                            {team.name !== 'Chicago Bears' && (
+                              <div className="absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center rounded-lg pointer-events-none">
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Dashboard coming soon</span>
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
