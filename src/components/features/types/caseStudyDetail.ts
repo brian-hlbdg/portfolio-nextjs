@@ -65,6 +65,7 @@ export interface CaseStudyDetailData {
       title: string;
       items: string[];
     }[];
+    beforeAfter?: BeforeAfterData;
   };
 
   // Results & Impact
@@ -83,6 +84,21 @@ export interface CaseStudyDetailData {
     challenges: ReflectionItem[];
     keyTakeaways: KeyTakeaway[];
   };
+}
+
+export interface ComparisonItem {
+  label: string;
+  before: string;
+  after: string;
+}
+
+  export interface BeforeAfterData {
+  title?: string;
+  beforeImage?: string;
+  afterImage?: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+  comparisons: ComparisonItem[];
 }
 
 export interface ResearchSection {

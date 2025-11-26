@@ -18,6 +18,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
     cart: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17 18a2 2 0 010 4 2 2 0 010-4M1 2h3.27l.94 2H20a1 1 0 01.78 1.63l-4.5 5.5a1 1 0 01-.78.37H8.53L7.06 14H19v2H7a2 2 0 01-2-2 2 2 0 01.25-1l1.5-2.7L3 4H1V2m6 16a2 2 0 010 4 2 2 0 010-4z"/></svg>,
     megaphone: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v13H9V8H3a1 1 0 01-1-1V6a1 1 0 011-1h18a1 1 0 011 1v1a1 1 0 01-1 1h-9z"/></svg>,
     layers: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>,
+    code: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 3a2 2 0 00-2 2v4a2 2 0 01-2 2H3v2h1a2 2 0 012 2v4a2 2 0 002 2h2v-2H8v-5a2 2 0 00-2-2 2 2 0 002-2V5h2V3H8zm8 0a2 2 0 012 2v4a2 2 0 002 2h1v2h-1a2 2 0 00-2 2v4a2 2 0 01-2 2h-2v-2h2v-5a2 2 0 012-2 2 2 0 01-2-2V5h-2V3h2z"/></svg>,
   };
 
   // For coming soon cards, use a div instead of Link

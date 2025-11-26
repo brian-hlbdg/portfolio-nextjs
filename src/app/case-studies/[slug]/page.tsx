@@ -5,10 +5,12 @@ import { HeroSection } from '@/components/features/case-studies/HeroSection';
 import { TLDRSection } from '@/components/features/case-study-detail/TLDRSection';
 import { MetricsGrid } from '@/components/features/case-study-detail/MetricsGrid';
 import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSteps';
+import { BeforeAfterComparison } from '@/components/features/case-study-detail/BeforeAfterComparison';
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
 import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 import { nfiRelayExceptionHandlingCaseStudyData } from '@/data/nfiRelayExceptionHandlingCaseStudy';
+import { portfolioRedesignCaseStudyData } from '@/data/portfolioRedesignCaseStudy';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,6 +18,7 @@ const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
   'wine-tasting-app': palateCollectifCaseStudyData,
   'nfi-relay-exception-handling': nfiRelayExceptionHandlingCaseStudyData,
+  'portfolio-redesign': portfolioRedesignCaseStudyData,
 };
 
 export async function generateStaticParams() {
@@ -238,7 +241,7 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
             {data.solution.improvements.map((improvement, idx) => (
               <div key={idx} className="bg-gray-100 dark:bg-slate-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6">
                 <h3 className="text-orange-500 font-semibold mb-4">{improvement.title}</h3>
@@ -252,7 +255,19 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
                 </ul>
               </div>
             ))}
+            
           </div>
+        {data.solution.beforeAfter && (
+          <div className="bg-gray-100 dark:bg-slate-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6">
+              <h3 className="text-orange-500 font-semibold mb-4">Before/After Comparison</h3>
+                <BeforeAfterComparison
+                  beforeImage={data.solution.beforeAfter.beforeImage}
+                  afterImage={data.solution.beforeAfter.afterImage}
+                  comparisons={data.solution.beforeAfter.comparisons}
+                  title={data.solution.beforeAfter.title}
+                />
+            </div>
+        )}
         </section>
 
         {/* Results & Impact */}
