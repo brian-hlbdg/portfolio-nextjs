@@ -109,7 +109,7 @@ export default function BlogPage() {
         <section className="mt-16 bg-gray-50 dark:bg-slate-800/30 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
           <h2 className="text-3xl font-bold mb-4">Want to discuss a project?</h2>
           <p className="text-gray-500 dark:text-slate-400 mb-8 max-w-2xl mx-auto">
-            I'm currently accepting new projects for Q3 2025. Let's talk about how I can help solve
+            I'm currently accepting new projects for 2025. Let's talk about how I can help solve
             your design and development challenges.
           </p>
         </section>
