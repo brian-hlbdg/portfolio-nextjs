@@ -1,5 +1,6 @@
 import { use } from 'react';
 import { notFound } from 'next/navigation';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { Footer } from '@/components/layout/Footer';
 import  Link from 'next/link';
 import { BlogPostData } from '@/components/features/types/blogPost';
@@ -10,7 +11,8 @@ import { designSystemsScaleData } from '@/data/designSystemsScale';
 import { accessibilityBasicsData } from '@/data/accessibilityBasics';
 import { chicagoDesignCommunityData } from '@/data/chicagoDesignCommunity';
 import { elixirForDesignersData } from '@/data/elixirForDesigners';
-import {growingup104thparnellpart1Data} from '@/data/growing-up-104th-parnell-part-1';
+import { growingup104thparnellpart1Data } from '@/data/growing-up-104th-parnell-part-1';
+import { eventStormsTmsData } from '@/data/eventStormsTms';
 
 
 const blogPostDataMap: Record<string, BlogPostData> = {
@@ -21,6 +23,7 @@ const blogPostDataMap: Record<string, BlogPostData> = {
   'chicago-design-community': chicagoDesignCommunityData,
   'elixir-for-designers': elixirForDesignersData,
   'growing-up-104th-parnell-part-1': growingup104thparnellpart1Data,
+  'event-storms-tms': eventStormsTmsData,
 };
 
 export async function generateStaticParams() {
@@ -142,8 +145,21 @@ export default function BlogPostPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
 
-
       <article className="max-w-3xl mx-auto px-6 py-16">
+
+        {/* Back Navigation */}
+        <div className="mt-12">
+          <Link 
+            href="/blog"
+            className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Blog
+          </Link>
+        </div>
+
         {/* Header */}
         <header className="mb-8">
           {/* Category */}
@@ -194,8 +210,17 @@ export default function BlogPostPage({ params }: PageProps) {
         </div>
 
         {/* Content */}
-        <div className="prose prose-invert prose-lg max-w-none">
-          {renderContent(post.content)}
+        <div className="max-w-none">
+          {post.content ? (
+            <MarkdownRenderer content={post.content} />
+          ) : (
+            <div className="space-y-6 text-gray-900 dark:text-slate-300">
+              <p className="text-lg leading-relaxed">{post.excerpt}</p>
+              <p className="text-gray-900 dark:text-slate-400 italic">
+                Full article content coming soon...
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Author Bio */}
