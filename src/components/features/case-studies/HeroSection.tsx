@@ -6,7 +6,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
   return (
-    <section className="mb-16">
+    <section className="mb-8">
       <div className="text-orange-500 text-sm font-semibold mb-4 uppercase tracking-wide">
         {hero.category}
       </div>
