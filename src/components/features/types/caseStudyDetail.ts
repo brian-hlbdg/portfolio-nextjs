@@ -7,6 +7,14 @@ export interface CaseStudyDetailData {
     client: string;
     technologies: string[];
     timeline: string;
+    badges?: ('Greenfield' | 'Legacy Modernization' | 'Design System' | 'Mobile' | 'Enterprise' | 'Personal Project' | 'UX Design' | 'Frontend Development')[];
+    whyItMatters?: string;
+  };
+
+  teamComposition?: {
+  size: string;
+  structure: TeamMember[];
+  collaboration?: string; // e.g., "Distributed team across 3 time zones"
   };
 
   // TL;DR Section
@@ -85,6 +93,14 @@ export interface CaseStudyDetailData {
     keyTakeaways: KeyTakeaway[];
   };
 }
+
+export interface TeamMember {
+  role: string;
+  count?: number;
+  location?: string;
+  responsibilities?: string[];
+}
+
 
 export interface ComparisonItem {
   label: string;

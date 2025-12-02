@@ -7,7 +7,18 @@ export const portfolioRedesignCaseStudyData: CaseStudyDetailData = {
     role: 'UX Designer & Frontend Developer',
     client: 'Personal Portfolio',
     technologies: ['React', 'Next.js 15', 'TypeScript', 'Tailwind CSS v4', 'ESPN API'],
-    timeline: 'August 2025 - Present'
+    timeline: 'August 2025 - Present', 
+    badges: ['Personal Project', 'UX Design', 'Frontend Development'],
+    whyItMatters: 'Showcases the evolution of my design philosophy and technical skills over a decade, transitioning from a visually playful portfolio to a mature, research-driven UX and frontend development platform.'
+  },
+
+  teamComposition: {
+    size: 'Solo Project',
+    structure: [
+      { role: 'UX Designer', location: 'Chicago' },
+      { role: 'Frontend Developer', location: 'Chicago' }
+    ],
+    collaboration: 'Independent work with periodic peer reviews from design and development colleagues'
   },
 
   tldr: {

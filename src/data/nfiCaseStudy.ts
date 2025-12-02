@@ -7,7 +7,21 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
     role: 'UX Designer & Frontend Developer',
     client: 'NFI Industries',
     technologies: ['Phoenix LiveView', 'Elixir', 'Tailwind CSS'],
-    timeline: '2017 - Present'
+    timeline: '2017 - Sept 2025', 
+    badges: ['Greenfield', 'Enterprise', 'Design System'],
+    whyItMatters: 'Demonstrates building enterprise-scale systems from scratch for 250+ users, with full design system ownership and cross-functional leadership.'
+  },
+
+  teamComposition: {
+    size: '8-12 members',
+    structure: [
+      { role: 'UX Designer', count: 2, location: 'Chicago' },
+      { role: 'Backend Engineers', count: 6, location: 'Distributed' },
+      { role: 'Frontend Engineers', count: 2, location: 'Distributed' },
+      { role: 'Product Manager', count: 3, location: 'Chicago' },
+      { role: 'Support Staff', count: 3, location: 'Distributed' },
+    ],
+    collaboration: 'Hybrid team with daily standups across Eastern and Central time zones'
   },
 
   tldr: {

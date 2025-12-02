@@ -6,6 +6,7 @@ import { TLDRSection } from '@/components/features/case-study-detail/TLDRSection
 import { MetricsGrid } from '@/components/features/case-study-detail/MetricsGrid';
 import { ProcessSteps } from '@/components/features/case-study-detail/ProcessSteps';
 import { BeforeAfterComparison } from '@/components/features/case-study-detail/BeforeAfterComparison';
+import { TeamComposition } from '@/components/features/case-study-detail/TeamComposition';
 import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
 import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
@@ -13,6 +14,7 @@ import { nfiRelayExceptionHandlingCaseStudyData } from '@/data/nfiRelayException
 import { portfolioRedesignCaseStudyData } from '@/data/portfolioRedesignCaseStudy';
 import Image from 'next/image';
 import Link from 'next/link';
+
 
 const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'nfi-tms-platform': nfiCaseStudyData,
@@ -57,6 +59,15 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
 
         {/* Hero Section */}
         <HeroSection hero={data.hero} />
+
+        {/* Team Composition - if available */}
+        {data.teamComposition && (
+          <TeamComposition 
+            size={data.teamComposition.size}
+            structure={data.teamComposition.structure}
+            collaboration={data.teamComposition.collaboration}
+          />
+        )}
 
         {/* TL;DR */}
         <TLDRSection tldr={data.tldr} />
@@ -260,12 +271,14 @@ export default function CaseStudyDetailPage({ params }: PageProps) {
         {data.solution.beforeAfter && (
           <div className="bg-gray-100 dark:bg-slate-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6">
               <h3 className="text-orange-500 font-semibold mb-4">Before/After Comparison</h3>
+              
                 <BeforeAfterComparison
                   beforeImage={data.solution.beforeAfter.beforeImage}
                   afterImage={data.solution.beforeAfter.afterImage}
                   comparisons={data.solution.beforeAfter.comparisons}
                   title={data.solution.beforeAfter.title}
                 />
+              
             </div>
         )}
         </section>

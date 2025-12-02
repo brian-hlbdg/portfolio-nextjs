@@ -7,7 +7,18 @@ export const palateCollectifCaseStudyData: CaseStudyDetailData = {
     role: 'Product Designer & Frontend Developer',
     client: 'Palate Collectif',
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'PostgreSQL'],
-    timeline: '2024 - Present'
+    timeline: '2024 - Present',
+    badges: ['Greenfield', 'Mobile'],
+    whyItMatters: 'End-to-end product ownership from user research through implementation, demonstrating ability to balance educational UX with technical architecture decisions.'
+  },
+
+  teamComposition: {
+    size: 'Solo project',
+    structure: [
+      { role: 'Product Designer & Developer', count: 1, location: 'Chicago (me)' },
+      { role: 'Sparkling Wine Distributor', count: 1, location: 'Chicago' }
+    ],
+    collaboration: 'Collaborated with wine educators for domain expertise validation'
   },
 
   tldr: {

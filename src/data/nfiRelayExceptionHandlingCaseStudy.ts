@@ -7,7 +7,19 @@ export const nfiRelayExceptionHandlingCaseStudyData: CaseStudyDetailData = {
     role: 'UX Designer & Frontend Developer',
     client: 'NFI Industries',
     technologies: ['Phoenix LiveView', 'Elixir', 'Tailwind CSS'],
-    timeline: '2017 - Present'
+    timeline: '2017 - Sept 2025',
+    badges: ['Enterprise', 'Design System'],
+    whyItMatters: 'Shows ability to identify high-impact workflow problems, design targeted solutions, and achieve measurable operational improvements within an existing platform.'
+  },
+
+  teamComposition: {
+    size: '5-6 members',
+    structure: [
+      { role: 'UX Designer', count: 1, location: 'Chicago (me)' },
+      { role: 'Backend Engineer', count: 2, location: 'Remote' },
+      { role: 'Product Manager', count: 1, location: 'Chicago' },
+    ],
+    collaboration: 'Close partnership with field operations for real-world validation'
   },
 
   tldr: {
