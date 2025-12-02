@@ -6,6 +6,7 @@ import { BlogCard } from '@/components/features/blog/BlogCard';
 import { BlogFilterPanel } from '@/components/features/blog/BlogFilterPanel';
 import { FeaturedPostsSection } from '@/components/features/blog/FeaturedPostsSection';
 import { allPosts } from '@/data/blogPosts';
+import Link from 'next/link';
 
 
 interface FilterState {
@@ -112,6 +113,21 @@ export default function BlogPage() {
             I'm currently accepting new projects for 2026. Let's talk about how I can help solve
             your design and development challenges.
           </p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link 
+              href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-gray-800 dark:text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+            >
+              <span>💬</span>
+              Start a Conversation
+            </Link>
+            <Link
+              href="/experience"
+              className="px-6 py-3 bg-gray-50 dark:bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white rounded-lg font-semibold transition-colors inline-block text-center"
+            >
+              View Professional Experience
+            </Link>
+          </div>
         </section>
       </div>
 

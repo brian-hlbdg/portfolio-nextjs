@@ -61,7 +61,7 @@ export const allPosts: BlogPost[] = [
     tags: ['Community', 'Personal'],
     image: '/images/blog/chicago-skyline.webp',
     date: '2025-02-18',
-    readTime: '6 min read'
+    readTime: '15 min read'
   },
   {
     id: '6',
