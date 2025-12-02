@@ -21,4 +21,14 @@ export type BlogCategory =
   | 'Development' 
   | 'Design Systems' 
   | 'Accessibility' 
-  | 'Cultural';
+  | 'Cultural'
+  | 'Community'
+  | 'Component Library'
+  | 'Scalability'
+  | 'WCAG'
+  | 'Inclusive Design'
+  | 'Elixir'
+  | 'Phoenix LiveView'
+  | 'Personal'
+  | 'UX Insight';
+
