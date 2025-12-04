@@ -1,5 +1,5 @@
 /**
- * src/components/features/bears-dashboard/sections/ScheduleSection.tsx - GRID CARDS
+ * src/components/features/bears-dashboard/sections/ScheduleSection.tsx
  * ========================================================================
  * 5 cards across, 2 rows
  * Shows: Date, Time, Opponent, Record, Venue, Broadcast, Win % (placeholder)
@@ -8,56 +8,44 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTeamSchedule, ScheduleGame } from '@/hooks/useTeamSchedule';
-import { useSportsStats } from '@/hooks/useSportsStats';
+import { NFLTeamRecord } from '@/hooks/useBearsStats';
+import { getStadiumByName, getVenueConditions } from '@/data/Nflstadiums';
 import Image from 'next/image';
 
 interface ScheduleSectionProps {
   upcomingGames?: ScheduleGame[];
   loading?: boolean;
+  nflTeamRecords?: Map<string, NFLTeamRecord>;
 }
 
 export default function ScheduleSection({
   upcomingGames: propGames,
   loading: propLoading = false,
+  nflTeamRecords,
 }: ScheduleSectionProps) {
-  const { scheduleData, loading: hookLoading, error } = useTeamSchedule(
-    'bears'
-  );
-
-  const { teams } = useSportsStats();
+  const { scheduleData, loading: hookLoading, error } = useTeamSchedule('bears');
 
   const loading = propLoading || hookLoading;
   const games = propGames || scheduleData?.games || [];
-  const upcomingGames = games.filter((g: ScheduleGame) =>
-    g.status === 'scheduled' || g.status === 'live'
+  const upcomingGames = games.filter(
+    (g: ScheduleGame) => g.status === 'scheduled' || g.status === 'live'
   );
 
-  // Build opponent stats map
-  const opponentStatsMap = useMemo(() => {
-    const map: Record<string, { record: string; wins: number; losses: number }> = {};
-    teams.forEach(team => {
-      map[team.name.toLowerCase()] = {
-        record: team.record,
-        wins: team.wins,
-        losses: team.losses,
-      };
-    });
-    return map;
-  }, [teams]);
-
-  // Get opponent record
-  const getOpponentRecord = (opponentName: string): { record: string; wins: number; losses: number } | null => {
-    const key = opponentName.toLowerCase();
-    return opponentStatsMap[key] || null;
+  // Get opponent record from the passed-in NFL team records
+  const getOpponentRecord = (opponentName: string): NFLTeamRecord | null => {
+    if (!nflTeamRecords) return null;
+    return nflTeamRecords.get(opponentName.toLowerCase()) || null;
   };
 
   // LOADING STATE
   if (loading) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upcoming Games</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Upcoming Games
+        </h2>
         <div className="grid grid-cols-5 gap-4">
           {[...Array(10)].map((_, i) => (
             <div
@@ -74,7 +62,9 @@ export default function ScheduleSection({
   if (error) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upcoming Games</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Upcoming Games
+        </h2>
         <div className="bg-white dark:bg-slate-800/40 border border-red-200 dark:border-red-700/50 rounded-lg p-6 text-center">
           <p className="text-red-400">Error loading schedule: {error}</p>
         </div>
@@ -86,9 +76,13 @@ export default function ScheduleSection({
   if (!upcomingGames || upcomingGames.length === 0) {
     return (
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Upcoming Games</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+          Upcoming Games
+        </h2>
         <div className="bg-gray-200 dark:bg-slate-800/40 border border-gray-300 dark:border-slate-700/50 rounded-lg p-8 text-center">
-          <p className="text-gray-600 dark:text-slate-300">No upcoming games scheduled</p>
+          <p className="text-gray-600 dark:text-slate-300">
+            No upcoming games scheduled
+          </p>
         </div>
       </div>
     );
@@ -105,9 +99,9 @@ export default function ScheduleSection({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {upcomingGames.map((game: ScheduleGame) => (
-          <GameCard 
-            key={game.id} 
-            game={game} 
+          <GameCard
+            key={game.id}
+            game={game}
             opponentRecord={getOpponentRecord(game.opponent)}
           />
         ))}
@@ -121,12 +115,16 @@ export default function ScheduleSection({
  */
 interface GameCardProps {
   game: ScheduleGame;
-  opponentRecord: { record: string; wins: number; losses: number } | null;
+  opponentRecord: NFLTeamRecord | null;
 }
 
 function GameCard({ game, opponentRecord }: GameCardProps) {
   const isHome = game.homeAway === 'home';
   const winProbability = 52; // Placeholder - can be calculated later
+
+  // Get stadium info
+  const stadium = getStadiumByName(game.venue);
+  const venueConditions = stadium ? getVenueConditions(stadium) : null;
 
   return (
     <div className="bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-800/60 dark:to-slate-700/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4 hover:border-orange-500/50 transition-all hover:shadow-lg hover:shadow-orange-500/20 flex flex-col h-full">
@@ -134,7 +132,9 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
       <div className="flex items-start justify-between mb-2">
         <div>
           <p className="text-xs text-gray-800 dark:text-slate-300">{game.date}</p>
-          <p className="text-sm font-bold text-gray-900 dark:text-white">{game.time}</p>
+          <p className="text-sm font-bold text-gray-900 dark:text-white">
+            {game.time}
+          </p>
         </div>
 
         <span
@@ -171,44 +171,52 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
         </p>
 
         {/* Opponent Record */}
-        {opponentRecord ? (
-          <div className="text-xs space-y-0.5">
-            <p className="text-slate-400">
-              Record: <span className="text-orange-400 font-semibold">{opponentRecord.record}</span>
-            </p>
-            <p className="text-slate-400">
-              <span className="text-green-800 dark:text-green-400">{opponentRecord.wins}W</span>
-              {' '}
-              <span className="text-red-800 dark:text-red-400">{opponentRecord.losses}L</span>
-            </p>
-          </div>
-        ) : (
-          <p className="text-xs text-gray-400 dark:text-slate-500 italic">Record: TBD</p>
-        )}
+        <p className="text-xs text-gray-400 dark:text-slate-400">
+          Record:{' '}
+          <span className="text-orange-400 font-semibold">
+            {opponentRecord?.record || 'TBD'}
+          </span>
+        </p>
       </div>
 
       {/* Venue */}
-      <div className="mb-3 pb-3 border border-gray-200 dark:border-slate-600/30">
-        <p className="text-xs text-gray-600 dark:text-slate-400 uppercase tracking-wider mb-1">Venue</p>
-        <p className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-1">{game.venue}</p>
-        {game.location && (
-          <p className="text-xs text-gray-600 dark:text-slate-500">{game.location}</p>
-        )}
+      <div className="mb-3 pb-3 border-b border-gray-200 dark:border-slate-600/30">
+        <p className="text-xs text-gray-600 dark:text-slate-400 uppercase tracking-wider mb-1">
+          Venue
+        </p>
+        <p className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-1">
+          {game.venue}
+        </p>
+        {venueConditions ? (
+          <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">
+            {venueConditions}
+          </p>
+        ) : game.location ? (
+          <p className="text-xs text-gray-600 dark:text-slate-500">
+            {game.location}
+          </p>
+        ) : null}
       </div>
 
-      {/* Broadcast & Win Probability */}
+            {/* Broadcast & Win Probability */}
       <div className="space-y-2 mt-auto">
         {/* Broadcast */}
         {game.broadcast && (
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-600 dark:text-slate-400">Broadcasting:</p>
-            <p className="text-xs font-semibold text-orange-700 dark:text-orange-400">{game.broadcast}</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400">
+              Broadcasting:
+            </p>
+            <p className="text-xs font-semibold text-orange-700 dark:text-orange-400">
+              {game.broadcast}
+            </p>
           </div>
         )}
 
         {/* Win Probability (Placeholder) */}
         <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-slate-600/30">
-          <p className="text-xs text-gray-600 dark:text-slate-400">Bears Chance:</p>
+          <p className="text-xs text-gray-600 dark:text-slate-400">
+            Bears Chance:
+          </p>
           <div className="flex items-center gap-1">
             <div className="w-12 h-1.5 bg-gray-50 dark:bg-slate-700 rounded-full overflow-hidden">
               <div

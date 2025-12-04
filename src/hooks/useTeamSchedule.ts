@@ -24,6 +24,17 @@ interface ESPNCompetitor {
   homeAway: 'home' | 'away';
   team: ESPNTeam;
   score?: number;
+  records?: Array<{
+    id?: string;
+    abbreviation?: string;
+    displayName?: string;
+    shortDisplayName?: string;
+    description?: string;
+    type: string;
+    displayValue?: string;
+    summary?: string;
+  }>;
+
 }
 
 interface ESPNVenue {
@@ -34,6 +45,17 @@ interface ESPNVenue {
 
 interface ESPNBroadcast {
   names?: string[];
+  media?: {
+    shortName?: string;
+  };
+  type?: {
+    id?: string;
+    shortName?: string;
+  };
+  market?: {
+    id?: string;
+    type?: string;
+  };
 }
 
 interface ESPNCompetition {
@@ -70,6 +92,7 @@ export interface ScheduleGame {
   time: string;
   opponent: string;
   opponentLogo: string;
+  opponentRecord?: string;
   location: string;
   venue: string;
   homeAway: 'home' | 'away';
@@ -186,12 +209,18 @@ function formatDateTime(dateString: string): { date: string; time: string } {
 function getOpponent(
   competitors: ESPNCompetitor[],
   ourTeamId: string
-): { name: string; logo?: string } {
+): { name: string; logo?: string; record?: string } {
   const opponent = competitors.find((c: ESPNCompetitor): boolean => c.team.id !== ourTeamId);
+
+  // Find the "overall" or "total" record from the records array
+  const overallRecord = opponent?.records?.find(
+    (r) => r.type === 'total'
+  );
 
   return {
     name: opponent?.team?.displayName || 'Unknown',
     logo: opponent?.team?.logo,
+    record: overallRecord?.displayValue || overallRecord?.summary,
   };
 }
 
@@ -226,7 +255,9 @@ function parseGame(
   const opponentScore = opposingTeam?.score;
 
   const broadcasts = competition.broadcasts || [];
-  const broadcast = broadcasts.length > 0 ? broadcasts[0].names?.[0] : undefined;
+  const broadcast = broadcasts.length > 0 
+    ? broadcasts[0].media?.shortName || broadcasts[0].names?.[0]
+    : undefined;
 
   return {
     id: event.id,
@@ -234,6 +265,7 @@ function parseGame(
     time,
     opponent: opponent.name,
     opponentLogo: opponent.logo || '',
+    opponentRecord: opponent.record,
     location: competition.venue?.city || 'Unknown',
     venue: competition.venue?.fullName || 'Unknown Venue',
     homeAway: ourTeam?.homeAway || 'away',
