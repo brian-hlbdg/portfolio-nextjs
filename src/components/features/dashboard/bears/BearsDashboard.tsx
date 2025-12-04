@@ -85,26 +85,24 @@ export default function BearsDashboard() {
           <OverviewSection stats={bearsStats} loading={statsLoading} />
         </section>
 
-        {/* Section 3: Recent Results */}
-        <section>
-          <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
-        </section>
-
         {/* Section 2: Upcoming Games */}
         <section>
           <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} nflTeamRecords={nflTeamRecords} />
         </section>
 
-        
-
-        {/* Section 4: Player Stats */}
+        {/* Section 3: Recent Results */}
         <section>
-          <PlayerStatsSection playerStats={[]} loading={false} />
+          <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
         </section>
 
-        {/* Section 5: Roster */}
+        {/* Section 4: Roster */}
         <section>
           <RosterSection />
+        </section>
+
+        {/* Section 5: Player Stats */}
+        <section>
+          <PlayerStatsSection playerStats={[]} loading={false} />
         </section>
       
 
