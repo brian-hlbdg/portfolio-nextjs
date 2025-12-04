@@ -10,6 +10,10 @@ import {
 
 const ESPN_NFL_SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard';
 
+// ========================================================================
+// TYPES
+// ========================================================================
+
 interface ESPNCompetitor {
   homeAway: string;
   team?: {
@@ -18,6 +22,9 @@ interface ESPNCompetitor {
   };
   score?: number;
   records?: Array<{
+    type?: string;
+    summary?: string;
+    displayValue?: string;
     wins?: number;
     losses?: number;
     ties?: number;
@@ -27,9 +34,29 @@ interface ESPNCompetitor {
   }>;
 }
 
+/**
+ * NFL Team Record - exported for use in other components
+ */
+export interface NFLTeamRecord {
+  name: string;
+  record: string;
+  wins: number;
+  losses: number;
+  ties: number;
+}
+
+// ========================================================================
+// EXTENDED RETURN TYPE
+// ========================================================================
+
 interface UseBearsStatsReturn extends BearsDashboardState {
   refetch: () => Promise<void>;
+  nflTeamRecords: Map<string, NFLTeamRecord>;
 }
+
+// ========================================================================
+// MAIN HOOK
+// ========================================================================
 
 export function useBearsStats(): UseBearsStatsReturn {
   const [state, setState] = useState<BearsDashboardState>({
@@ -42,8 +69,22 @@ export function useBearsStats(): UseBearsStatsReturn {
     lastUpdated: null,
   });
 
+  // Store all NFL team records
+  const [nflTeamRecords, setNflTeamRecords] = useState<Map<string, NFLTeamRecord>>(
+    new Map()
+  );
+
+  /**
+   * Fetch season stats AND all NFL team records from scoreboard
+   * Returns both Bears-specific stats and a map of all team records
+   */
   const fetchSeasonStats = useCallback(
-    async (): Promise<BearsSeasonStats | null> => {
+    async (): Promise<{
+      bearsStats: BearsSeasonStats | null;
+      allTeamRecords: Map<string, NFLTeamRecord>;
+    }> => {
+      const allTeamRecords = new Map<string, NFLTeamRecord>();
+
       try {
         const response = await Promise.race([
           fetch(ESPN_NFL_SCOREBOARD, {
@@ -61,36 +102,63 @@ export function useBearsStats(): UseBearsStatsReturn {
         const data = await response.json();
         const events = data.events || [];
 
+        let bearsStats: BearsSeasonStats | null = null;
+
+        // Loop through all events and extract ALL team records
         for (const event of events) {
           const competitors = event.competitions?.[0]?.competitors || [];
 
           for (const competitor of competitors) {
             const displayName = competitor.team?.displayName || '';
+            
+            // Find the "total" record (overall season record)
+            const totalRecord = competitor.records?.find(
+              (r: { type?: string }) => r.type === 'total'
+            );
 
-            if (displayName.includes('Bears')) {
-              const record = competitor.records?.[0];
+            if (displayName && totalRecord) {
+              // Extract wins/losses/ties
+              const wins = totalRecord.wins ?? 0;
+              const losses = totalRecord.losses ?? 0;
+              const ties = totalRecord.ties ?? 0;
+              
+              // Get record string from displayValue/summary, or construct it
+              const recordStr = 
+                totalRecord.displayValue || 
+                totalRecord.summary || 
+                (ties > 0 ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`);
 
-              if (record) {
-                return {
-                  wins: record.wins || 0,
-                  losses: record.losses || 0,
-                  ties: record.ties || 0,
-                  winPercentage: record.winpct || 0,
-                  pointsFor: record.pointsfor || 0,
-                  pointsAgainst: record.pointsagainst || 0,
-                  record: `${record.wins || 0}-${record.losses || 0}${
-                    record.ties ? `-${record.ties}` : ''
-                  }`,
+              // Store in map (lowercase key for easy lookup)
+              allTeamRecords.set(displayName.toLowerCase(), {
+                name: displayName,
+                record: recordStr,
+                wins,
+                losses,
+                ties,
+              });
+
+              // If this is the Bears, also extract their full stats
+              if (displayName.includes('Bears')) {
+                bearsStats = {
+                  wins,
+                  losses,
+                  ties,
+                  winPercentage: totalRecord.winpct ?? 0,
+                  pointsFor: totalRecord.pointsfor ?? 0,
+                  pointsAgainst: totalRecord.pointsagainst ?? 0,
+                  record: recordStr,
                 };
               }
             }
           }
         }
 
-        return null;
+        console.log(`📊 Extracted ${allTeamRecords.size} NFL team records from scoreboard`);
+        
+        return { bearsStats, allTeamRecords };
       } catch (error) {
-        console.error('Error fetching Bears season stats:', error);
-        return null;
+        console.error('Error fetching season stats:', error);
+        return { bearsStats: null, allTeamRecords };
       }
     },
     []
@@ -189,14 +257,17 @@ export function useBearsStats(): UseBearsStatsReturn {
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const [seasonStats, gameData, playerStats] = await Promise.all([
+      const [seasonData, gameData, playerStats] = await Promise.all([
         fetchSeasonStats(),
         fetchBearsGames(),
         fetchPlayerStats(),
       ]);
 
+      // Update NFL team records
+      setNflTeamRecords(seasonData.allTeamRecords);
+
       setState({
-        seasonStats: seasonStats,
+        seasonStats: seasonData.bearsStats,
         upcomingGames: gameData.upcoming,
         recentGames: gameData.recent,
         playerStats: playerStats,
@@ -226,5 +297,6 @@ export function useBearsStats(): UseBearsStatsReturn {
   return {
     ...state,
     refetch: fetchAllData,
+    nflTeamRecords,  // NEW: expose all team records
   };
 }

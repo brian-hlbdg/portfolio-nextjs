@@ -10,6 +10,7 @@
 import React, { useMemo } from 'react';
 import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
 import { useTeamSchedule } from '@/hooks/useTeamSchedule';
+import { useBearsStats } from '@/hooks/useBearsStats';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
@@ -26,6 +27,9 @@ export default function BearsDashboard() {
     error: statsError,
     refetch: refetchStats,
   } = useSportsStats();
+
+  // Get NFL team records from Bears stats hook
+  const { nflTeamRecords } = useBearsStats();
 
   // ✅ Fetch schedule
   const {
@@ -88,7 +92,7 @@ export default function BearsDashboard() {
 
         {/* Section 2: Upcoming Games */}
         <section>
-          <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} />
+          <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} nflTeamRecords={nflTeamRecords} />
         </section>
 
         
