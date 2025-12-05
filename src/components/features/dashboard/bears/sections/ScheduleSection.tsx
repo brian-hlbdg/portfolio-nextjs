@@ -12,6 +12,7 @@ import React from 'react';
 import { useTeamSchedule, ScheduleGame } from '@/hooks/useTeamSchedule';
 import { NFLTeamRecord } from '@/hooks/useBearsStats';
 import { getStadiumByName, getVenueConditions } from '@/data/Nflstadiums';
+import { useGamePredictors, GamePrediction, getPredictionGradient } from '@/hooks/useGamePredictors';
 import Image from 'next/image';
 
 interface ScheduleSectionProps {
@@ -32,6 +33,12 @@ export default function ScheduleSection({
   const upcomingGames = games.filter(
     (g: ScheduleGame) => g.status === 'scheduled' || g.status === 'live'
   );
+
+  // Get game IDs for upcoming games
+  const upcomingGameIds = upcomingGames.map((g) => g.id);
+
+  // Fetch ESPN FPI predictions
+  const { predictions, loading: predictionsLoading } = useGamePredictors(upcomingGameIds);
 
   // Get opponent record from the passed-in NFL team records
   const getOpponentRecord = (opponentName: string): NFLTeamRecord | null => {
@@ -103,6 +110,7 @@ export default function ScheduleSection({
             key={game.id}
             game={game}
             opponentRecord={getOpponentRecord(game.opponent)}
+            prediction={predictions.get(game.id) || null}
           />
         ))}
       </div>
@@ -116,9 +124,10 @@ export default function ScheduleSection({
 interface GameCardProps {
   game: ScheduleGame;
   opponentRecord: NFLTeamRecord | null;
+  prediction: GamePrediction | null;
 }
 
-function GameCard({ game, opponentRecord }: GameCardProps) {
+function GameCard({ game, opponentRecord, prediction }: GameCardProps) {
   const isHome = game.homeAway === 'home';
   const winProbability = 52; // Placeholder - can be calculated later
 
@@ -198,7 +207,7 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
         ) : null}
       </div>
 
-            {/* Broadcast & Win Probability */}
+      {/* Broadcast */}
       <div className="space-y-2 mt-auto">
         {/* Broadcast */}
         {game.broadcast && (
@@ -212,22 +221,61 @@ function GameCard({ game, opponentRecord }: GameCardProps) {
           </div>
         )}
 
-        {/* Win Probability (Placeholder) */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-slate-600/30">
-          <p className="text-xs text-gray-600 dark:text-slate-400">
-            Bears Chance:
-          </p>
-          <div className="flex items-center gap-1">
-            <div className="w-12 h-1.5 bg-gray-50 dark:bg-slate-700 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"
-                style={{ width: `${winProbability}%` }}
-              />
-            </div>
-            <span className="text-xs font-semibold text-orange-400 w-8 text-right">
-              {winProbability}%
-            </span>
+        {/* Win Probability - ESPN FPI */}
+        <div className="pt-2 border-t border-gray-200 dark:border-slate-600/30 space-y-1">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-600 dark:text-slate-400">
+              Bears Chance:
+            </p>
+            {prediction ? (
+              <div className="flex items-center gap-2">
+                <div className="w-16 h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 bg-gradient-to-r ${getPredictionGradient(prediction.bearsWinProbability)}`}
+                    style={{ width: `${prediction.bearsWinProbability}%` }}
+                  />
+                </div>
+                <span
+                  className={`text-xs font-bold w-10 text-right ${
+                    prediction.bearsWinProbability >= 50
+                      ? 'text-green-500'
+                      : 'text-orange-500'
+                  }`}
+                >
+                  {prediction.bearsWinProbability}%
+                </span>
+              </div>
+            ) : (
+              <span className="text-xs text-gray-400 dark:text-slate-500 italic">
+                --
+              </span>
+            )}
           </div>
+          
+          {/* Predicted Spread */}
+          {prediction && (
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-600 dark:text-slate-400">
+                Spread:
+              </p>
+              <span
+                className={`text-xs font-semibold ${
+                  prediction.predictedSpread > 0
+                    ? 'text-green-500'
+                    : prediction.predictedSpread < 0
+                    ? 'text-red-500'
+                    : 'text-gray-500'
+                }`}
+              >
+                {prediction.predictedSpread > 0 
+                  ? `Bears by ${prediction.predictedSpread}` 
+                  : prediction.predictedSpread < 0 
+                  ? `Lose by ${Math.abs(prediction.predictedSpread)}`
+                  : "Pick'em"
+                }
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
