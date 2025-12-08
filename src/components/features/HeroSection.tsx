@@ -11,13 +11,13 @@ export function HeroSection() {
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white leading-tight">
             Senior UX Designer &<br />
             <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-              Frontend Developer
+              Frontend Professional
             </span>
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl leading-relaxed">
-            I help companies build scalable digital experiences that drive measurable business growth. 
-            Specializing in Phoenix LiveView with 10+ years of proven results.
+            Over a decade of proven impact turning complex ideas into usable, scalable digital 
+            experiences that drive measurable business value.
           </p>
 
           {/* Navigation Links */}
