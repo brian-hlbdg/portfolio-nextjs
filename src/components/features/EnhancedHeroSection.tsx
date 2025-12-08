@@ -45,8 +45,8 @@ export function EnhancedHeroSection() {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl leading-relaxed font-light">
-            I help companies build scalable digital experiences that drive measurable business growth. 
-            Specializing in Phoenix LiveView with 10+ years of proven results.
+            Over a decade of proven impact turning complex ideas into usable, scalable digital 
+            experiences that drive measurable business value.
           </p>
 
           {/* Navigation Links */}
