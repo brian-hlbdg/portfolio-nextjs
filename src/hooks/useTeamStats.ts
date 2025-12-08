@@ -292,6 +292,21 @@ function parseStatisticsWithLogging(data: ESPNStatisticsResponse): TeamStats {
     ]);
     logSearch('Points Against (Scoring Defense)', pointsAgainstResult);
 
+    const scoringMarginResult = findStat(allStats, [
+  'scoringmargin',
+  'margin',
+  'pointdifferential',
+]);
+logSearch('Scoring Margin', scoringMarginResult);
+
+  // Final points-against value
+  const pointsAgainstValue =
+    pointsAgainstResult.found
+    ? pointsAgainstResult.value
+    : pointsForResult.found && scoringMarginResult.found
+    ? pointsForResult.value - scoringMarginResult.value
+    : 0;
+
     // Construct final stats
     const thirdDownPercentage = calculatePercentage(
       thirdDownConvsResult.value,
@@ -302,7 +317,7 @@ function parseStatisticsWithLogging(data: ESPNStatisticsResponse): TeamStats {
       passingYards: passingResult.value,
       rushingYards: rushingResult.value,
       pointsFor: pointsForResult.value,
-      pointsAgainst: pointsAgainstResult.value,
+      pointsAgainst: pointsAgainstValue,
       turnovers: turnoversResult.value,
       thirdDownConversions: thirdDownConvsResult.value,
       thirdDownAttempts: thirdDownAttemptsResult.value,
