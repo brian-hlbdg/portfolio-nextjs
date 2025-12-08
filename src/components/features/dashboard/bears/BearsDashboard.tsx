@@ -17,6 +17,7 @@ import ScheduleSection from './sections/ScheduleSection';
 import PlayerStatsSection from './sections/PlayerStatsSection';
 import RosterSection from './sections/RosterSection';
 import { TeamStatsSection } from './sections/TeamStatsSection';
+import { GameSummarySection } from './sections/GameSummarySection';
 
 
 export default function BearsDashboard() {
@@ -88,6 +89,11 @@ export default function BearsDashboard() {
         {/* Section 2: Upcoming Games */}
         <section>
           <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} nflTeamRecords={nflTeamRecords} />
+        </section>
+
+        {/* ✅ NEW SECTION: Game Summary */}
+        <section>
+          <GameSummarySection teamId="bears" />
         </section>
 
         {/* Section 3: Recent Results */}
