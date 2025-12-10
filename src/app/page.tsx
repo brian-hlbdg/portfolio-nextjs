@@ -1,4 +1,5 @@
 import { EnhancedHeroSection } from '@/components/features/EnhancedHeroSection';
+import { RecentUpdates } from '@/components/features/updates'; 
 import { AboutMeSection } from '@/components/features/AboutMeSection';
 import { PassionsSection } from '@/components/features/PassionsSection';
 import { EducationSection } from '@/components/features/EducationSection';
@@ -17,6 +18,7 @@ export default function HomePage() {
       <AboutMeSection />
       <PassionsSection />
       <EducationSection />
+      <RecentUpdates limit={4} />
       <CoreStrengthsSection />
       <TechnicalToolbox />
       <InteractiveSkillsSection />
