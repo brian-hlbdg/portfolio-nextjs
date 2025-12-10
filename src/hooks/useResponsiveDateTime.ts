@@ -6,9 +6,6 @@ interface DateTimeFormats {
   mobile: string;
 }
 
-// Mobile breakpoint: 768px (matches Tailwind's md: breakpoint)
-// Below 768px = mobile view (shortened format)
-// 768px and above = desktop view (full format)
 const MOBILE_BREAKPOINT = 768;
 
 export function useResponsiveDateTime() {
@@ -16,14 +13,12 @@ export function useResponsiveDateTime() {
     desktop: '',
     mobile: ''
   });
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null); // Changed: null = "not yet determined"
 
   useEffect(() => {
-    // Check if screen width is below mobile breakpoint
     const checkMobile = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     };
-
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -33,7 +28,6 @@ export function useResponsiveDateTime() {
     const updateDateTime = () => {
       const now = new Date();
 
-      // Desktop format: "Thursday, October 23, 2025, 09:40:53 AM Chicago, IL"
       const desktopOptions: Intl.DateTimeFormatOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -46,7 +40,6 @@ export function useResponsiveDateTime() {
         timeZone: 'America/Chicago'
       };
 
-      // Mobile format: "Thu, 10/23/25, 09:40 AM CST"
       const mobileOptions: Intl.DateTimeFormatOptions = {
         weekday: 'short',
         year: '2-digit',
@@ -61,7 +54,6 @@ export function useResponsiveDateTime() {
       const desktopDateTime = now.toLocaleDateString('en-US', desktopOptions);
       const mobileDateTime = now.toLocaleDateString('en-US', mobileOptions);
 
-      // Get timezone abbreviation (CST/CDT for Chicago) - only for mobile
       const tzFormatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/Chicago',
         timeZoneName: 'short'
@@ -81,8 +73,15 @@ export function useResponsiveDateTime() {
     return () => clearInterval(interval);
   }, []);
 
+  // Return empty string until client has determined the viewport
+  const display = isMobile === null 
+    ? '' 
+    : isMobile 
+      ? dateTime.mobile 
+      : dateTime.desktop;
+
   return {
-    display: isMobile ? dateTime.mobile : dateTime.desktop,
-    isMobile
+    display,
+    isMobile: isMobile ?? false // Fallback for consumers that need a boolean
   };
 }

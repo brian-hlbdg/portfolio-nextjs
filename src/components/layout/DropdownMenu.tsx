@@ -113,7 +113,9 @@ export function DropdownMenu() {
       {/* Dropdown Menu Panel - slides down from top, no background */}
       <div
         className={`fixed top-16 left-0 right-0 z-40 transition-all duration-500 ease-out ${
-          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          isOpen 
+            ? 'translate-y-0 opacity-100 pointer-events-auto' 
+            : '-translate-y-full opacity-0 pointer-events-none'
         }`}
       >
         <div className="container mx-auto px-6 py-12">
