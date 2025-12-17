@@ -482,7 +482,7 @@ export default function OverviewSection({
           footerItems={[
             { label: 'Giveaways', value: calculations.giveaways.toString() },
             { 
-              label: 'Turn over Battle', 
+              label: 'Turn Over Battle', 
               value: calculations.turnoverDiff >= 0 ? 'Winning' : 'Losing'
             },
           ]}
