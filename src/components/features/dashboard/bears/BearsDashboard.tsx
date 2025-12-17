@@ -1,14 +1,18 @@
 /**
- * src/components/features/bears-dashboard/BearsDashboard.tsx - FIXED
+ * src/components/features/dashboard/bears/BearsDashboard.tsx
  * ========================================================================
- * Now includes schedule fetching and passes data to ScheduleSection
+ * CLEANED UP: Removed useSportsStats dependency
+ * 
+ * Changes:
+ * - Removed useSportsStats() call (was fetching all 7 Chicago teams)
+ * - Now uses useBearsStats() exclusively for Bears data
+ * - Cleaner separation - Bears dashboard only fetches Bears data
  * ========================================================================
  */
 
 'use client';
 
 import React, { useMemo } from 'react';
-import { useSportsStats, TeamStats } from '@/hooks/useSportsStats';
 import { useTeamSchedule } from '@/hooks/useTeamSchedule';
 import { useBearsStats } from '@/hooks/useBearsStats';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
@@ -21,18 +25,16 @@ import { GameSummarySection } from './sections/GameSummarySection';
 
 
 export default function BearsDashboard() {
-  // ✅ Fetch season stats
+  // ✅ Get Bears stats and NFL team records from Bears-specific hook
   const {
-    teams,
-    loading: statsLoading,
-    error: statsError,
-    refetch: refetchStats,
-  } = useSportsStats();
+    seasonStats,
+    nflTeamRecords,
+    loading: bearsLoading,
+    error: bearsStatsError,
+    refetch: refetchBearsStats,
+  } = useBearsStats();
 
-  // Get NFL team records from Bears stats hook
-  const { nflTeamRecords } = useBearsStats();
-
-  // ✅ Fetch schedule
+  // ✅ Fetch Bears schedule
   const {
     scheduleData,
     loading: scheduleLoading,
@@ -40,10 +42,37 @@ export default function BearsDashboard() {
     refetch: refetchSchedule,
   } = useTeamSchedule('bears');
 
-  // ✅ Find Bears in teams array (return null when not found to match OverviewSection prop)
-  const bearsStats = useMemo((): TeamStats | null => {
-    return teams.find((team: TeamStats) => team.name === 'Chicago Bears') || null;
-  }, [teams]);
+  // ✅ Convert seasonStats to the format OverviewSection expects
+  // OverviewSection expects TeamStats type with: name, sport, wins, losses, record, etc.
+  const bearsStats = useMemo(() => {
+    if (!seasonStats) return null;
+    
+    // Parse wins/losses from record string if the individual values are 0
+    // This handles cases where ESPN returns record string but not individual stats
+    let wins = seasonStats.wins;
+    let losses = seasonStats.losses;
+    let ties = seasonStats.ties;
+    
+    if ((wins === 0 && losses === 0) && seasonStats.record) {
+      const parts = seasonStats.record.split('-').map(Number);
+      if (parts.length >= 2) {
+        wins = parts[0] || 0;
+        losses = parts[1] || 0;
+        ties = parts[2] || 0;
+      }
+    }
+    
+    return {
+      name: 'Chicago Bears',
+      sport: 'NFL',
+      wins,
+      losses,
+      ties,
+      record: seasonStats.record,
+      lastUpdated: new Date().toLocaleDateString(),
+      source: 'live' as const,
+    };
+  }, [seasonStats]);
 
   // Separate upcoming and past games
   const upcomingGames = useMemo(() => {
@@ -54,13 +83,24 @@ export default function BearsDashboard() {
     return scheduleData?.games?.filter(g => g.status === 'final') || [];
   }, [scheduleData]);
 
-  // Overall state
-  const loading = statsLoading || scheduleLoading;
-  const error = statsError || scheduleError;
+  // Overall loading state
+  const loading = bearsLoading || scheduleLoading;
+
+  // Bears-specific error handling
+  const error = useMemo((): string | null => {
+    if (scheduleError) {
+      return `Schedule: ${scheduleError}`;
+    }
+    if (bearsStatsError) {
+      return bearsStatsError;
+    }
+    return null;
+  }, [scheduleError, bearsStatsError]);
+
   const lastUpdated = bearsStats?.lastUpdated || new Date().toLocaleDateString();
 
   const refetch = async () => {
-    await Promise.all([refetchStats(), refetchSchedule()]);
+    await Promise.all([refetchBearsStats(), refetchSchedule()]);
   };
 
   return (
@@ -83,42 +123,48 @@ export default function BearsDashboard() {
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8 relative z-10">
         {/* Section 1: Overview Stats */}
         <section>
-          <OverviewSection stats={bearsStats} loading={statsLoading} />
+          <OverviewSection stats={bearsStats} loading={bearsLoading} />
         </section>
 
         {/* Section 2: Upcoming Games */}
         <section>
-          <ScheduleSection upcomingGames={upcomingGames} loading={scheduleLoading} nflTeamRecords={nflTeamRecords} />
+          <ScheduleSection 
+            upcomingGames={upcomingGames} 
+            loading={scheduleLoading} 
+            nflTeamRecords={nflTeamRecords} 
+          />
         </section>
 
-        {/* ✅ NEW SECTION: Game Summary */}
+        {/* Section 3: Game Summary */}
         <section>
           <GameSummarySection teamId="bears" />
         </section>
 
-        {/* Section 3: Recent Results */}
+        {/* Section 4: Team Stats */}
         <section>
           <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
         </section>
 
-        {/* Section 4: Roster */}
+        {/* Section 5: Roster */}
         <section>
           <RosterSection />
         </section>
 
-        {/* Section 5: Player Stats */}
+        {/* Section 6: Player Stats */}
         <section>
           <PlayerStatsSection playerStats={[]} loading={false} />
         </section>
-      
-
 
         {/* Debug Info (Development Only) */}
         {process.env.NODE_ENV === 'development' && (
           <div className="bg-gray-100 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-lg p-4 text-xs text-gray-600 dark:text-gray-400 space-y-2">
+            <p className="font-semibold text-gray-900 dark:text-white mb-2">Debug Info</p>
             <p>
-              <strong>Bears Stats:</strong> {bearsStats ? 'Loaded' : 'None'} (
-              {bearsStats?.record})
+              <strong>Bears Stats:</strong> {bearsStats ? '✅ Loaded' : '❌ None'}
+              {bearsStats && ` (${bearsStats.record})`}
+            </p>
+            <p>
+              <strong>NFL Team Records:</strong> {nflTeamRecords?.size || 0} teams
             </p>
             <p>
               <strong>Upcoming Games:</strong> {upcomingGames.length} games
@@ -127,13 +173,13 @@ export default function BearsDashboard() {
               <strong>Recent Results:</strong> {recentGames.length} games
             </p>
             <p>
-              <strong>Stats Loading:</strong> {statsLoading ? 'Yes' : 'No'}
+              <strong>Bears Loading:</strong> {bearsLoading ? 'Yes' : 'No'}
             </p>
             <p>
               <strong>Schedule Loading:</strong> {scheduleLoading ? 'Yes' : 'No'}
             </p>
             <p>
-              <strong>Stats Error:</strong> {statsError || 'None'}
+              <strong>Bears Stats Error:</strong> {bearsStatsError || 'None'}
             </p>
             <p>
               <strong>Schedule Error:</strong> {scheduleError || 'None'}

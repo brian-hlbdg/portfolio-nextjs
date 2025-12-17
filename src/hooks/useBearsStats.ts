@@ -14,6 +14,18 @@ const ESPN_NFL_SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/footb
 // TYPES
 // ========================================================================
 
+interface ESPNRecord {
+  type?: string;
+  summary?: string;
+  displayValue?: string;
+  wins?: number;
+  losses?: number;
+  ties?: number;
+  winpct?: number;
+  pointsfor?: number;
+  pointsagainst?: number;
+}
+
 interface ESPNCompetitor {
   homeAway: string;
   team?: {
@@ -21,17 +33,7 @@ interface ESPNCompetitor {
     logo?: string;
   };
   score?: number;
-  records?: Array<{
-    type?: string;
-    summary?: string;
-    displayValue?: string;
-    wins?: number;
-    losses?: number;
-    ties?: number;
-    winpct?: number;
-    pointsfor?: number;
-    pointsagainst?: number;
-  }>;
+  records?: ESPNRecord[];
 }
 
 /**
@@ -43,6 +45,71 @@ export interface NFLTeamRecord {
   wins: number;
   losses: number;
   ties: number;
+}
+
+// ========================================================================
+// HELPER FUNCTIONS
+// ========================================================================
+
+/**
+ * Parse a record string like "10-4" or "10-4-1" into wins/losses/ties
+ */
+function parseRecordString(recordStr: string): { wins: number; losses: number; ties: number } {
+  const parts = recordStr.split('-').map(Number);
+  return {
+    wins: parts[0] || 0,
+    losses: parts[1] || 0,
+    ties: parts[2] || 0,
+  };
+}
+
+/**
+ * Extract wins/losses/ties from ESPN record object
+ * Handles multiple formats ESPN might return
+ */
+function extractRecordData(records: ESPNRecord[] | undefined): {
+  wins: number;
+  losses: number;
+  ties: number;
+  recordStr: string;
+  winpct: number;
+  pointsfor: number;
+  pointsagainst: number;
+} {
+  if (!records || records.length === 0) {
+    return { wins: 0, losses: 0, ties: 0, recordStr: '0-0', winpct: 0, pointsfor: 0, pointsagainst: 0 };
+  }
+
+  // Try to find the "total" or "overall" record first
+  const totalRecord = records.find(
+    (r) => r.type === 'total' || r.type === 'overall' || !r.type
+  ) || records[0]; // Fall back to first record
+
+  // Try to get wins/losses directly from the record object
+  let wins = totalRecord.wins ?? 0;
+  let losses = totalRecord.losses ?? 0;
+  let ties = totalRecord.ties ?? 0;
+
+  // Get record string
+  const recordStr = totalRecord.displayValue || totalRecord.summary || '';
+
+  // If wins/losses are 0 but we have a record string, parse it
+  if (wins === 0 && losses === 0 && recordStr) {
+    const parsed = parseRecordString(recordStr);
+    wins = parsed.wins;
+    losses = parsed.losses;
+    ties = parsed.ties;
+  }
+
+  return {
+    wins,
+    losses,
+    ties,
+    recordStr: recordStr || (ties > 0 ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`),
+    winpct: totalRecord.winpct ?? 0,
+    pointsfor: totalRecord.pointsfor ?? 0,
+    pointsagainst: totalRecord.pointsagainst ?? 0,
+  };
 }
 
 // ========================================================================
@@ -111,44 +178,33 @@ export function useBearsStats(): UseBearsStatsReturn {
           for (const competitor of competitors) {
             const displayName = competitor.team?.displayName || '';
             
-            // Find the "total" record (overall season record)
-            const totalRecord = competitor.records?.find(
-              (r: { type?: string }) => r.type === 'total'
-            );
+            if (!displayName) continue;
 
-            if (displayName && totalRecord) {
-              // Extract wins/losses/ties
-              const wins = totalRecord.wins ?? 0;
-              const losses = totalRecord.losses ?? 0;
-              const ties = totalRecord.ties ?? 0;
+            // Extract record data using helper function
+            const recordData = extractRecordData(competitor.records);
+
+            // Store in map (lowercase key for easy lookup)
+            allTeamRecords.set(displayName.toLowerCase(), {
+              name: displayName,
+              record: recordData.recordStr,
+              wins: recordData.wins,
+              losses: recordData.losses,
+              ties: recordData.ties,
+            });
+
+            // If this is the Bears, also extract their full stats
+            if (displayName.includes('Bears')) {
+              bearsStats = {
+                wins: recordData.wins,
+                losses: recordData.losses,
+                ties: recordData.ties,
+                winPercentage: recordData.winpct,
+                pointsFor: recordData.pointsfor,
+                pointsAgainst: recordData.pointsagainst,
+                record: recordData.recordStr,
+              };
               
-              // Get record string from displayValue/summary, or construct it
-              const recordStr = 
-                totalRecord.displayValue || 
-                totalRecord.summary || 
-                (ties > 0 ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`);
-
-              // Store in map (lowercase key for easy lookup)
-              allTeamRecords.set(displayName.toLowerCase(), {
-                name: displayName,
-                record: recordStr,
-                wins,
-                losses,
-                ties,
-              });
-
-              // If this is the Bears, also extract their full stats
-              if (displayName.includes('Bears')) {
-                bearsStats = {
-                  wins,
-                  losses,
-                  ties,
-                  winPercentage: totalRecord.winpct ?? 0,
-                  pointsFor: totalRecord.pointsfor ?? 0,
-                  pointsAgainst: totalRecord.pointsagainst ?? 0,
-                  record: recordStr,
-                };
-              }
+              console.log('🐻 Bears stats extracted:', bearsStats);
             }
           }
         }
@@ -297,6 +353,6 @@ export function useBearsStats(): UseBearsStatsReturn {
   return {
     ...state,
     refetch: fetchAllData,
-    nflTeamRecords,  // NEW: expose all team records
+    nflTeamRecords,  // Expose all team records
   };
 }
