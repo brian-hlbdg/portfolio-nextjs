@@ -161,7 +161,7 @@ function CardSkeleton(): React.ReactElement {
       </div>
       
       {/* Secondary stats skeleton */}
-      <div className="grid grid-cols-2 gap-2 mb-3 flex-grow">
+      <div className="grid grid-cols-2 gap-2 mb-3">
         <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded" />
         <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded" />
       </div>
@@ -283,7 +283,7 @@ export default function OverviewStatCard({
 
       {/* ====== SECONDARY STATS ====== */}
       {secondaryStats && secondaryStats.length > 0 && (
-        <div className="grid grid-cols-2 gap-2 mb-3 flex-grow">
+        <div className="grid grid-cols-2 gap-2 mb-3">
           {secondaryStats.map((stat, index) => (
             <div 
               key={`secondary-${index}`}
