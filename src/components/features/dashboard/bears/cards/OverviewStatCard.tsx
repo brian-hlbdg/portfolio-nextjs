@@ -221,8 +221,8 @@ export default function OverviewStatCard({
       hover:border-orange-500/50 transition-all hover:shadow-lg hover:shadow-orange-500/20
     `,
     highlight: `
-      bg-orange-50 dark:bg-gradient-to-br dark:from-orange-600/10 dark:to-orange-700/30 
-      border border-orange-200 dark:border-orange-500/50 
+      bg-orange-50 dark:bg-gradient-to-br dark:from-orange-300/20 dark:to-orange-700/50 
+      border border-orange-200 dark:border-orange-400/50 
       hover:border-orange-500/50 transition-all hover:shadow-lg hover:shadow-orange-500/20shadow-sm shadow-orange-500/10
     `,
     muted: `
@@ -287,7 +287,7 @@ export default function OverviewStatCard({
           {secondaryStats.map((stat, index) => (
             <div 
               key={`secondary-${index}`}
-              className="bg-gray-50 dark:bg-slate-700/30 rounded px-2 py-1.5"
+              className="bg-gray-50 dark:bg-slate-700/30 border border-gray-200/70 dark:border-slate-800/10 rounded px-2 py-1.5"
             >
               <p className="text-xs text-gray-500 dark:text-slate-500 uppercase">
                 {stat.label}
@@ -318,7 +318,7 @@ export default function OverviewStatCard({
                 <span className="text-gray-500 dark:text-slate-500">
                   {item.label}:
                 </span>
-                <span className="font-medium text-gray-700 dark:text-slate-300">
+                <span className="font-medium text-gray-700 dark:text-slate-100">
                   {item.value}
                 </span>
               </div>
