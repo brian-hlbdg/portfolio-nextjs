@@ -26,6 +26,7 @@ import { useDivisionStandings, TeamStanding } from '@/hooks/useDivisionStandings
 import { useGameData, GameData } from '@/hooks/useGameData';
 import { useTeamStats, TeamStats as DetailedStats } from '@/hooks/useTeamStats';
 import { useTeamSchedule } from '@/hooks/useTeamSchedule';
+import { getCurrentNFLWeek } from '@/utils/getCurrentNFLWeek';
 
 // ========================================================================
 // TYPES
@@ -256,26 +257,41 @@ export default function OverviewSection({
   // ====== ADDITIONAL HOOKS ======
   const { 
     bearsStanding, 
-    currentWeek, 
+    // REMOVED: currentWeek - we calculate it from schedule instead
     loading: standingsLoading 
   } = useDivisionStandings();
-  
-  // FIXED: useGameData expects team name, not ID
+
   const { 
     gameData, 
     loading: gameLoading 
   } = useGameData('bears');
-  
+
   const { 
     stats: teamStats, 
     loading: teamStatsLoading 
   } = useTeamStats();
 
-  // Fetch schedule for next game info
   const {
     scheduleData,
     loading: scheduleLoading
   } = useTeamSchedule('bears');
+
+  // ====== CALCULATE CURRENT WEEK FROM SCHEDULE ======
+  // This is separate from calculations memo - hooks can't be nested
+  const weekInfo = useMemo(() => {
+    if (!scheduleData?.games) {
+      return { week: 1, isByeWeek: false, gamesPlayed: 0 };
+    }
+    // Map games to include week property derived from array index
+    const gamesWithWeek = scheduleData.games.map((game, index) => ({
+      ...game,
+      week: index + 1,
+    }));
+    return getCurrentNFLWeek(gamesWithWeek);
+  }, [scheduleData?.games]);
+
+  const currentWeek = weekInfo.week;
+  const isByeWeek = weekInfo.isByeWeek;
 
   // ====== COMPUTED VALUES ======
   const calculations = useMemo(() => {
@@ -283,25 +299,25 @@ export default function OverviewSection({
     const losses = stats?.losses ?? bearsStanding?.losses ?? 0;
     const ties = stats?.ties ?? bearsStanding?.ties ?? 0;
     const totalGames = wins + losses + ties;
-    
+
     // From detailed team stats
     const passYards = teamStats?.passingYards ?? 0;
     const rushYards = teamStats?.rushingYards ?? 0;
-    
+
     // Use standings data for points (more reliable)
     const pointsFor = bearsStanding?.pointsFor ?? teamStats?.pointsFor ?? 0;
     const pointsAgainst = bearsStanding?.pointsAgainst ?? teamStats?.pointsAgainst ?? 0;
     const pointDiff = pointsFor - pointsAgainst;
-    
+
     const passRushRatio = calculatePassRushRatio(passYards, rushYards);
     const avgMarginValue = totalGames > 0 ? pointDiff / totalGames : 0;
-    
+
     // Takeaways = opponent turnovers we forced (INTs + fumbles recovered)
     const takeaways = teamStats?.interceptions ?? 0;
     // Giveaways = our turnovers
     const giveaways = teamStats?.turnovers ?? 0;
     const turnoverDiff = takeaways - giveaways;
-    
+
     return {
       totalGames,
       winPct: formatWinPercentage(wins, losses, ties),
@@ -563,7 +579,9 @@ export default function OverviewSection({
             Data: <strong>{stats?.source ?? 'standings'}</strong>
           </span>
         </div>
-        <span>Week {currentWeek} • Updated: {stats?.lastUpdated ?? 'Now'}</span>
+        <span>
+          Week {currentWeek}{isByeWeek ? ' (BYE)' : ''} • Updated: {stats?.lastUpdated ?? 'Now'}
+        </span>
       </div>
     </div>
   );
