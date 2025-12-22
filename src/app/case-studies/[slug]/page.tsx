@@ -12,6 +12,7 @@ import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 import { nfiRelayExceptionHandlingCaseStudyData } from '@/data/nfiRelayExceptionHandlingCaseStudy';
 import { portfolioRedesignCaseStudyData } from '@/data/portfolioRedesignCaseStudy';
+import { chicagoSportsDashboardCaseStudyData } from '@/data/chicagoSportsDashboardCaseStudy';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -21,6 +22,7 @@ const caseStudyDataMap: Record<string, CaseStudyDetailData> = {
   'wine-tasting-app': palateCollectifCaseStudyData,
   'nfi-relay-exception-handling': nfiRelayExceptionHandlingCaseStudyData,
   'portfolio-redesign': portfolioRedesignCaseStudyData,
+  'chicago-sports-dashboard': chicagoSportsDashboardCaseStudyData,
 };
 
 export async function generateStaticParams() {
