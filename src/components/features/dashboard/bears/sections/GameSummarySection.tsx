@@ -187,13 +187,15 @@ function ScoreWithYardsCard({ gameData }: ScoreWithYardsCardProps): React.ReactE
             <p className="text-4xl font-bold text-gray-900 dark:text-white">
               {gameData.finalScore.opponent}
             </p>
-            <Image
-              src={gameData.opponentLogo}
-              alt={gameData.opponent}
-              width={32}
-              height={32}
-              className="h-8 w-8 object-contain"
-            />
+            {gameData.opponentLogo && (
+              <Image
+                src={gameData.opponentLogo}
+                alt={gameData.opponent}
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
+              />
+            )}
           </div>
 
 
@@ -412,10 +414,15 @@ function KeyPlaysSection({ keyPlays }: KeyPlaysSectionProps): React.ReactElement
       .slice(0, 5),
   }));
 
+  // Get overtime plays (quarter 5+)
+  const overtimePlays = keyPlays.filter((play) => play.quarter >= 5);
+  const overtimeQuarters = [...new Set(overtimePlays.map(p => p.quarter))].sort();
+
   return (
     <div className="bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-800/60 dark:to-slate-700/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4">
       <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">Key Plays</h3>
 
+      {/* Regulation Quarters (Q1-Q4) */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
         {quarters.map(({ quarter, plays }) => (
           <div
@@ -473,6 +480,64 @@ function KeyPlaysSection({ keyPlays }: KeyPlaysSectionProps): React.ReactElement
           </div>
         ))}
       </div>
+
+      {/* Overtime Periods - Full Width Below */}
+      {overtimeQuarters.length > 0 && (
+        <div className="mt-4 space-y-3">
+          {overtimeQuarters.map((otQuarter) => {
+            const otPlays = overtimePlays.filter(p => p.quarter === otQuarter).slice(0, 5);
+            const otLabel = otQuarter === 5 ? 'OT' : `OT${otQuarter - 4}`;
+            
+            return (
+              <div
+                key={otQuarter}
+                className="rounded-lg border-2 border-orange-500/50 bg-orange-500/10 dark:bg-orange-500/5 p-4"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-bold uppercase tracking-wide text-orange-600 dark:text-orange-400">
+                    {otLabel}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">
+                    {otPlays.length} play{otPlays.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {otPlays.map((play, index) => (
+                    <div
+                      key={`${otQuarter}-${index}`}
+                      className="flex gap-2 items-start rounded-md bg-white/70 dark:bg-slate-900/30 border border-orange-200/50 dark:border-orange-700/30 px-2 py-2 text-[11px]"
+                    >
+                      <span className="mt-[1px] text-sm shrink-0">
+                        {getPlayIcon(play.playType)}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1 mb-0.5">
+                          <span className="text-[10px] font-medium text-gray-500 dark:text-slate-400">
+                            {play.time}
+                          </span>
+                          <span
+                            className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold ${
+                              play.team === 'team'
+                                ? 'bg-green-500/15 text-green-700 dark:text-green-300'
+                                : 'bg-red-500/15 text-red-700 dark:text-red-300'
+                            }`}
+                          >
+                            {play.team === 'team' ? 'CHI' : 'OPP'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-gray-700 dark:text-slate-300 leading-snug">
+                          {play.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

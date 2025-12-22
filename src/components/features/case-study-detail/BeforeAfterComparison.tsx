@@ -70,7 +70,7 @@ export function BeforeAfterComparison({
                   : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600'
               }`}
             >
-              2014 Version
+              First Vision
             </button>
             <button
               onClick={() => setActiveTab('after')}
@@ -80,7 +80,7 @@ export function BeforeAfterComparison({
                   : 'bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600'
               }`}
             >
-              2025 Version
+              Bears Centric
             </button>
           </div>
 

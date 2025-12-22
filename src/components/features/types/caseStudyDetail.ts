@@ -7,7 +7,7 @@ export interface CaseStudyDetailData {
     client: string;
     technologies: string[];
     timeline: string;
-    badges?: ('Greenfield' | 'Legacy Modernization' | 'Design System' | 'Mobile' | 'Enterprise' | 'Personal Project' | 'UX Design' | 'Frontend Development')[];
+    badges?: ('Greenfield' | 'Legacy Modernization' | 'Design System' | 'Mobile' | 'Enterprise' | 'Personal Project' | 'UX Design' | 'Frontend Development' | 'Data Visualization')[];
     whyItMatters?: string;
   };
 
