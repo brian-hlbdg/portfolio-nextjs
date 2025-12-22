@@ -22,7 +22,6 @@ function getAbbrFromEspnId(espnId: string): string | undefined {
 }
 
 
-
 // ========================================================================
 // TYPES - OUTPUT INTERFACES
 // ========================================================================
@@ -49,6 +48,7 @@ export interface KeyPlay {
   time: string;
   description: string;
   team: 'team' | 'opponent';
+  teamAbbreviation: string; // e.g., "CHI", "GB", "MIN"
   playType: 'touchdown' | 'turnover' | 'big-gain' | 'field-goal';
 }
 
@@ -65,9 +65,10 @@ export interface GameStatistics {
 export interface GameData {
   id: string;
   date: string;
-  opponent: string; // full name for UI
-  opponentAbbr?: string; // NEW: abbreviation, for logos/labels
+  opponent: string;
   opponentLogo: string;
+  opponentAbbreviation: string; // e.g., "GB", "MIN"
+  opponentAbbr?: string; // NEW: abbreviation, for logos/labels
   location: string;
   finalScore: {
     team: number;
@@ -90,8 +91,13 @@ export interface GameData {
 // ========================================================================
 
 interface Competitor {
-  team: { id: string; displayName: string; logo: string };
-  score: number | { value?: number | string } | null;
+  team: { 
+    id: string; 
+    displayName: string; 
+    logo: string;
+    abbreviation?: string;
+  };
+  score: number | { value: number; displayValue: string };
   linescores?: Array<{ value: number }>;
 }
 
@@ -118,7 +124,7 @@ interface SummaryData {
       team: { id: string };
       statistics?: Array<{
         name: string;
-        displayValue?: string | { displayValue?: string };
+        displayValue?: string;
         value?: number;
       }>;
     }>;
@@ -142,7 +148,10 @@ interface SummaryData {
         scoringPlay?: boolean;
         scoreValue?: number;
         statYardage?: number;
-        team?: { id?: string };
+        team?: { 
+          id?: string;
+          abbreviation?: string;
+        };
       }>;
     }>;
   };
@@ -162,7 +171,6 @@ const TEAM_CODE_MAP: Record<string, string> = {
   fire: '1902',
 };
 
-const REQUEST_TIMEOUT = 8000;
 
 // ========================================================================
 // MAIN HOOK
@@ -196,20 +204,29 @@ export function useGameData(teamId: string) {
       const scheduleData = (await scheduleRes.json()) as ScheduleResponse;
       const events = scheduleData.events || [];
 
-      // Get all completed games
+      console.log('📅 Total events in schedule:', events.length);
+
+      // Filter all completed games
       const completedGames = events.filter((e: Event) => {
         const status = e.competitions?.[0]?.status?.type?.name;
         return status === 'STATUS_FINAL' || status === 'Final';
       });
 
-      // Sort by date, latest first
-      completedGames.sort((a, b) => {
-        const aTime = new Date(a.date).getTime();
-        const bTime = new Date(b.date).getTime();
-        return bTime - aTime;
-      });
+      console.log('✅ Completed games found:', completedGames.length);
 
-      const lastGame = completedGames[0];
+      if (completedGames.length === 0) {
+        setError('No completed games found');
+        return;
+      }
+
+      // Get the LAST completed game (most recent)
+      const lastGame = completedGames[completedGames.length - 1];
+      
+      console.log('🏈 Last game:', {
+        date: lastGame.date,
+        id: lastGame.id,
+        opponent: lastGame.competitions[0].competitors.map((c: { team: { displayName: string } }) => c.team.displayName),
+      });
 
       if (!lastGame) {
         setError('No completed games found');
@@ -300,6 +317,12 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
     opponentName,
   });
 
+  console.log('✅ Identified teams:', {
+    ourTeam: ourTeam.team.displayName,
+    opponent: opponent.team.displayName,
+    isHome,
+  });
+
   const scoreProgression: GameScore[] = [];
   const quarters = competition.linescores || [];
 
@@ -314,24 +337,19 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
 
   // Safely extract score as number
   const getScore = (competitor: Competitor): number => {
-    const raw = competitor.score;
-
-    if (typeof raw === 'number') {
-      return raw;
+    if (typeof competitor.score === 'number') {
+      return competitor.score;
     }
-
-    if (raw && typeof raw === 'object' && 'value' in raw) {
-      const value = (raw as { value?: number | string }).value;
-      return Number(value) || 0;
+    // Handle if score is an object with value property
+    if (typeof competitor.score === 'object' && competitor.score !== null && 'value' in competitor.score) {
+      return Number(competitor.score.value || 0);
     }
-
     return 0;
   };
 
   const ourScore = getScore(ourTeam);
   const oppScore = getScore(opponent);
-  const result: 'W' | 'L' | 'T' =
-    ourScore > oppScore ? 'W' : ourScore < oppScore ? 'L' : 'T';
+  const result: 'W' | 'L' | 'T' = ourScore > oppScore ? 'W' : ourScore < oppScore ? 'L' : 'T';
 
   return {
     id: event.id,
@@ -340,9 +358,10 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
       month: 'short',
       day: 'numeric',
     }),
-    opponent: opponentName,                 // full name
-    opponentAbbr,                           // abbreviation (e.g. 'MIN')
+    opponent: opponent.team.displayName,
     opponentLogo: opponentLogos?.scoreboard || opponent.team.logo,
+    opponentAbbreviation: opponent.team.abbreviation || opponent.team.displayName.substring(0, 3).toUpperCase(),
+    opponentAbbr: opponentAbbr,
     location: competition.venue?.fullName || 'Unknown Venue',
     finalScore: {
       team: ourScore,
@@ -354,7 +373,6 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
     venue: competition.venue?.city || '',
   };
 }
-
 
 /**
  * Parse full game data with statistics from summary endpoint
@@ -482,6 +500,8 @@ function extractKeyPlays(summaryData: SummaryData, teamCode: string): KeyPlay[] 
     const drives = summaryData?.drives?.previous || [];
     const keyPlays: KeyPlay[] = [];
 
+    console.log('🏈 Extracting key plays from', drives.length, 'drives');
+
     drives.forEach((drive) => {
       const drivePlays = drive.plays || [];
 
@@ -494,11 +514,53 @@ function extractKeyPlays(summaryData: SummaryData, teamCode: string): KeyPlay[] 
         const isFieldGoal = play.scoringPlay && play.scoreValue === 3;
 
         if (isTouchdown || isTurnover || isBigGain || isFieldGoal) {
+          const quarter = play.period?.number || 1;
+          
+          // Determine team based on play.team.id OR infer from description
+          let isOurTeam = false;
+          let teamAbbr = 'OPP';
+          
+          if (play.team?.id) {
+            isOurTeam = play.team.id === teamCode;
+            // Use abbreviation from API if available
+            teamAbbr = play.team.abbreviation || (isOurTeam ? 'CHI' : 'OPP');
+          } else {
+            // Fallback: Check if Bears are mentioned in the play description
+            const playText = play.text || '';
+            if (playText.includes('CHI') || playText.includes('Chicago')) {
+              isOurTeam = true;
+              teamAbbr = 'CHI';
+            } else {
+              // Try to extract opponent abbreviation from play text
+              // Most plays mention the team abbreviation
+              const abbrs = ['GB', 'MIN', 'DET', 'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CIN', 'CLE', 
+                            'DAL', 'DEN', 'HOU', 'IND', 'JAX', 'KC', 'LAC', 'LAR', 'LV', 'MIA',
+                            'NE', 'NO', 'NYG', 'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'];
+              for (const abbr of abbrs) {
+                if (playText.includes(abbr + ' ')) {
+                  teamAbbr = abbr;
+                  break;
+                }
+              }
+            }
+          }
+          
+          console.log('📝 Play:', {
+            quarter,
+            teamId: play.team?.id,
+            teamAbbr: play.team?.abbreviation,
+            ourTeamId: teamCode,
+            isOurTeam,
+            finalAbbr: teamAbbr,
+            text: play.text?.substring(0, 50)
+          });
+          
           keyPlays.push({
-            quarter: play.period?.number || 1,
+            quarter,
             time: play.clock?.displayValue || '',
             description: play.text || '',
-            team: play.team?.id === teamCode ? 'team' : 'opponent',
+            team: isOurTeam ? 'team' : 'opponent',
+            teamAbbreviation: teamAbbr,
             playType: isTouchdown
               ? 'touchdown'
               : isTurnover
@@ -511,25 +573,18 @@ function extractKeyPlays(summaryData: SummaryData, teamCode: string): KeyPlay[] 
       });
     });
 
-    // Optional: sort by quarter, then by clock (descending like game clock)
-    keyPlays.sort((a, b) => {
-    if (a.quarter !== b.quarter) return a.quarter - b.quarter;
+    console.log('✅ Key plays found:', keyPlays.length);
+    console.log('📊 Plays by quarter:', keyPlays.reduce((acc, play) => {
+      acc[play.quarter] = (acc[play.quarter] || 0) + 1;
+      return acc;
+    }, {} as Record<number, number>));
 
-    const toSeconds = (t: string): number => {
-      const [m, s] = t.split(':').map((n) => Number(n));
-      if (Number.isNaN(m) || Number.isNaN(s)) return 0;
-      return m * 60 + s;
-    };
-
-    // later in the quarter (smaller clock) comes after earlier
-    return toSeconds(b.time) - toSeconds(a.time);
-  });
-
-  return keyPlays;
-    } catch (err) {
-      console.error('Error extracting key plays:', err);
-      return [];
-    }
+    // Return ALL key plays (no limit)
+    return keyPlays;
+  } catch (err) {
+    console.error('Error parsing key plays:', err);
+    return [];
+  }
 }
 
 /**
@@ -548,46 +603,28 @@ function extractTeamStatistics(
 
     if (!ourTeam?.statistics || !oppTeam?.statistics) return undefined;
 
-    const getStat = (
-      stats: typeof ourTeam.statistics,
-      name: string,
-      altNames: string[] = []
-    ): string => {
+    const getStat = (stats: typeof ourTeam.statistics, name: string): string => {
       if (!stats) return '0';
-
-      const candidates = [name, ...altNames];
-
-      let stat:
-        | {
-            name: string;
-            displayValue?: string | { displayValue?: string };
-            value?: number;
-          }
-        | undefined;
-
-      for (const n of candidates) {
-        stat = stats.find((s) => s.name === n);
-        if (stat) break;
-      }
-
+      const stat = stats.find((s) => s.name === name);
+      
+      // Handle ESPN's nested object structure
       if (!stat) return '0';
-
+      
+      // If displayValue exists and is a string, use it
       if (typeof stat.displayValue === 'string') {
         return stat.displayValue;
       }
-
-      if (
-        stat.displayValue &&
-        typeof stat.displayValue === 'object' &&
-        'displayValue' in stat.displayValue
-      ) {
-        return String(stat.displayValue.displayValue);
+      
+      // If displayValue is an object with displayValue property
+      if (stat.displayValue && typeof stat.displayValue === 'object' && 'displayValue' in stat.displayValue) {
+        return String(stat.displayValue);
       }
-
+      
+      // If value exists, convert to string
       if (stat.value !== undefined) {
         return String(stat.value);
       }
-
+      
       return '0';
     };
 
@@ -597,20 +634,8 @@ function extractTeamStatistics(
         opponent: parseInt(getStat(oppTeam.statistics, 'totalYards')) || 0,
       },
       passingYards: {
-        team:
-          parseInt(
-            getStat(ourTeam.statistics, 'passingYards', [
-              'netPassingYards',
-              'totalPassingYards',
-            ])
-          ) || 0,
-        opponent:
-          parseInt(
-            getStat(oppTeam.statistics, 'passingYards', [
-              'netPassingYards',
-              'totalPassingYards',
-            ])
-          ) || 0,
+        team: parseInt(getStat(ourTeam.statistics, 'passingYards')) || 0,
+        opponent: parseInt(getStat(oppTeam.statistics, 'passingYards')) || 0,
       },
       rushingYards: {
         team: parseInt(getStat(ourTeam.statistics, 'rushingYards')) || 0,
