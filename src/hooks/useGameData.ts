@@ -15,12 +15,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { NFL_TEAMS, getNFLTeamName } from '@/data/nflTeamLogos';
-
-function getAbbrFromEspnId(espnId: string): string | undefined {
-  return Object.values(NFL_TEAMS).find((t) => t.espnId === espnId)?.abbreviation;
-}
-
 
 // ========================================================================
 // TYPES - OUTPUT INTERFACES
@@ -68,7 +62,6 @@ export interface GameData {
   opponent: string;
   opponentLogo: string;
   opponentAbbreviation: string; // e.g., "GB", "MIN"
-  opponentAbbr?: string; // NEW: abbreviation, for logos/labels
   location: string;
   finalScore: {
     team: number;
@@ -170,7 +163,6 @@ const TEAM_CODE_MAP: Record<string, string> = {
   sky: '2',
   fire: '1902',
 };
-
 
 // ========================================================================
 // MAIN HOOK
@@ -300,23 +292,6 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
   const ourTeam = isHome ? homeTeam : awayTeam;
   const opponent = isHome ? awayTeam : homeTeam;
 
-  const opponentAbbr = getAbbrFromEspnId(opponent.team.id);
-  const opponentName = opponentAbbr
-    ? getNFLTeamName(opponentAbbr) // full franchise name from local data
-    : opponent.team.displayName;
-
-  const opponentLogos = opponentAbbr
-    ? NFL_TEAMS[opponentAbbr as keyof typeof NFL_TEAMS]?.logos
-    : undefined;
-
-  console.log('✅ Identified teams:', {
-    ourTeam: ourTeam.team.displayName,
-    opponent: opponent.team.displayName,
-    isHome,
-    opponentAbbr,
-    opponentName,
-  });
-
   console.log('✅ Identified teams:', {
     ourTeam: ourTeam.team.displayName,
     opponent: opponent.team.displayName,
@@ -359,9 +334,8 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
       day: 'numeric',
     }),
     opponent: opponent.team.displayName,
-    opponentLogo: opponentLogos?.scoreboard || opponent.team.logo,
+    opponentLogo: opponent.team.logo,
     opponentAbbreviation: opponent.team.abbreviation || opponent.team.displayName.substring(0, 3).toUpperCase(),
-    opponentAbbr: opponentAbbr,
     location: competition.venue?.fullName || 'Unknown Venue',
     finalScore: {
       team: ourScore,
@@ -525,19 +499,35 @@ function extractKeyPlays(summaryData: SummaryData, teamCode: string): KeyPlay[] 
             // Use abbreviation from API if available
             teamAbbr = play.team.abbreviation || (isOurTeam ? 'CHI' : 'OPP');
           } else {
-            // Fallback: Check if Bears are mentioned in the play description
+            // Fallback: Infer from play description
             const playText = play.text || '';
-            if (playText.includes('CHI') || playText.includes('Chicago')) {
-              isOurTeam = true;
-              teamAbbr = 'CHI';
-            } else {
-              // Try to extract opponent abbreviation from play text
-              // Most plays mention the team abbreviation
+            
+            // Check for Bears player names at start of play (more reliable than "CHI")
+            const bearsIndicators = [
+              /^C\.Williams/,           // Caleb Williams
+              /^D\.Moore/,              // DJ Moore
+              /^K\.Allen/,              // Keenan Allen
+              /^R\.Odunze/,             // Rome Odunze
+              /^D\.Swift/,              // D'Andre Swift
+              /^C\.Santos/,             // Cairo Santos
+              /^J\.Johnson/,            // Jaylon Johnson
+              /^T\.Edmunds/,            // Tremaine Edmunds
+              /^K\.Byard/,              // Kevin Byard
+              /by CHI-/,                // "recovered by CHI-Player"
+              /\(CHI\)/,                // "(CHI)" after player name
+            ];
+            
+            isOurTeam = bearsIndicators.some(regex => regex.test(playText));
+            teamAbbr = isOurTeam ? 'CHI' : 'OPP';
+            
+            // If still OPP, try to extract opponent abbreviation
+            if (!isOurTeam) {
               const abbrs = ['GB', 'MIN', 'DET', 'ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CIN', 'CLE', 
                             'DAL', 'DEN', 'HOU', 'IND', 'JAX', 'KC', 'LAC', 'LAR', 'LV', 'MIA',
                             'NE', 'NO', 'NYG', 'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WAS'];
               for (const abbr of abbrs) {
-                if (playText.includes(abbr + ' ')) {
+                // Look for pattern like "J.Love" or "by GB-Player" at start
+                if (playText.match(new RegExp(`^[A-Z]\\.[A-Z]|by ${abbr}-`))) {
                   teamAbbr = abbr;
                   break;
                 }
