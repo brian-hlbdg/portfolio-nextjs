@@ -187,15 +187,13 @@ function ScoreWithYardsCard({ gameData }: ScoreWithYardsCardProps): React.ReactE
             <p className="text-4xl font-bold text-gray-900 dark:text-white">
               {gameData.finalScore.opponent}
             </p>
-            {gameData.opponentLogo && (
-              <Image
-                src={gameData.opponentLogo}
-                alt={gameData.opponent}
-                width={32}
-                height={32}
-                className="h-8 w-8 object-contain"
-              />
-            )}
+            <Image
+              src={gameData.opponentLogo}
+              alt={gameData.opponent}
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
           </div>
 
 
