@@ -420,7 +420,45 @@ function KeyPlaysSection({ keyPlays }: KeyPlaysSectionProps): React.ReactElement
 
   return (
     <div className="bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-800/60 dark:to-slate-700/40 border border-gray-200 dark:border-slate-700/50 rounded-lg p-4">
-      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-3">Key Plays</h3>
+      <div className="flex items-start justify-between mb-3">
+        <h3 className="text-lg font-bold text-gray-800 dark:text-white">Key Plays</h3>
+        
+        {/* Legend */}
+        <div className="flex flex-wrap gap-3 text-[10px]">
+          <div className="flex items-center gap-1">
+            <span className="text-sm">🏈</span>
+            <span className="text-gray-600 dark:text-slate-400">Touchdown</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-sm">🎯</span>
+            <span className="text-gray-600 dark:text-slate-400">Field Goal</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-sm">⚠️</span>
+            <span className="text-gray-600 dark:text-slate-400">Turnover</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-sm">⚡</span>
+            <span className="text-gray-600 dark:text-slate-400">Big Gain (25+)</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Team Badge Legend */}
+      <div className="flex items-center gap-3 mb-3 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="px-2 py-0.5 rounded-full bg-green-500/15 text-green-700 dark:text-green-300 font-semibold">
+            CHI
+          </span>
+          <span className="text-gray-600 dark:text-slate-400">Chicago Bears</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="px-2 py-0.5 rounded-full bg-red-500/15 text-red-700 dark:text-red-300 font-semibold">
+            OPP
+          </span>
+          <span className="text-gray-600 dark:text-slate-400">Opponent</span>
+        </div>
+      </div>
 
       {/* Regulation Quarters (Q1-Q4) */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
