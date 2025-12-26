@@ -380,7 +380,7 @@ function parseDefensiveStats(allStats: ESPNStat[]): DefensiveStats {
   const scoringMarginStat = findStat(allStats, ['scoringMargin', 'pointDifferential']);
   
   // Try direct lookup first
-  let pointsAllowedStat = findStat(allStats, [
+  const pointsAllowedStat = findStat(allStats, [
     'pointsAgainst', 
     'pointsAllowed', 
     'opponentPoints',
