@@ -15,6 +15,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { NFL_TEAMS, getNFLTeamName } from '@/data/nflTeamLogos';
+
+function getAbbrFromEspnId(espnId: string): string | undefined {
+  return Object.values(NFL_TEAMS).find((t) => t.espnId === espnId)?.abbreviation;
+}
 
 // ========================================================================
 // TYPES - OUTPUT INTERFACES
@@ -62,6 +67,7 @@ export interface GameData {
   opponent: string;
   opponentLogo: string;
   opponentAbbreviation: string; // e.g., "GB", "MIN"
+  opponentAbbr?: string; // NEW: abbreviation, for logos/labels
   location: string;
   finalScore: {
     team: number;
@@ -292,10 +298,21 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
   const ourTeam = isHome ? homeTeam : awayTeam;
   const opponent = isHome ? awayTeam : homeTeam;
 
+  const opponentAbbr = getAbbrFromEspnId(opponent.team.id);
+  const opponentName = opponentAbbr
+    ? getNFLTeamName(opponentAbbr) // full franchise name from local data
+    : opponent.team.displayName;
+
+  const opponentLogos = opponentAbbr
+    ? NFL_TEAMS[opponentAbbr as keyof typeof NFL_TEAMS]?.logos
+    : undefined;
+
   console.log('✅ Identified teams:', {
     ourTeam: ourTeam.team.displayName,
     opponent: opponent.team.displayName,
     isHome,
+    opponentAbbr,
+    opponentName,
   });
 
   const scoreProgression: GameScore[] = [];
@@ -334,8 +351,8 @@ function parseBasicGameData(event: Event, teamCode: string): GameData {
       day: 'numeric',
     }),
     opponent: opponent.team.displayName,
-    opponentLogo: opponent.team.logo,
-    opponentAbbreviation: opponent.team.abbreviation || opponent.team.displayName.substring(0, 3).toUpperCase(),
+    opponentLogo: opponentLogos?.scoreboard || opponent.team.logo,
+    opponentAbbreviation: opponentAbbr || opponent.team.displayName.substring(0, 3).toUpperCase(),
     location: competition.venue?.fullName || 'Unknown Venue',
     finalScore: {
       team: ourScore,
@@ -593,9 +610,17 @@ function extractTeamStatistics(
 
     if (!ourTeam?.statistics || !oppTeam?.statistics) return undefined;
 
-    const getStat = (stats: typeof ourTeam.statistics, name: string): string => {
+    const getStat = (stats: typeof ourTeam.statistics, name: string, fallbacks?: string[]): string => {
       if (!stats) return '0';
-      const stat = stats.find((s) => s.name === name);
+      let stat = stats.find((s) => s.name === name);
+      
+      // Try fallback names if primary name not found
+      if (!stat && fallbacks) {
+        for (const fallbackName of fallbacks) {
+          stat = stats.find((s) => s.name === fallbackName);
+          if (stat) break;
+        }
+      }
       
       // Handle ESPN's nested object structure
       if (!stat) return '0';
@@ -624,8 +649,20 @@ function extractTeamStatistics(
         opponent: parseInt(getStat(oppTeam.statistics, 'totalYards')) || 0,
       },
       passingYards: {
-        team: parseInt(getStat(ourTeam.statistics, 'passingYards')) || 0,
-        opponent: parseInt(getStat(oppTeam.statistics, 'passingYards')) || 0,
+      team:
+        parseInt(
+          getStat(ourTeam.statistics, 'passingYards', [
+            'netPassingYards',
+            'totalPassingYards',
+          ])
+        ) || 0,
+      opponent:
+        parseInt(
+          getStat(oppTeam.statistics, 'passingYards', [
+            'netPassingYards',
+            'totalPassingYards',
+          ])
+        ) || 0,
       },
       rushingYards: {
         team: parseInt(getStat(ourTeam.statistics, 'rushingYards')) || 0,
