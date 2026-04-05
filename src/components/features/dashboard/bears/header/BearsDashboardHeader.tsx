@@ -19,6 +19,7 @@ interface BearsDashboardHeaderProps {
   onRefetch?: () => void;
   lastUpdated?: string | null;
   loading?: boolean;
+  subtitle?: string;
 }
 
 /**
@@ -31,6 +32,7 @@ export default function BearsDashboardHeader({
   onRefetch,
   lastUpdated,
   loading = false,
+  subtitle = 'NFL • 2026 Season',
 }: BearsDashboardHeaderProps) {
   const formatLastUpdated = (timestamp?: string | null) => {
     if (!timestamp) return 'Never';
@@ -70,7 +72,7 @@ export default function BearsDashboardHeader({
               <h1 className="text-4xl font-bold tracking-tighter bg-gradient-to-r from-orange-500 via-orange-400 to-orange-600 bg-clip-text text-transparent">
                 CHICAGO BEARS
               </h1>
-              <p className="text-gray-600 dark:text-slate-400 text-sm">NFL • 2025 Season</p>
+              <p className="text-gray-600 dark:text-slate-400 text-sm">{subtitle}</p>
             </div>
           </div>
 

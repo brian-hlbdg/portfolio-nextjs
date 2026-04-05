@@ -12,7 +12,7 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTeamSchedule } from '@/hooks/useTeamSchedule';
 import { useBearsStats } from '@/hooks/useBearsStats';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
@@ -22,9 +22,15 @@ import PlayerStatsSection from './sections/PlayerStatsSection';
 import RosterSection from './sections/RosterSection';
 import { TeamStatsSection } from './sections/TeamStatsSection';
 import { GameSummarySection } from './sections/GameSummarySection';
+import OffSeasonDashboard from './OffSeasonDashboard';
+import RockerSwitch from '@/components/ui/RockerSwitch';
+import { getNFLSeasonState } from '@/utils/getNFLSeasonState';
 
 
 export default function BearsDashboard() {
+  // Dev-only: 'left' = regular season, 'right' = off-season
+  const [devView, setDevView] = useState<'left' | 'right'>('left');
+
   // ✅ Get Bears stats and NFL team records from Bears-specific hook
   const {
     seasonStats,
@@ -42,17 +48,30 @@ export default function BearsDashboard() {
     refetch: refetchSchedule,
   } = useTeamSchedule('bears');
 
+  // Detect whether the NFL season has ended
+  const autoSeasonState = getNFLSeasonState(
+    scheduleData?.games ?? null,
+    scheduleLoading
+  );
+
+  // In dev: honour the manual toggle. In prod: use auto detection.
+  const isOffseason =
+    process.env.NODE_ENV === 'development'
+      ? devView === 'right'
+      : autoSeasonState === 'offseason';
+
   // ✅ Convert seasonStats to the format OverviewSection expects
   // OverviewSection expects TeamStats type with: name, sport, wins, losses, record, etc.
+  // (Hooks must all be called before any conditional return — Rules of Hooks)
   const bearsStats = useMemo(() => {
     if (!seasonStats) return null;
-    
+
     // Parse wins/losses from record string if the individual values are 0
     // This handles cases where ESPN returns record string but not individual stats
     let wins = seasonStats.wins;
     let losses = seasonStats.losses;
     let ties = seasonStats.ties;
-    
+
     if ((wins === 0 && losses === 0) && seasonStats.record) {
       const parts = seasonStats.record.split('-').map(Number);
       if (parts.length >= 2) {
@@ -61,7 +80,7 @@ export default function BearsDashboard() {
         ties = parts[2] || 0;
       }
     }
-    
+
     return {
       name: 'Chicago Bears',
       sport: 'NFL',
@@ -97,6 +116,33 @@ export default function BearsDashboard() {
     return null;
   }, [scheduleError, bearsStatsError]);
 
+  // Render off-season board when appropriate (after all hooks)
+  if (isOffseason) {
+    return (
+      <div>
+        {/* Dev toggle — floated above the off-season board */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="flex items-center gap-3 px-6 py-3 bg-slate-950/80 border-b border-slate-800 sticky top-0 z-50">
+            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+              DEV
+            </span>
+            <RockerSwitch
+              selected={devView}
+              onToggle={setDevView}
+              leftLabel="Regular Season"
+              rightLabel="Off-Season"
+              size="sm"
+            />
+            <span className="text-[10px] text-slate-600 font-mono">
+              auto: <strong className="text-slate-400">{autoSeasonState}</strong>
+            </span>
+          </div>
+        )}
+        <OffSeasonDashboard />
+      </div>
+    );
+  }
+
   const lastUpdated = bearsStats?.lastUpdated || new Date().toLocaleDateString();
 
   const refetch = async () => {
@@ -105,6 +151,25 @@ export default function BearsDashboard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white relative overflow-hidden">
+      {/* Dev toggle bar */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="flex items-center gap-3 px-6 py-3 bg-slate-950/80 border-b border-slate-800 sticky top-0 z-50">
+          <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
+            DEV
+          </span>
+          <RockerSwitch
+            selected={devView}
+            onToggle={setDevView}
+            leftLabel="Regular Season"
+            rightLabel="Off-Season"
+            size="sm"
+          />
+          <span className="text-[10px] text-slate-600 font-mono">
+            auto: <strong className="text-slate-400">{autoSeasonState}</strong>
+          </span>
+        </div>
+      )}
+
       {/* Background Glow Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 dark:bg-orange-500/5 rounded-full blur-3xl" />

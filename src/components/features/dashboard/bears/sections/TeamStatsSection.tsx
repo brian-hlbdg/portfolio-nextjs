@@ -32,6 +32,8 @@ import {
 
 interface TeamStatsSectionProps {
   /** Show debug panel */
+  teamId?: string;      
+  teamName?: string;
   showDebug?: boolean;
 }
 
@@ -406,6 +408,8 @@ function buildCardData(config: StatCardConfig, stats: TeamStats): CardData {
 // ========================================================================
 
 export function TeamStatsSection({
+  teamId = '3',
+  teamName = 'Chicago Bears',
   showDebug = false,
 }: TeamStatsSectionProps): React.ReactElement {
   // Fetch team stats
