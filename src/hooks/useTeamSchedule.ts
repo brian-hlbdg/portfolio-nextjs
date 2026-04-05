@@ -20,10 +20,15 @@ interface ESPNTeam {
   logo?: string;
 }
 
+interface ESPNScoreValue {
+  value?: number;
+  displayValue?: string;
+}
+
 interface ESPNCompetitor {
   homeAway: 'home' | 'away';
   team: ESPNTeam;
-  score?: number;
+  score?: number | ESPNScoreValue;
   records?: Array<{
     id?: string;
     abbreviation?: string;
@@ -225,11 +230,24 @@ function getOpponent(
 }
 
 /**
+ * Extract a plain number from ESPN's score field, which may be a number
+ * or an object like { value: 24, displayValue: "24" }
+ */
+function extractScore(raw: number | ESPNScoreValue | undefined): number | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  if (typeof raw === 'number') return raw;
+  if (typeof raw === 'object' && 'value' in raw && raw.value !== undefined) {
+    return Number(raw.value);
+  }
+  return undefined;
+}
+
+/**
  * Get our score from competitors
  */
 function getOurScore(competitors: ESPNCompetitor[], ourTeamId: string): number | undefined {
   const ourTeam = competitors.find((c: ESPNCompetitor): boolean => c.team.id === ourTeamId);
-  return ourTeam?.score;
+  return extractScore(ourTeam?.score);
 }
 
 /**
@@ -252,7 +270,7 @@ function parseGame(
 
   const status = mapStatus(competition.status?.type?.name);
   const ourScore = getOurScore(competition.competitors, ourTeamId);
-  const opponentScore = opposingTeam?.score;
+  const opponentScore = extractScore(opposingTeam?.score);
 
   const broadcasts = competition.broadcasts || [];
   const broadcast = broadcasts.length > 0 

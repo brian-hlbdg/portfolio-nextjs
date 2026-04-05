@@ -22,6 +22,7 @@ import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OffSeasonRecapSection from './sections/OffSeasonRecapSection';
 import TeamNewsSection from './sections/TeamNewsSection';
 import { TeamStatsSection } from './sections/TeamStatsSection';
+import SeasonHighlightsSection from './sections/SeasonHighlightsSection';
 import { useDivisionStandings, TeamStanding } from '@/hooks/useDivisionStandings';
 import { useTeamLeaders, TeamLeader, TeamLeaders } from '@/hooks/useTeamLeaders';
 
@@ -239,7 +240,10 @@ export default function OffSeasonDashboard(): React.ReactElement {
         {/* 4. Standout players */}
         <StandoutPlayersSection />
 
-        {/* 5. Season stats — reused verbatim */}
+        {/* 5. Season highlights — derived from game-by-game schedule data */}
+        <SeasonHighlightsSection />
+
+        {/* 6. Detailed team stats */}
         <section>
           <div className="mb-4">
             <h2 className="text-lg font-bold text-white">Season Stats</h2>
