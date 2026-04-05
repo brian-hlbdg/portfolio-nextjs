@@ -315,7 +315,7 @@ export default function OverviewSection({
     // Takeaways = opponent turnovers we forced (INTs + fumbles recovered)
     const takeaways = teamStats?.interceptions ?? 0;
     // Giveaways = our turnovers
-    const giveaways = teamStats?.turnovers ?? 0;
+    const giveaways = teamStats?.totalTurnovers ?? 0;
     const turnoverDiff = takeaways - giveaways;
 
     return {
@@ -330,8 +330,8 @@ export default function OverviewSection({
       rushYardsPerGame: perGame(rushYards, totalGames),
       passRushRatio,
       thirdDownPct: formatThirdDownPct(
-        teamStats?.thirdDownConversions ?? 0,
-        teamStats?.thirdDownAttempts ?? 0
+        teamStats?.efficiency?.thirdDownConversions?.value ?? 0,
+        teamStats?.efficiency?.thirdDownAttempts?.value ?? 0
       ),
       takeaways,
       giveaways,

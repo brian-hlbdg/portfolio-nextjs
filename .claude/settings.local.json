@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "Bash(npx tsc --noEmit 2>&1 | head -100)",
+      "Bash(npx tsc --noEmit 2>&1)",
+      "Bash(find /Users/hlbdg/portfolio-nextjs/src -path \"*bear*\" -o -path \"*nfl*\" 2>/dev/null | head -30)",
+      "Bash(grep -r \"api\\\\|endpoint\\\\|fetch\" /Users/hlbdg/portfolio-nextjs/src/hooks/*.ts | grep -i \"url\\\\|http\" | head -20)",
+      "WebFetch(domain:site.api.espn.com)",
+      "Bash(npx next build --no-lint 2>&1 | tail -20)"
+    ]
+  }
+}
