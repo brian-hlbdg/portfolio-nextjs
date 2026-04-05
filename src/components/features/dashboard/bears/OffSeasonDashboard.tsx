@@ -233,7 +233,13 @@ export default function OffSeasonDashboard(): React.ReactElement {
         {/* 2. Division standings */}
         <DivisionStandingsSection />
 
-        {/* 3. Season stats — reused verbatim */}
+        {/* 3. Team news */}
+        <TeamNewsSection />
+
+        {/* 4. Standout players */}
+        <StandoutPlayersSection />
+
+        {/* 5. Season stats — reused verbatim */}
         <section>
           <div className="mb-4">
             <h2 className="text-lg font-bold text-white">Season Stats</h2>
@@ -241,12 +247,6 @@ export default function OffSeasonDashboard(): React.ReactElement {
           </div>
           <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
         </section>
-
-        {/* 4. Standout players */}
-        <StandoutPlayersSection />
-
-        {/* 5. Team news */}
-        <TeamNewsSection />
       </main>
     </div>
   );
