@@ -63,9 +63,9 @@ function isValidRecord(record: string | undefined | null): boolean {
  * Calculate win percentage display
  */
 function formatWinPercentage(wins: number, losses: number, ties: number): string {
-  const totalGames = wins + losses + ties;
+  const totalGames = safeNum(wins) + safeNum(losses) + safeNum(ties);
   if (totalGames === 0) return '.000';
-  const pct = wins / totalGames;
+  const pct = safeNum(wins) / totalGames;
   return pct.toFixed(3).replace(/^0/, '');
 }
 
@@ -73,7 +73,7 @@ function formatWinPercentage(wins: number, losses: number, ties: number): string
  * Calculate average margin of victory
  */
 function calculateAvgMargin(pointDiff: number, gamesPlayed: number): string {
-  if (gamesPlayed === 0) return '0.0';
+  if (gamesPlayed === 0 || !Number.isFinite(pointDiff)) return '0.0';
   const avg = pointDiff / gamesPlayed;
   const sign = avg >= 0 ? '+' : '';
   return `${sign}${avg.toFixed(1)}`;
@@ -112,10 +112,18 @@ function calculatePassRushRatio(
 }
 
 /**
+ * Coerce a number that may be NaN/null/undefined to a safe finite value.
+ */
+function safeNum(val: number | null | undefined): number {
+  if (val === null || val === undefined || !Number.isFinite(val)) return 0;
+  return val;
+}
+
+/**
  * Calculate per-game average
  */
 function perGame(total: number, games: number): string {
-  if (games === 0) return '0.0';
+  if (games === 0 || !Number.isFinite(total) || !Number.isFinite(games)) return '0.0';
   return (total / games).toFixed(1);
 }
 
@@ -295,27 +303,27 @@ export default function OverviewSection({
 
   // ====== COMPUTED VALUES ======
   const calculations = useMemo(() => {
-    const wins = stats?.wins ?? bearsStanding?.wins ?? 0;
-    const losses = stats?.losses ?? bearsStanding?.losses ?? 0;
-    const ties = stats?.ties ?? bearsStanding?.ties ?? 0;
+    const wins = safeNum(stats?.wins ?? bearsStanding?.wins);
+    const losses = safeNum(stats?.losses ?? bearsStanding?.losses);
+    const ties = safeNum(stats?.ties ?? bearsStanding?.ties);
     const totalGames = wins + losses + ties;
 
     // From detailed team stats
-    const passYards = teamStats?.passingYards ?? 0;
-    const rushYards = teamStats?.rushingYards ?? 0;
+    const passYards = safeNum(teamStats?.passingYards);
+    const rushYards = safeNum(teamStats?.rushingYards);
 
     // Use standings data for points (more reliable)
-    const pointsFor = bearsStanding?.pointsFor ?? teamStats?.pointsFor ?? 0;
-    const pointsAgainst = bearsStanding?.pointsAgainst ?? teamStats?.pointsAgainst ?? 0;
+    const pointsFor = safeNum(bearsStanding?.pointsFor ?? teamStats?.pointsFor);
+    const pointsAgainst = safeNum(bearsStanding?.pointsAgainst ?? teamStats?.pointsAgainst);
     const pointDiff = pointsFor - pointsAgainst;
 
     const passRushRatio = calculatePassRushRatio(passYards, rushYards);
     const avgMarginValue = totalGames > 0 ? pointDiff / totalGames : 0;
 
     // Takeaways = opponent turnovers we forced (INTs + fumbles recovered)
-    const takeaways = teamStats?.interceptions ?? 0;
+    const takeaways = safeNum(teamStats?.interceptions);
     // Giveaways = our turnovers
-    const giveaways = teamStats?.totalTurnovers ?? 0;
+    const giveaways = safeNum(teamStats?.totalTurnovers);
     const turnoverDiff = takeaways - giveaways;
 
     return {
@@ -355,7 +363,7 @@ export default function OverviewSection({
     return (
       <div className="space-y-4">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-          2025 Season Overview
+          2026 Season Overview
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
@@ -378,6 +386,16 @@ export default function OverviewSection({
         <p className="text-gray-600 dark:text-slate-300">
           Season stats currently unavailable
         </p>
+      </div>
+    );
+  }
+
+  // ====== NO GAMES PLAYED YET ======
+  if (!isLoading && calculations.totalGames === 0) {
+    return (
+      <div className="rounded-2xl border border-slate-700/50 bg-slate-900/30 p-8 text-center space-y-2">
+        <h2 className="text-2xl font-bold text-white">2026 Overview</h2>
+        <p className="text-slate-400 text-sm">Season stats will appear here once games are played.</p>
       </div>
     );
   }
@@ -405,7 +423,7 @@ export default function OverviewSection({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-        2025 Overview
+        2026 Overview
       </h2>
 
       {/* Main Stats Grid - 4 columns */}

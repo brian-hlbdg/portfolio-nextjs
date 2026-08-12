@@ -18,9 +18,11 @@ import { useBearsStats } from '@/hooks/useBearsStats';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
-import PlayerStatsSection from './sections/PlayerStatsSection';
 import RosterSection from './sections/RosterSection';
 import { GameSummarySection } from './sections/GameSummarySection';
+import BearsTrendChart from './sections/BearsTrendChart';
+import TeamNewsSection from './sections/TeamNewsSection';
+import NFCNorthStandingsSection from './sections/NFCNorthStandingsSection';
 import OffSeasonDashboard from './OffSeasonDashboard';
 import PreSeasonDashboard from './PreSeasonDashboard';
 import PostSeasonDashboard from './PostSeasonDashboard';
@@ -200,28 +202,34 @@ export default function BearsDashboard() {
 
         {/* Section 2: Upcoming Games */}
         <section>
-          <ScheduleSection 
-            upcomingGames={upcomingGames} 
-            loading={scheduleLoading} 
-            nflTeamRecords={nflTeamRecords} 
+          <ScheduleSection
+            upcomingGames={upcomingGames}
+            loading={scheduleLoading}
+            nflTeamRecords={nflTeamRecords}
           />
         </section>
 
-        {/* Section 3: Game Summary — hidden until at least one game has been played */}
+        {/* Section 3: Caleb Williams Era trend chart */}
+        <BearsTrendChart />
+
+        {/* Section 4: Game Summary — hidden until at least one game has been played */}
         {recentGames.length > 0 && (
           <section>
             <GameSummarySection teamId="bears" />
           </section>
         )}
 
-        {/* Section 4: Roster */}
+        {/* Section 5: NFC North standings — shown after week 3 (3+ completed games) */}
+        {recentGames.length >= 3 && (
+          <NFCNorthStandingsSection />
+        )}
+
+        {/* Section 6: Team news */}
+        <TeamNewsSection />
+
+        {/* Section 7: Roster */}
         <section>
           <RosterSection />
-        </section>
-
-        {/* Section 6: Player Stats */}
-        <section>
-          <PlayerStatsSection playerStats={[]} loading={false} />
         </section>
 
         {/* Debug Info (Development Only) */}
