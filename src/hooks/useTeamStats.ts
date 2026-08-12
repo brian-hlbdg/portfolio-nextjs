@@ -211,8 +211,8 @@ export interface UseTeamStatsReturn {
 // CONSTANTS
 // ========================================================================
 
-const BEARS_STATS_URL = 
-  'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2025/types/2/teams/3/statistics';
+const BEARS_STATS_BASE =
+  'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons';
 
 const EMPTY_STAT: StatValue = {
   value: 0,
@@ -475,7 +475,7 @@ function parseSpecialTeamsStats(allStats: ESPNStat[]): SpecialTeamsStats {
 // MAIN HOOK
 // ========================================================================
 
-export function useTeamStats(): UseTeamStatsReturn {
+export function useTeamStats(teamId: number = 3, seasonYear: number = new Date().getFullYear()): UseTeamStatsReturn {
   const [stats, setStats] = useState<TeamStats | null>(null);
   const [rawCategories, setRawCategories] = useState<Map<string, ESPNStat[]>>(new Map());
   const [loading, setLoading] = useState<boolean>(true);
@@ -486,9 +486,10 @@ export function useTeamStats(): UseTeamStatsReturn {
       setLoading(true);
       setError(null);
 
+      const url = `${BEARS_STATS_BASE}/${seasonYear}/types/2/teams/${teamId}/statistics`;
       console.log('%c🏈 Fetching Enhanced Team Stats', 'color: #C83803; font-weight: bold; font-size: 14px;');
 
-      const response = await fetch(BEARS_STATS_URL);
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error(`ESPN API error: ${response.status}`);
@@ -561,7 +562,8 @@ export function useTeamStats(): UseTeamStatsReturn {
 
   useEffect(() => {
     void fetchStats();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamId, seasonYear]);
 
   return {
     stats,

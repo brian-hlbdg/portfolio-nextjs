@@ -1,40 +1,23 @@
-/**
- * src/components/features/dashboard/bears/sections/SeasonHighlightsSection.tsx
- * ========================================================================
- * Derives game-level season insights from the Bears schedule data:
- *  - Most points allowed in a single game
- *  - Worst loss (largest margin of defeat)
- *  - Full season game-by-game team matchup log
- *
- * Uses useTeamSchedule (site.api.espn.com) which is more reliably
- * accessible than the core stats API.
- *
- * STRICT TYPESCRIPT - NO ANY TYPES
- * ========================================================================
- */
-
 'use client';
 
 import React, { useMemo } from 'react';
 import { useTeamSchedule, ScheduleGame } from '@/hooks/useTeamSchedule';
+import { BEARS_2025_SEASON, BEARS_2024_SEASON, GreatestHit } from '@/data/bears2025Season';
+import { ALL_NFL_TEAMS } from '@/data/nflTeamLogos';
 
-// ========================================================================
-// DERIVED TYPES
-// ========================================================================
+// ── Types ────────────────────────────────────────────────────────────────────
 
 interface GameResult {
   opponent: string;
   homeAway: 'home' | 'away';
   teamScore: number;
   opponentScore: number;
-  margin: number;        // positive = win, negative = loss
+  margin: number;
   result: 'W' | 'L' | 'T';
   date: string;
 }
 
-// ========================================================================
-// HELPERS
-// ========================================================================
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
 function deriveResults(games: ScheduleGame[]): GameResult[] {
   return games
@@ -44,15 +27,7 @@ function deriveResults(games: ScheduleGame[]): GameResult[] {
       const opp = g.score!.opponent;
       const margin = team - opp;
       const result: 'W' | 'L' | 'T' = margin > 0 ? 'W' : margin < 0 ? 'L' : 'T';
-      return {
-        opponent: g.opponent,
-        homeAway: g.homeAway,
-        teamScore: team,
-        opponentScore: opp,
-        margin,
-        result,
-        date: g.date,
-      };
+      return { opponent: g.opponent, homeAway: g.homeAway, teamScore: team, opponentScore: opp, margin, result, date: g.date };
     });
 }
 
@@ -64,15 +39,20 @@ function formatDate(iso: string): string {
   }
 }
 
-// Shorten long team names for the table
 function shortName(name: string): string {
   const parts = name.split(' ');
-  return parts[parts.length - 1]; // e.g. "Green Bay Packers" → "Packers"
+  return parts[parts.length - 1];
 }
 
-// ========================================================================
-// STAT HIGHLIGHT CARD
-// ========================================================================
+function getLogoForTeam(name: string): string {
+  const lower = name.toLowerCase();
+  const match = ALL_NFL_TEAMS.find(t =>
+    lower.includes(t.nickname.toLowerCase()) || lower.includes(t.location.toLowerCase())
+  );
+  return match?.logos.logo ?? '';
+}
+
+// ── Sub-components ───────────────────────────────────────────────────────────
 
 interface HighlightCardProps {
   label: string;
@@ -99,21 +79,12 @@ function HighlightCard({ label, value, sub, accent = 'orange' }: HighlightCardPr
   );
 }
 
-// ========================================================================
-// MATCHUP LOG TABLE
-// ========================================================================
-
-interface MatchupLogProps {
-  results: GameResult[];
-}
-
-function MatchupLog({ results }: MatchupLogProps): React.ReactElement {
+function MatchupLog({ results }: { results: GameResult[] }): React.ReactElement {
   const wins = results.filter((r) => r.result === 'W').length;
   const losses = results.filter((r) => r.result === 'L').length;
 
   return (
     <div className="rounded-2xl border border-slate-700/50 bg-slate-900/30 overflow-hidden">
-      {/* Table header */}
       <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-3 items-center px-4 py-2.5 bg-slate-800/60 border-b border-slate-700/50 text-[10px] font-semibold tracking-widest uppercase text-slate-500">
         <span className="w-6">#</span>
         <span>Opponent</span>
@@ -122,55 +93,33 @@ function MatchupLog({ results }: MatchupLogProps): React.ReactElement {
         <span className="text-center w-8">Res</span>
       </div>
 
-      {/* Rows */}
       <div className="divide-y divide-slate-800/60">
-        {results.map((game, idx) => {
-          const isWin = game.result === 'W';
-          const isBigLoss = game.margin <= -20;
-
-          return (
-            <div
-              key={idx}
-              className={`grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-3 items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-800/30 ${
-                isBigLoss ? 'bg-red-950/10' : ''
-              }`}
-            >
-              {/* Week number */}
-              <span className="text-[10px] text-slate-600 w-6 tabular-nums">{idx + 1}</span>
-
-              {/* Opponent */}
-              <span className="text-slate-300 truncate font-medium">
-                {shortName(game.opponent)}
-              </span>
-
-              {/* Home / Away */}
-              <span className="text-[10px] text-slate-500 text-center w-6">
-                {game.homeAway === 'home' ? 'H' : 'A'}
-              </span>
-
-              {/* Score */}
-              <span className="text-xs tabular-nums text-right w-16 text-slate-400">
-                {game.teamScore}–{game.opponentScore}
-              </span>
-
-              {/* Result badge */}
-              <span
-                className={`text-[11px] font-bold text-center w-8 rounded px-1 py-0.5 ${
-                  game.result === 'W'
-                    ? 'bg-green-500/15 text-green-400'
-                    : game.result === 'L'
-                    ? 'bg-red-500/15 text-red-400'
-                    : 'bg-slate-500/15 text-slate-400'
-                }`}
-              >
-                {game.result}
-              </span>
-            </div>
-          );
-        })}
+        {results.map((game, idx) => (
+          <div
+            key={idx}
+            className={`grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-3 items-center px-4 py-2.5 text-sm transition-colors hover:bg-slate-800/30 ${
+              game.margin <= -20 ? 'bg-red-950/10' : ''
+            }`}
+          >
+            <span className="text-[10px] text-slate-600 w-6 tabular-nums">{idx + 1}</span>
+            <span className="text-slate-300 truncate font-medium">{shortName(game.opponent)}</span>
+            <span className="text-[10px] text-slate-500 text-center w-6">
+              {game.homeAway === 'home' ? 'H' : 'A'}
+            </span>
+            <span className="text-xs tabular-nums text-right w-16 text-slate-400">
+              {game.teamScore}–{game.opponentScore}
+            </span>
+            <span className={`text-[11px] font-bold text-center w-8 rounded px-1 py-0.5 ${
+              game.result === 'W' ? 'bg-green-500/15 text-green-400'
+              : game.result === 'L' ? 'bg-red-500/15 text-red-400'
+              : 'bg-slate-500/15 text-slate-400'
+            }`}>
+              {game.result}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Footer */}
       <div className="px-4 py-2.5 bg-slate-800/30 border-t border-slate-700/50 flex items-center justify-between text-xs text-slate-500">
         <span>{results.length} games played</span>
         <span>
@@ -183,32 +132,69 @@ function MatchupLog({ results }: MatchupLogProps): React.ReactElement {
   );
 }
 
-// ========================================================================
-// MAIN SECTION
-// ========================================================================
+function GreatestHitsSection({ hits, yearLabel }: { hits: GreatestHit[]; yearLabel: string }): React.ReactElement {
+  return (
+    <div>
+      <div className="mb-3">
+        <h3 className="text-base font-bold text-white">Greatest Moments</h3>
+        <p className="text-xs text-slate-500">{yearLabel} season highlights</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {hits.map((hit, i) => {
+          const logo = getLogoForTeam(hit.opponent);
+          return (
+            <div key={i} className="rounded-xl border border-orange-500/20 bg-gradient-to-br from-orange-950/20 to-slate-900 p-4 flex flex-col gap-2">
+              <span className="inline-block text-[10px] font-black uppercase tracking-widest text-orange-400 bg-orange-500/10 border border-orange-500/20 rounded-full px-2 py-0.5 w-fit">
+                {hit.label}
+              </span>
+              <div className="flex items-center gap-2">
+                {logo && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logo} alt={hit.opponent} className="w-7 h-7 object-contain flex-shrink-0" />
+                )}
+                <div>
+                  <p className="text-xs font-semibold text-white leading-tight">
+                    vs. {hit.opponent}
+                  </p>
+                  <p className="text-[11px] text-slate-400">
+                    Wk {hit.week} · {hit.score}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">{hit.description}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Main Section ─────────────────────────────────────────────────────────────
 
 export default function SeasonHighlightsSection(): React.ReactElement {
   const { scheduleData, loading } = useTeamSchedule('bears');
 
   const results = useMemo(() => {
     if (!scheduleData?.games) return [];
-    return deriveResults(scheduleData.games);
+    // Only include completed REGULAR SEASON games — preseason finals don't count
+    return deriveResults(scheduleData.games.filter(g => !g.gameType || g.gameType === 'regular'));
   }, [scheduleData]);
 
-  // Most points allowed in a single game
+  // During offseason the schedule API returns no regular season completed games — use static 2025 data
+  const isOffseason = !loading && results.length === 0;
+
   const mostPointsAgainst = useMemo(() => {
     if (!results.length) return null;
     return results.reduce((max, g) => (g.opponentScore > max.opponentScore ? g : max), results[0]);
   }, [results]);
 
-  // Worst loss by margin
   const worstLoss = useMemo(() => {
     const losses = results.filter((r) => r.result === 'L');
     if (!losses.length) return null;
     return losses.reduce((worst, g) => (g.margin < worst.margin ? g : worst), losses[0]);
   }, [results]);
 
-  // Best win by margin
   const bestWin = useMemo(() => {
     const wins = results.filter((r) => r.result === 'W');
     if (!wins.length) return null;
@@ -217,6 +203,20 @@ export default function SeasonHighlightsSection(): React.ReactElement {
 
   const skeleton = 'animate-pulse bg-slate-800 rounded-xl h-24';
 
+  if (isOffseason) {
+    // Static offseason view — show 2025 greatest hits and 2024 greatest hits
+    return (
+      <section aria-label="Season Highlights" className="space-y-8">
+        <div className="mb-2">
+          <h2 className="text-lg font-bold text-white">Season Highlights</h2>
+          <p className="text-xs text-slate-500 mt-0.5">Best moments from the Caleb Williams era</p>
+        </div>
+        <GreatestHitsSection hits={BEARS_2025_SEASON.greatestHits} yearLabel="2025" />
+        <GreatestHitsSection hits={BEARS_2024_SEASON.greatestHits} yearLabel="2024" />
+      </section>
+    );
+  }
+
   return (
     <section aria-label="Season Highlights">
       <div className="mb-4">
@@ -224,7 +224,6 @@ export default function SeasonHighlightsSection(): React.ReactElement {
         <p className="text-xs text-slate-500 mt-0.5">Game-by-game 2025 regular season</p>
       </div>
 
-      {/* Stat highlight cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         {loading ? (
           <>
@@ -237,46 +236,36 @@ export default function SeasonHighlightsSection(): React.ReactElement {
             <HighlightCard
               label="Most Points Allowed"
               value={mostPointsAgainst ? `${mostPointsAgainst.opponentScore}` : '—'}
-              sub={
-                mostPointsAgainst
-                  ? `vs ${shortName(mostPointsAgainst.opponent)} · ${formatDate(mostPointsAgainst.date)}`
-                  : 'No data'
-              }
+              sub={mostPointsAgainst ? `vs ${shortName(mostPointsAgainst.opponent)} · ${formatDate(mostPointsAgainst.date)}` : 'No data'}
               accent="red"
             />
             <HighlightCard
               label="Worst Loss"
               value={worstLoss ? `${Math.abs(worstLoss.margin)}` : '—'}
-              sub={
-                worstLoss
-                  ? `${worstLoss.teamScore}–${worstLoss.opponentScore} vs ${shortName(worstLoss.opponent)}`
-                  : 'No data'
-              }
+              sub={worstLoss ? `${worstLoss.teamScore}–${worstLoss.opponentScore} vs ${shortName(worstLoss.opponent)}` : 'No data'}
               accent="orange"
             />
             <HighlightCard
               label="Biggest Win"
               value={bestWin ? `+${bestWin.margin}` : '—'}
-              sub={
-                bestWin
-                  ? `${bestWin.teamScore}–${bestWin.opponentScore} vs ${shortName(bestWin.opponent)}`
-                  : 'No data'
-              }
+              sub={bestWin ? `${bestWin.teamScore}–${bestWin.opponentScore} vs ${shortName(bestWin.opponent)}` : 'No data'}
               accent="blue"
             />
           </>
         )}
       </div>
 
-      {/* Game-by-game matchup log */}
       {loading ? (
         <div className="h-96 rounded-2xl bg-slate-800/40 animate-pulse" />
       ) : results.length > 0 ? (
-        <MatchupLog results={results} />
+        <>
+          <MatchupLog results={results} />
+          <div className="mt-8">
+            <GreatestHitsSection hits={BEARS_2025_SEASON.greatestHits} yearLabel="2025" />
+          </div>
+        </>
       ) : (
-        <p className="text-sm text-slate-500 text-center py-8">
-          Game data unavailable.
-        </p>
+        <p className="text-sm text-slate-500 text-center py-8">Game data unavailable.</p>
       )}
     </section>
   );

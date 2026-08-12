@@ -17,7 +17,9 @@ import { useState, useEffect, useCallback } from 'react';
 interface ESPNTeam {
   id: string;
   displayName: string;
+  abbreviation?: string;
   logo?: string;
+  logos?: Array<{ href?: string }>;
 }
 
 interface ESPNScoreValue {
@@ -81,6 +83,11 @@ interface ESPNEvent {
   date: string;
   name: string;
   competitions: ESPNCompetition[];
+  seasonType?: {
+    id?: string;   // '1' = preseason, '2' = regular, '3' = postseason
+    type?: number;
+    name?: string;
+  };
 }
 
 interface ESPNScheduleResponse {
@@ -96,12 +103,14 @@ export interface ScheduleGame {
   date: string;
   time: string;
   opponent: string;
+  opponentAbbreviation?: string;
   opponentLogo: string;
   opponentRecord?: string;
   location: string;
   venue: string;
   homeAway: 'home' | 'away';
   status: 'scheduled' | 'live' | 'final';
+  gameType?: 'preseason' | 'regular' | 'postseason';
   score?: {
     team: number;
     opponent: number;
@@ -214,17 +223,21 @@ function formatDateTime(dateString: string): { date: string; time: string } {
 function getOpponent(
   competitors: ESPNCompetitor[],
   ourTeamId: string
-): { name: string; logo?: string; record?: string } {
+): { name: string; abbreviation?: string; logo?: string; record?: string } {
   const opponent = competitors.find((c: ESPNCompetitor): boolean => c.team.id !== ourTeamId);
 
-  // Find the "overall" or "total" record from the records array
-  const overallRecord = opponent?.records?.find(
-    (r) => r.type === 'total'
-  );
+  const overallRecord = opponent?.records?.find((r) => r.type === 'total');
+
+  // ESPN returns logo as a direct field OR in a logos[] array — check both
+  const logo =
+    opponent?.team?.logo ||
+    opponent?.team?.logos?.[0]?.href ||
+    undefined;
 
   return {
     name: opponent?.team?.displayName || 'Unknown',
-    logo: opponent?.team?.logo,
+    abbreviation: opponent?.team?.abbreviation,
+    logo,
     record: overallRecord?.displayValue || overallRecord?.summary,
   };
 }
@@ -250,6 +263,12 @@ function getOurScore(competitors: ESPNCompetitor[], ourTeamId: string): number |
   return extractScore(ourTeam?.score);
 }
 
+function mapGameType(seasonTypeId?: string): 'preseason' | 'regular' | 'postseason' {
+  if (seasonTypeId === '1') return 'preseason';
+  if (seasonTypeId === '3') return 'postseason';
+  return 'regular';
+}
+
 /**
  * Parse ESPN event into ScheduleGame
  */
@@ -273,7 +292,7 @@ function parseGame(
   const opponentScore = extractScore(opposingTeam?.score);
 
   const broadcasts = competition.broadcasts || [];
-  const broadcast = broadcasts.length > 0 
+  const broadcast = broadcasts.length > 0
     ? broadcasts[0].media?.shortName || broadcasts[0].names?.[0]
     : undefined;
 
@@ -282,12 +301,14 @@ function parseGame(
     date,
     time,
     opponent: opponent.name,
+    opponentAbbreviation: opponent.abbreviation,
     opponentLogo: opponent.logo || '',
     opponentRecord: opponent.record,
     location: competition.venue?.city || 'Unknown',
     venue: competition.venue?.fullName || 'Unknown Venue',
     homeAway: ourTeam?.homeAway || 'away',
     status,
+    gameType: mapGameType(event.seasonType?.id),
     score:
       status === 'final' && ourScore !== undefined && opponentScore !== undefined
         ? { team: ourScore, opponent: opponentScore }
@@ -327,9 +348,11 @@ interface UseTeamScheduleReturn {
 }
 
 /**
- * Hook to fetch team schedule from ESPN with debug logging
+ * Hook to fetch team schedule from ESPN.
+ * @param teamId - One of the team keys from TEAM_ENDPOINTS
+ * @param seasonType - Optional ESPN season type: 1=preseason, 2=regular, 3=postseason
  */
-export function useTeamSchedule(teamId: string): UseTeamScheduleReturn {
+export function useTeamSchedule(teamId: string, seasonType?: number): UseTeamScheduleReturn {
   const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -344,12 +367,16 @@ export function useTeamSchedule(teamId: string): UseTeamScheduleReturn {
         throw new Error(`Unknown team: ${teamId}`);
       }
 
+      const url = seasonType
+        ? `${config.endpoint}?seasontype=${seasonType}`
+        : config.endpoint;
+
       console.log(`📅 Fetching ${teamId} schedule from ESPN...`);
-      console.log(`   Endpoint: ${config.endpoint}`);
+      console.log(`   Endpoint: ${url}`);
       console.log(`   Team ID: ${config.bearTeamId}`);
 
       const response = await Promise.race<Response>([
-        fetch(config.endpoint),
+        fetch(url),
         new Promise<never>((_, reject): void => {
           setTimeout((): void => {
             reject(new Error('Schedule fetch timeout'));
@@ -403,7 +430,7 @@ export function useTeamSchedule(teamId: string): UseTeamScheduleReturn {
     } finally {
       setLoading(false);
     }
-  }, [teamId]);
+  }, [teamId, seasonType]);
 
   const refetch = useCallback(async (): Promise<void> => {
     console.log(`🔄 Refetching schedule...`);

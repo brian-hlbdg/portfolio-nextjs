@@ -20,16 +20,16 @@ import OverviewSection from './sections/OverviewSection';
 import ScheduleSection from './sections/ScheduleSection';
 import PlayerStatsSection from './sections/PlayerStatsSection';
 import RosterSection from './sections/RosterSection';
-import { TeamStatsSection } from './sections/TeamStatsSection';
 import { GameSummarySection } from './sections/GameSummarySection';
 import OffSeasonDashboard from './OffSeasonDashboard';
-import RockerSwitch from '@/components/ui/RockerSwitch';
+import PreSeasonDashboard from './PreSeasonDashboard';
+import PostSeasonDashboard from './PostSeasonDashboard';
 import { getNFLSeasonState } from '@/utils/getNFLSeasonState';
 
 
 export default function BearsDashboard() {
-  // Dev-only: 'left' = regular season, 'right' = off-season
-  const [devView, setDevView] = useState<'left' | 'right'>('left');
+  // Dev-only: choose which season view to display
+  const [devView, setDevView] = useState<'regular' | 'preseason' | 'postseason' | 'offseason'>('preseason');
 
   // ✅ Get Bears stats and NFL team records from Bears-specific hook
   const {
@@ -55,10 +55,8 @@ export default function BearsDashboard() {
   );
 
   // In dev: honour the manual toggle. In prod: use auto detection.
-  const isOffseason =
-    process.env.NODE_ENV === 'development'
-      ? devView === 'right'
-      : autoSeasonState === 'offseason';
+  const effectiveState =
+    process.env.NODE_ENV === 'development' ? devView : autoSeasonState;
 
   // ✅ Convert seasonStats to the format OverviewSection expects
   // OverviewSection expects TeamStats type with: name, sport, wins, losses, record, etc.
@@ -116,29 +114,55 @@ export default function BearsDashboard() {
     return null;
   }, [scheduleError, bearsStatsError]);
 
-  // Render off-season board when appropriate (after all hooks)
-  if (isOffseason) {
+  const devToggle = process.env.NODE_ENV === 'development' ? (
+    <div className="flex items-center gap-3 px-6 py-3 bg-slate-950/80 border-b border-slate-800 sticky top-0 z-50">
+      <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">DEV</span>
+      {(['regular', 'preseason', 'postseason', 'offseason'] as const).map(view => (
+        <button
+          key={view}
+          onClick={() => setDevView(view)}
+          className={`text-[10px] px-3 py-1 rounded font-mono uppercase tracking-wide transition-colors ${
+            devView === view
+              ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50'
+              : 'text-slate-500 hover:text-slate-300 border border-transparent'
+          }`}
+        >
+          {view}
+        </button>
+      ))}
+      <span className="text-[10px] text-slate-600 font-mono">
+        auto: <strong className="text-slate-400">{autoSeasonState}</strong>
+      </span>
+    </div>
+  ) : null;
+
+  if (effectiveState === 'offseason') {
     return (
       <div>
-        {/* Dev toggle — floated above the off-season board */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="flex items-center gap-3 px-6 py-3 bg-slate-950/80 border-b border-slate-800 sticky top-0 z-50">
-            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
-              DEV
-            </span>
-            <RockerSwitch
-              selected={devView}
-              onToggle={setDevView}
-              leftLabel="Regular Season"
-              rightLabel="Off-Season"
-              size="sm"
-            />
-            <span className="text-[10px] text-slate-600 font-mono">
-              auto: <strong className="text-slate-400">{autoSeasonState}</strong>
-            </span>
-          </div>
-        )}
+        {devToggle}
         <OffSeasonDashboard />
+      </div>
+    );
+  }
+
+  if (effectiveState === 'preseason') {
+    return (
+      <div>
+        {devToggle}
+        <PreSeasonDashboard
+          scheduleData={scheduleData}
+          nflTeamRecords={nflTeamRecords}
+          scheduleLoading={scheduleLoading}
+        />
+      </div>
+    );
+  }
+
+  if (effectiveState === 'postseason') {
+    return (
+      <div>
+        {devToggle}
+        <PostSeasonDashboard />
       </div>
     );
   }
@@ -151,24 +175,7 @@ export default function BearsDashboard() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white relative overflow-hidden">
-      {/* Dev toggle bar */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="flex items-center gap-3 px-6 py-3 bg-slate-950/80 border-b border-slate-800 sticky top-0 z-50">
-          <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider">
-            DEV
-          </span>
-          <RockerSwitch
-            selected={devView}
-            onToggle={setDevView}
-            leftLabel="Regular Season"
-            rightLabel="Off-Season"
-            size="sm"
-          />
-          <span className="text-[10px] text-slate-600 font-mono">
-            auto: <strong className="text-slate-400">{autoSeasonState}</strong>
-          </span>
-        </div>
-      )}
+      {devToggle}
 
       {/* Background Glow Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -200,17 +207,14 @@ export default function BearsDashboard() {
           />
         </section>
 
-        {/* Section 3: Game Summary */}
-        <section>
-          <GameSummarySection teamId="bears" />
-        </section>
+        {/* Section 3: Game Summary — hidden until at least one game has been played */}
+        {recentGames.length > 0 && (
+          <section>
+            <GameSummarySection teamId="bears" />
+          </section>
+        )}
 
-        {/* Section 4: Team Stats */}
-        <section>
-          <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
-        </section>
-
-        {/* Section 5: Roster */}
+        {/* Section 4: Roster */}
         <section>
           <RosterSection />
         </section>

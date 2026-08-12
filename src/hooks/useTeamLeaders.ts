@@ -123,7 +123,7 @@ interface ESPNCoreLeadersResponse {
 // ========================================================================
 
 const BEARS_TEAM_ID = '3';
-const CURRENT_SEASON = '2024'; // Use 2024 for completed season data
+const CURRENT_SEASON = '2025'; // 2025 completed regular season
 
 // ESPN player headshot URL pattern
 const ESPN_HEADSHOT_BASE = 'https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full';
@@ -189,14 +189,11 @@ const CATEGORY_MAP: Record<string, keyof TeamLeaders> = {
 };
 
 // ========================================================================
-// FALLBACK DATA - 2024 Bears Season Stats with CORRECT ESPN IDs
+// FALLBACK DATA - 2025 Bears Season Stats with CORRECT ESPN IDs
 // ========================================================================
-// 
-// NOTE: ESPN API domains are blocked from this hosting environment.
-// This fallback data will always be used. Update manually as needed.
-// 
-// ESPN IDs verified from: https://www.espn.com/nfl/team/roster/_/name/chi
-// Stats from 2024 regular season
+//
+// Source: chicagobears.com/news/by-the-numbers-bears-2025-season-stats
+// ESPN IDs from espn.com player URLs
 // ========================================================================
 
 const FALLBACK_LEADERS: TeamLeaders = {
@@ -207,17 +204,8 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'QB',
       jersey: '18',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/4431611.png&w=96&h=70`,
-      statValue: 3541,
-      statDisplay: '3,541 yds',
-    },
-    {
-      playerId: '4434153',
-      name: 'Tyson Bagent',
-      position: 'QB',
-      jersey: '17',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4434153.png&w=96&h=70`,
-      statValue: 0,
-      statDisplay: 'Backup',
+      statValue: 3942,
+      statDisplay: '3,942 yds', // Franchise single-season record
     },
   ],
   rushing: [
@@ -227,17 +215,17 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'RB',
       jersey: '4',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/4259545.png&w=96&h=70`,
-      statValue: 1088,
-      statDisplay: '1,088 yds',
+      statValue: 1087,
+      statDisplay: '1,087 yds',
     },
     {
-      playerId: '4431611',
-      name: 'Caleb Williams',
-      position: 'QB',
-      jersey: '18',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4431611.png&w=96&h=70`,
-      statValue: 489,
-      statDisplay: '489 yds',
+      playerId: '4608686',
+      name: 'Kyle Monangai',
+      position: 'RB',
+      jersey: '25',
+      headshotUrl: `${ESPN_HEADSHOT_BASE}/4608686.png&w=96&h=70`,
+      statValue: 783,
+      statDisplay: '783 yds',
     },
   ],
   receiving: [
@@ -247,8 +235,17 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'WR',
       jersey: '2',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/3915416.png&w=96&h=70`,
-      statValue: 793,
-      statDisplay: '793 yds',
+      statValue: 761,
+      statDisplay: '761 yds',
+    },
+    {
+      playerId: '4723086',
+      name: 'Colston Loveland',
+      position: 'TE',
+      jersey: '18',
+      headshotUrl: `${ESPN_HEADSHOT_BASE}/4723086.png&w=96&h=70`,
+      statValue: 713,
+      statDisplay: '713 yds', // 1st rookie TE to lead Bears since Mike Ditka (1961)
     },
     {
       playerId: '4431299',
@@ -256,17 +253,8 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'WR',
       jersey: '15',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/4431299.png&w=96&h=70`,
-      statValue: 640,
-      statDisplay: '640 yds',
-    },
-    {
-      playerId: '4258595',
-      name: 'Cole Kmet',
-      position: 'TE',
-      jersey: '85',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4258595.png&w=96&h=70`,
-      statValue: 590,
-      statDisplay: '590 yds',
+      statValue: 661,
+      statDisplay: '661 yds',
     },
   ],
   sacks: [
@@ -276,57 +264,30 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'DE',
       jersey: '98',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/3134690.png&w=96&h=70`,
-      statValue: 7.5,
-      statDisplay: '7.5 sacks',
-    },
-    {
-      playerId: '4429014',
-      name: 'Gervon Dexter Sr.',
-      position: 'DT',
-      jersey: '99',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4429014.png&w=96&h=70`,
-      statValue: 5.0,
-      statDisplay: '5.0 sacks',
+      statValue: 10.0,
+      statDisplay: '10.0 sacks',
     },
   ],
   interceptions: [
     {
-      playerId: '4243253',
-      name: 'Jaylon Johnson',
-      position: 'CB',
-      jersey: '1',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4243253.png&w=96&h=70`,
-      statValue: 4,
-      statDisplay: '4 INTs',
-    },
-    {
-      playerId: '4570044',
-      name: 'Jaquan Brisker',
+      playerId: '2574056',
+      name: 'Kevin Byard III',
       position: 'S',
-      jersey: '9',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/4570044.png&w=96&h=70`,
-      statValue: 2,
-      statDisplay: '2 INTs',
+      jersey: '31',
+      headshotUrl: `${ESPN_HEADSHOT_BASE}/2574056.png&w=96&h=70`,
+      statValue: 7,
+      statDisplay: '7 INTs', // NFL leader, 1st-team All-Pro
     },
   ],
   tackles: [
-    {
-      playerId: '3121544',
-      name: 'T.J. Edwards',
-      position: 'LB',
-      jersey: '53',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/3121544.png&w=96&h=70`,
-      statValue: 155,
-      statDisplay: '155 tackles',
-    },
     {
       playerId: '3929950',
       name: 'Tremaine Edmunds',
       position: 'LB',
       jersey: '49',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/3929950.png&w=96&h=70`,
-      statValue: 118,
-      statDisplay: '118 tackles',
+      statValue: 112,
+      statDisplay: '112 tackles',
     },
   ],
   touchdowns: [
@@ -336,17 +297,17 @@ const FALLBACK_LEADERS: TeamLeaders = {
       position: 'RB',
       jersey: '4',
       headshotUrl: `${ESPN_HEADSHOT_BASE}/4259545.png&w=96&h=70`,
-      statValue: 8,
-      statDisplay: '8 TDs',
+      statValue: 9,
+      statDisplay: '9 TDs',
     },
     {
-      playerId: '3915416',
-      name: 'DJ Moore',
-      position: 'WR',
-      jersey: '2',
-      headshotUrl: `${ESPN_HEADSHOT_BASE}/3915416.png&w=96&h=70`,
-      statValue: 5,
-      statDisplay: '5 TDs',
+      playerId: '4723086',
+      name: 'Colston Loveland',
+      position: 'TE',
+      jersey: '18',
+      headshotUrl: `${ESPN_HEADSHOT_BASE}/4723086.png&w=96&h=70`,
+      statValue: 6,
+      statDisplay: '6 TDs',
     },
   ],
 };

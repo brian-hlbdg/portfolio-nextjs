@@ -44,6 +44,9 @@ interface ESPNAthlete {
   position?: ESPNPosition;
   status?: ESPNStatus;
   active?: boolean;
+  experience?: {
+    years?: number;
+  };
   injuries?: Array<{
     status?: string;
     description?: string;
@@ -274,6 +277,8 @@ function convertESPNAthleteToBearsPlayer(athlete: ESPNAthlete): BearsPlayer {
       weight: weightNum,
       college: collegeName,
       nflId: athlete.id,
+      experience: typeof athlete.experience?.years === 'number' ? athlete.experience.years : undefined,
+      statusLabel: athlete.status?.description || (athlete.active === false ? 'Inactive' : 'Active'),
     };
   }
 
@@ -286,6 +291,8 @@ function convertESPNAthleteToBearsPlayer(athlete: ESPNAthlete): BearsPlayer {
     weight: weightNum,
     college: collegeName,
     nflId: athlete.id,
+    experience: typeof athlete.experience?.years === 'number' ? athlete.experience.years : undefined,
+    statusLabel: athlete.status?.description || (athlete.active === false ? 'Inactive' : 'Active'),
   };
 }
 

@@ -7,9 +7,8 @@
  * Sections:
  *  1. Season Recap hero
  *  2. Final NFC North standings
- *  3. Season stats (reuses TeamStatsSection verbatim)
- *  4. Standout players
- *  5. Team news & updates
+ *  3. Standout players
+ *  4. Team news & updates
  *
  * STRICT TYPESCRIPT - NO ANY TYPES
  * ========================================================================
@@ -21,21 +20,15 @@ import React from 'react';
 import BearsDashboardHeader from './header/BearsDashboardHeader';
 import OffSeasonRecapSection from './sections/OffSeasonRecapSection';
 import TeamNewsSection from './sections/TeamNewsSection';
-import { TeamStatsSection } from './sections/TeamStatsSection';
 import SeasonHighlightsSection from './sections/SeasonHighlightsSection';
-import { useDivisionStandings, TeamStanding } from '@/hooks/useDivisionStandings';
 import { useTeamLeaders, TeamLeader, TeamLeaders } from '@/hooks/useTeamLeaders';
+import { NFC_NORTH_2025_STANDINGS, DivisionTeamStanding } from '@/data/bears2025Season';
 
 // ========================================================================
-// DIVISION STANDINGS TABLE
+// DIVISION STANDINGS TABLE — uses static 2025 final data
 // ========================================================================
 
-interface StandingsRowProps {
-  team: TeamStanding;
-  isBears: boolean;
-}
-
-function StandingsRow({ team, isBears }: StandingsRowProps): React.ReactElement {
+function StandingsRow({ team, isBears }: { team: DivisionTeamStanding; isBears: boolean }): React.ReactElement {
   return (
     <div
       className={`grid grid-cols-[1fr_auto_auto_auto] gap-2 items-center px-4 py-3 rounded-xl transition-colors ${
@@ -44,7 +37,6 @@ function StandingsRow({ team, isBears }: StandingsRowProps): React.ReactElement 
           : 'bg-slate-900/40 border border-slate-700/30'
       }`}
     >
-      {/* Team name + rank */}
       <div className="flex items-center gap-2 min-w-0">
         <span className={`text-xs font-bold w-5 text-center ${isBears ? 'text-orange-400' : 'text-slate-500'}`}>
           {team.divisionRank}
@@ -53,18 +45,13 @@ function StandingsRow({ team, isBears }: StandingsRowProps): React.ReactElement 
           {team.teamName}
         </span>
       </div>
-      {/* Record */}
       <span className="text-sm text-slate-300 tabular-nums text-right">
         {team.wins}-{team.losses}{team.ties > 0 ? `-${team.ties}` : ''}
       </span>
-      {/* Win % */}
       <span className="text-xs text-slate-400 tabular-nums text-right w-12">
-        {(Number(team.winPercentage) || 0).toFixed(3).replace(/^0/, '')}
+        {team.winPercentage.toFixed(3).replace(/^0/, '')}
       </span>
-      {/* Differential */}
-      <span className={`text-xs tabular-nums text-right w-12 ${
-        team.pointDifferential >= 0 ? 'text-green-400' : 'text-red-400'
-      }`}>
+      <span className={`text-xs tabular-nums text-right w-12 ${team.pointDifferential >= 0 ? 'text-green-400' : 'text-red-400'}`}>
         {team.pointDifferential >= 0 ? '+' : ''}{team.pointDifferential}
       </span>
     </div>
@@ -72,23 +59,14 @@ function StandingsRow({ team, isBears }: StandingsRowProps): React.ReactElement 
 }
 
 function DivisionStandingsSection(): React.ReactElement {
-  const { divisionStandings, bearsStanding, loading } = useDivisionStandings();
-
-  const sorted = divisionStandings
-    ? [...divisionStandings.teams].sort((a, b) => a.divisionRank - b.divisionRank)
-    : [];
-
   return (
     <section aria-label="NFC North Final Standings">
       <div className="rounded-2xl border border-slate-700/50 bg-slate-900/30 p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-white">
-            {divisionStandings?.divisionName ?? 'NFC North'} — Final Standings
-          </h2>
+          <h2 className="text-lg font-bold text-white">NFC North — Final Standings</h2>
           <span className="text-xs text-slate-500">2025 Season</span>
         </div>
 
-        {/* Column headers */}
         <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 px-4 pb-2 text-[10px] font-semibold tracking-widest uppercase text-slate-500">
           <span>Team</span>
           <span className="text-right">W-L</span>
@@ -96,23 +74,15 @@ function DivisionStandingsSection(): React.ReactElement {
           <span className="text-right w-12">DIFF</span>
         </div>
 
-        {loading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-12 rounded-xl bg-slate-800/60 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {sorted.map((team) => (
-              <StandingsRow
-                key={team.teamId}
-                team={team}
-                isBears={team.teamId === bearsStanding?.teamId}
-              />
-            ))}
-          </div>
-        )}
+        <div className="space-y-2">
+          {NFC_NORTH_2025_STANDINGS.map((team) => (
+            <StandingsRow
+              key={team.teamId}
+              team={team}
+              isBears={team.teamId === '3'}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -243,14 +213,6 @@ export default function OffSeasonDashboard(): React.ReactElement {
         {/* 5. Season highlights — derived from game-by-game schedule data */}
         <SeasonHighlightsSection />
 
-        {/* 6. Detailed team stats */}
-        <section>
-          <div className="mb-4">
-            <h2 className="text-lg font-bold text-white">Season Stats</h2>
-            <p className="text-xs text-slate-500 mt-0.5">2025 regular season totals</p>
-          </div>
-          <TeamStatsSection teamId="bears" teamName="Chicago Bears" />
-        </section>
       </main>
     </div>
   );

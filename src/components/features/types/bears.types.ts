@@ -24,6 +24,8 @@ export interface BearsPlayer {
   weight?: number;
   college?: string;
   nflId?: string;
+  experience?: number;
+  statusLabel?: string;
 }
 
 export interface BearsPlayerStats extends BearsPlayer {
