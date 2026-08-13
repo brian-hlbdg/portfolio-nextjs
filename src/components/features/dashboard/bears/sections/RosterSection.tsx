@@ -69,7 +69,7 @@ export default function RosterSection() {
           {[...Array(3)].map((_, i) => (
             <div key={i} className="space-y-3">
               <div className="h-4 bg-slate-700/25 rounded w-28 animate-pulse" />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                 {[...Array(5)].map((_, j) => (
                   <div key={j} className="h-20 bg-slate-700/15 rounded border border-slate-700/20 animate-pulse" />
                 ))}
@@ -149,7 +149,7 @@ export default function RosterSection() {
               <span className="text-xs text-slate-500">{players.length} players</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
               {visible.map((player) => (
                 <div
                   key={player.id}
@@ -190,7 +190,7 @@ export default function RosterSection() {
               <span className="text-slate-600 text-xs">{isExpanded ? '▲' : '▼'}</span>
             </button>
             {isExpanded && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                 {injuredPlayers.map((player) => (
                   <div
                     key={player.id}
