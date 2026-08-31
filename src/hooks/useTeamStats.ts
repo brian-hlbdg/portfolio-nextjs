@@ -475,7 +475,11 @@ function parseSpecialTeamsStats(allStats: ESPNStat[]): SpecialTeamsStats {
 // MAIN HOOK
 // ========================================================================
 
-export function useTeamStats(teamId: number = 3, seasonYear: number = new Date().getFullYear()): UseTeamStatsReturn {
+// Cap the default year at 2025 until the 2026 regular season begins (Sept 5 2026)
+const REGULAR_SEASON_START_2026 = new Date('2026-09-05T00:00:00');
+const DEFAULT_STATS_YEAR = new Date() < REGULAR_SEASON_START_2026 ? 2025 : new Date().getFullYear();
+
+export function useTeamStats(teamId: number = 3, seasonYear: number = DEFAULT_STATS_YEAR): UseTeamStatsReturn {
   const [stats, setStats] = useState<TeamStats | null>(null);
   const [rawCategories, setRawCategories] = useState<Map<string, ESPNStat[]>>(new Map());
   const [loading, setLoading] = useState<boolean>(true);

@@ -26,24 +26,31 @@ export function getNFLSeasonState(
   loading: boolean,
   referenceDate: Date = new Date()
 ): SeasonState {
-  if (loading || games === null) return 'regular';
-  if (games.length === 0) return 'regular';
+  // Before the regular season opens, always show preseason — even while loading
+  // and even after all preseason games have been played.
+  if (referenceDate < REGULAR_SEASON_START_2026) {
+    // Still check for active postseason games just in case
+    if (games) {
+      const hasPostseason = games.some(
+        (g) => g.gameType === 'postseason' && (g.status === 'scheduled' || g.status === 'live')
+      );
+      if (hasPostseason) return 'postseason';
+    }
+    return 'preseason';
+  }
 
-  // Any active postseason game → postseason view
+  // Past regular season start — derive state from game data
+  if (loading || games === null || games.length === 0) return 'regular';
+
   const hasPostseason = games.some(
     (g) => g.gameType === 'postseason' && (g.status === 'scheduled' || g.status === 'live')
   );
   if (hasPostseason) return 'postseason';
 
-  const allFinal = games.every((g) => g.status === 'final');
-  if (allFinal && games.length >= 10) return 'offseason';
-
-  const hasActive = games.some(
-    (g) => g.status === 'scheduled' || g.status === 'live'
-  );
-  if (hasActive) {
-    return referenceDate < REGULAR_SEASON_START_2026 ? 'preseason' : 'regular';
-  }
+  // Only count regular season games for offseason detection
+  const regularGames = games.filter((g) => !g.gameType || g.gameType === 'regular');
+  const allRegularFinal = regularGames.length >= 10 && regularGames.every((g) => g.status === 'final');
+  if (allRegularFinal) return 'offseason';
 
   return 'regular';
 }

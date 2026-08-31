@@ -55,7 +55,7 @@ function StandingRow({ team, isBears }: { team: TeamStanding; isBears: boolean }
 
       {/* PCT */}
       <span className="text-xs text-slate-400 tabular-nums text-right w-10">
-        {team.winPercentage.toFixed(3).replace(/^0/, '')}
+        {Number.isFinite(team.winPercentage) ? Number(team.winPercentage).toFixed(3).replace(/^0/, '') : '.000'}
       </span>
 
       {/* Div */}
