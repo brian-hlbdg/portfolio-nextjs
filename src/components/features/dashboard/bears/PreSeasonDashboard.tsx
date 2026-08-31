@@ -7,6 +7,7 @@ import BearsDashboardHeader from './header/BearsDashboardHeader';
 import SeasonCountdownSection from './sections/SeasonCountdownSection';
 import PreSeasonScheduleSection from './sections/PreSeasonScheduleSection';
 import RosterSection from './sections/RosterSection';
+import RosterMovesSection from './sections/RosterMovesSection';
 import TeamNewsSection from './sections/TeamNewsSection';
 import OffSeasonRecapSection from './sections/OffSeasonRecapSection';
 import BearsTrendChart from './sections/BearsTrendChart';
@@ -75,6 +76,8 @@ export default function PreSeasonDashboard({
         <BearsTrendChart />
 
         <RosterSection />
+
+        <RosterMovesSection />
 
         <TeamNewsSection />
 
