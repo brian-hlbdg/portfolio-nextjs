@@ -10,6 +10,7 @@ import RosterSection from './sections/RosterSection';
 import TeamNewsSection from './sections/TeamNewsSection';
 import OffSeasonRecapSection from './sections/OffSeasonRecapSection';
 import BearsTrendChart from './sections/BearsTrendChart';
+import TeamMatchupAnalysisSection from './sections/TeamMatchupAnalysisSection';
 
 interface PreSeasonDashboardProps {
   scheduleData: ScheduleData | null;
@@ -62,6 +63,8 @@ export default function PreSeasonDashboard({
           regularSeasonGames={regularSeasonGames}
           loading={regularLoading}
         />
+
+        <TeamMatchupAnalysisSection />
 
         <PreSeasonScheduleSection
           games={preseasonGames}

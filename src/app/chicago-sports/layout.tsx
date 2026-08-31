@@ -15,7 +15,7 @@ export const metadata = {
 
 export default function ChicagoSportsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="dark min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {children}
     </div>
   );
