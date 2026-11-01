@@ -1,0 +1,43 @@
+name: Create design-gap issues
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create labels and issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create design-gap --color 1F2A44 --description "From portfolio design review" -R "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh label create "priority: high" --color B60205 -R "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh label create "priority: med" --color FBCA04 -R "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh label create "priority: low" --color C5DEF5 -R "$GITHUB_REPOSITORY" 2>/dev/null || true
+          for L in home case-study blog; do gh label create "area: $L" --color EDEDED -R "$GITHUB_REPOSITORY" 2>/dev/null || true; done
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[HERO] Generic claim, two equal-weight CTAs' -l design-gap -l 'priority: high' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[SKILLS] Self-rated percentage bars' -l design-gap -l 'priority: high' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[WORK] Case studies are a click away from home' -l design-gap -l 'priority: high' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[PROOF] Outcomes buried in paragraphs' -l design-gap -l 'priority: med' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[HIERARCHY] One card recipe everywhere' -l design-gap -l 'priority: med' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[A11Y] Orange accent fails small-text contrast' -l design-gap -l 'priority: med' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[SPORTS] Dashboard is a separate visual system' -l design-gap -l 'priority: med' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[NAV] Full-screen overlay for four links' -l design-gap -l 'priority: low' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CONTACT] No availability or quick contact' -l design-gap -l 'priority: low' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[DETAIL] Emoji skill icons, dark toggle as ornament' -l design-gap -l 'priority: low' -l 'area: home' -b '**Page:** Home
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] Outcomes arrive at the end' -l design-gap -l 'priority: high' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] Your role is unclear' -l design-gap -l 'priority: high' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] Long reads with no wayfinding' -l design-gap -l 'priority: med' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] No before / after' -l design-gap -l 'priority: med' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] Process shown, decisions hidden' -l design-gap -l 'priority: med' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[CASE STUDY] Placeholder studies in the index' -l design-gap -l 'priority: low' -l 'area: case-study' -b '**Page:** Case study
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[BLOG] Equal-weight card grid' -l design-gap -l 'priority: high' -l 'area: blog' -b '**Page:** Blog
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[BLOG] Work and life mixed without signal' -l design-gap -l 'priority: med' -l 'area: blog' -b '**Page:** Blog
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[BLOG] Inconsistent imagery' -l design-gap -l 'priority: med' -l 'area: blog' -b '**Page:** Blog
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[BLOG] Dates and read times hard to scan' -l design-gap -l 'priority: low' -l 'area: blog' -b '**Page:** Blog
+          gh issue create -R "$GITHUB_REPOSITORY" -t '[BLOG] No search or subscribe' -l design-gap -l 'priority: low' -l 'area: blog' -b '**Page:** Blog
+          echo "Done"
