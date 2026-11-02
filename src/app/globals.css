@@ -1,73 +1,78 @@
 @import "tailwindcss";
 
-/* Define dark mode variant for Tailwind v4 */
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-  --color-primary: rgb(211 84 0);
-  --color-primary-dark: rgb(180 70 0);
+  /* Color tokens */
+  --color-bone-50:      oklch(0.98  0.006 75);   /* page background */
+  --color-bone-100:     oklch(0.955 0.008 75);   /* alt band, row hover */
+  --color-ink:          oklch(0.22  0.02  260);  /* body text, headings */
+  --color-ink-950:      oklch(0.15  0.035 255);  /* footer, case-study bg */
+  --color-brass:        oklch(0.62  0.115 78);   /* accent on light surfaces */
+  --color-brass-500:    oklch(0.72  0.11  80);   /* accent on ink surfaces */
+  --color-sports-ink:   oklch(0.13  0.05  258);  /* sports band */
+  --color-sports-accent:oklch(0.62  0.16  40);   /* Bears orange */
+
+  /* Font stacks — resolved by next/font CSS vars applied to <html> */
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-mono), ui-monospace, monospace;
+
+  /* Site easing */
+  --ease-site: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Targeted smooth transitions - NOT universal selector */
-body,
-header,
-main,
-section,
-div[class*="bg-"],
-div[class*="text-"],
-div[class*="border-"] {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+/* Base */
+body {
+  background-color: oklch(0.98 0.006 75);
+  color: oklch(0.22 0.02 260);
 }
 
-/* Component-specific transitions */
-.work-item,
-.passion-card,
-button,
-a {
-  transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+/* Layout column */
+.col {
+  max-width: 1040px;
+  margin-inline: auto;
+  padding-inline: 32px;
 }
 
-/* Custom component styles */
-.text-primary {
-  color: rgb(211 84 0);
+@media (max-width: 759px) {
+  .col { padding-inline: 20px; }
 }
 
-.dark .text-primary {
-  color: rgb(255 138 76);
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid oklch(0.62 0.115 78);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-.bg-primary {
-  background-color: rgb(211 84 0);
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  translate: 0 16px;
+  transition: opacity 680ms var(--ease-site), translate 680ms var(--ease-site);
 }
 
-.hover\:bg-primary-dark:hover {
-  background-color: rgb(180 70 0);
+.reveal.reveal-visible {
+  opacity: 1;
+  translate: 0 0;
 }
 
-.border-primary {
-  border-color: rgb(211 84 0);
+@media (max-width: 759px) {
+  .reveal {
+    translate: 0 10px;
+    transition-duration: 520ms;
+  }
 }
 
-/* Enhanced animations */
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-.bg-clip-text {
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  .reveal {
+    opacity: 1 !important;
+    translate: 0 0 !important;
+    transition: none !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

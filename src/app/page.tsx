@@ -1,30 +1,18 @@
-import { EnhancedHeroSection } from '@/components/features/EnhancedHeroSection';
-import { RecentUpdates } from '@/components/features/updates'; 
-import { AboutMeSection } from '@/components/features/AboutMeSection';
-import { PassionsSection } from '@/components/features/PassionsSection';
-import { EducationSection } from '@/components/features/EducationSection';
-import { CoreStrengthsSection } from '@/components/features/CoreStrengthsSection';
-import { TechnicalToolbox } from '@/components/features/TechnicalToolbox';
-import { InteractiveSkillsSection } from '@/components/features/InteractiveSkillsSection';
-import { ExperienceTimeline } from '@/components/features/ExperienceTimeline';
-import { LookingForward } from '@/components/features/LookingForward';
-import { ContactSection } from '@/components/features/ContactSection';
-import { Footer } from '@/components/layout/Footer';
+import { HeroSection }         from '@/components/features/home/HeroSection';
+import { ProofStrip }           from '@/components/features/home/ProofStrip';
+import { WorkIndex }             from '@/components/features/home/WorkIndex';
+import { ExperienceChapters }   from '@/components/features/home/ExperienceChapters';
+import { SportsBand }            from '@/components/features/home/SportsBand';
+import { Footer }                from '@/components/layout/Footer';
 
 export default function HomePage() {
   return (
     <>
-      <EnhancedHeroSection />
-      <AboutMeSection />
-      <PassionsSection />
-      <EducationSection />
-      <RecentUpdates limit={4} />
-      <CoreStrengthsSection />
-      <TechnicalToolbox />
-      <InteractiveSkillsSection />
-      <ExperienceTimeline />
-      <LookingForward />
-      <ContactSection />
+      <HeroSection />
+      <ProofStrip />
+      <WorkIndex />
+      <ExperienceChapters />
+      <SportsBand />
       <Footer />
     </>
   );

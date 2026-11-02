@@ -1,68 +1,48 @@
-// src/app/layout.tsx
-import { Inter } from 'next/font/google';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { Archivo, IBM_Plex_Mono } from 'next/font/google';
 import { Header } from '@/components/layout/Header';
-import { EnhancedFloatingThemeToggle } from '@/components/layout/EnhancedFloatingThemeToggle';
+import { CommandPalette } from '@/components/ui/CommandPalette';
 import './globals.css';
 
-const inter = Inter({
+const archivo = Archivo({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter'
+  variable: '--font-archivo',
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-ibm-mono',
 });
 
 export const metadata = {
   title: {
-    default: 'Brian H. - Senior UX Designer & Frontend Developer | HLB Design Group',
-    template: '%s | Brian H. - UX Designer & Frontend Developer',
+    default: 'Brian Hall · Full-Stack Engineer & HCI Researcher',
+    template: '%s · Brian Hall',
   },
   icons: {
-    icon: [
-      { url: '/icon.png' }
-    ],
-    apple: [
-      { url: '/apple-icon.png' }
-    ],
+    icon: [{ url: '/icon.png' }],
+    apple: [{ url: '/apple-icon.png' }],
   },
-  description: 'Senior UX Designer and Frontend Developer specializing in LiveView, Phoenix, and Elixir. Creating intuitive interfaces that drive business growth. Chicago-based design professional.',
+  description:
+    'Full-stack engineer with an M.S. in HCI. Fifteen years from contextual inquiry to production Elixir and React. Chicago.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} [scrollbar-gutter:stable]`} suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const theme = localStorage.getItem('theme');
-                  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  const initialTheme = theme || (systemPrefersDark ? 'dark' : 'light');
-                  
-                  if (initialTheme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
-      <body className={`${inter.className} bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-100 antialiased`}>
-        <ThemeProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-grow pt-16">
-              {children}
-            </main>
-            <EnhancedFloatingThemeToggle />
-          </div>
-        </ThemeProvider>
+    <html
+      lang="en"
+      className={`${archivo.variable} ${ibmPlexMono.variable} [scrollbar-gutter:stable]`}
+    >
+      <body className="font-sans antialiased bg-bone-50 text-ink">
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <CommandPalette />
+          <main className="flex-grow pt-[60px]">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

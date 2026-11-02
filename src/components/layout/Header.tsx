@@ -1,39 +1,67 @@
-// src/components/layout/Header.tsx
 'use client';
-import { useState, useEffect } from 'react';
-import { useResponsiveDateTime } from '@/hooks/useResponsiveDateTime';
-import { DropdownMenu } from './DropdownMenu';
+
+import { useState } from 'react';
 import Link from 'next/link';
 
+const navLinks = [
+  { label: 'Work',           href: '/#work' },
+  { label: 'Experience',     href: '/#experience' },
+  { label: 'Writing',        href: '/blog' },
+  { label: 'Chicago Sports', href: '/chicago-sports' },
+];
+
 export function Header() {
-  const { display: currentDateTime } = useResponsiveDateTime();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      {/* Single Header Bar - Only time/date and name */}
-      <header className="fixed w-full bg-white/90 backdrop-blur-sm z-30 border-b border-gray-100 dark:bg-gray-900/90 dark:border-gray-800">
-        <div className="container mx-auto px-6 py-3 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-          <span className="truncate">{currentDateTime}</span>
-          <Link 
-            href="/" 
-            className="font-medium whitespace-nowrap ml-4 hover:text-primary dark:hover:text-primary transition-colors">
-            {isMobile ? 'Brian H.' : 'Brian L. Hall'}
-          </Link>
+    <header className="fixed top-0 inset-x-0 z-40 h-[60px] bg-bone-50/95 backdrop-blur-sm border-b border-black/[0.07]">
+      <div className="col h-full flex items-center justify-between gap-6">
+
+        <Link href="/" onClick={() => setOpen(false)} className="shrink-0 font-sans font-bold text-[15px] tracking-[-0.01em] text-ink hover:opacity-75 transition-opacity">
+          Brian Hall
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden min-[760px]:flex items-center gap-7">
+          {navLinks.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="font-sans text-[13px] font-medium text-ink/70 hover:text-ink transition-colors duration-200"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Mobile hamburger */}
+        <button
+          className="min-[760px]:hidden flex flex-col justify-center gap-[5px] w-8 h-8 shrink-0"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          onClick={() => setOpen(v => !v)}
+        >
+          <span className={`block h-[1.5px] bg-ink transition-all duration-200 origin-center ${open ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
+          <span className={`block h-[1.5px] bg-ink transition-all duration-200 ${open ? 'opacity-0 scale-x-0' : ''}`} />
+          <span className={`block h-[1.5px] bg-ink transition-all duration-200 origin-center ${open ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
+        </button>
+      </div>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="min-[760px]:hidden absolute top-[60px] inset-x-0 bg-bone-50 border-b border-black/[0.07] py-2 shadow-sm">
+          {navLinks.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              className="block px-6 py-3 text-[14px] font-medium text-ink/80 hover:text-ink hover:bg-bone-100 transition-colors"
+            >
+              {label}
+            </Link>
+          ))}
         </div>
-      </header>
-      {/* Dropdown Menu Component */}
-      <DropdownMenu />
-    </>
+      )}
+    </header>
   );
 }

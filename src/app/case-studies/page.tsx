@@ -1,97 +1,58 @@
-'use client';
-
-import { RotatingStats } from '@/components/features/case-studies/RotatingStats';
-import { CaseStudyCard } from '@/components/features/case-studies/CaseStudyCard';
-import { ApproachCard } from '@/components/features/case-studies/ApproachCard';
-import { featuredStudies, allCaseStudies, approachItems } from '@/data/caseStudiesData';
-import { Footer } from '@/components/layout/Footer';
 import Link from 'next/link';
+import { Footer } from '@/components/layout/Footer';
+import { nfiCaseStudyData } from '@/data/nfiCaseStudy';
+import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
+import { chicagoSportsDashboardCaseStudyData } from '@/data/chicagoSportsDashboardCaseStudy';
+
+const studies = [
+  { slug: 'nfi-tms-platform',           data: nfiCaseStudyData },
+  { slug: 'chicago-sports-dashboard',   data: chicagoSportsDashboardCaseStudyData },
+  { slug: 'wine-tasting-app',            data: palateCollectifCaseStudyData },
+];
 
 export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-800 dark:text-white">
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+    <div className="min-h-screen bg-bone-50">
+      <div className="col pt-16 pb-20">
 
+        <p className="font-mono text-[11px] tracking-[0.1em] text-brass uppercase mb-2">Case studies</p>
+        <h1 className="text-[40px] font-extrabold leading-[1.1] tracking-[-0.01em] text-ink mb-3">Work</h1>
+        <p className="text-[17px] text-ink/60 mb-12 max-w-[520px]">
+          Selected projects with outcomes, role, and decisions documented.
+        </p>
 
-
-      <div className="max-w-6xl mx-auto px-6 py-16">
-        {/* Hero Section */}
-        <section className="mb-16">
-          <h1 className="text-5xl font-bold mb-4">Case Studies</h1>
-          <p className="text-xl text-gray-900 dark:text-slate-400 max-w-3xl">
-            Deep dives into real projects where design meets measurable business impact. 
-            Each case study explores the challenges, process, and quantifiable results.
-          </p>
-        </section>
-
-        {/* Rotating Stats */}
-        <RotatingStats />
-
-        {/* Featured Case Studies */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold mb-6">Featured Case Studies</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredStudies.map(study => (
-              <CaseStudyCard key={study.id} study={study} featured />
-            ))}
-          </div>
-        </section>
-
-        {/* All Case Studies */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold mb-6">All Case Studies</h2>
-          <div className="grid grid-cols-1 gap-6">
-            {allCaseStudies.map(study => (
-              <CaseStudyCard key={study.id} study={study} />
-            ))}
-          </div>
-        </section>
-
-        {/* My Case Study Approach */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold mb-8 text-center">My Case Study Approach</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {approachItems.map((item, idx) => (
-              <ApproachCard key={idx} item={item} />
-            ))}
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="bg-gray-100 dark:bg-slate-800/30 rounded-2xl p-12 text-center border border-gray-200 dark:border-slate-700">
-          <h2 className="text-3xl font-bold mb-4">Want to discuss a project?</h2>
-          <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-            I'm always open to discussing new projects, creative collaborations, or opportunities to be part of something meaningful. Feel free to reach out if you'd like to discuss how my skills and experience could benefit your team or project.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link 
-              href="mailto:brian.HLBDG@outlook.com?subject=Start a Conversation"
-              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-gray-800 dark:text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <span>💬</span>
-              Start a Conversation
-            </Link>
+        <div className="border-t-[1.5px] border-ink">
+          {studies.map(({ slug, data }, idx) => (
             <Link
-              href="/experience"
-              className="px-6 py-3 bg-gray-50 dark:bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white rounded-lg font-semibold transition-colors inline-block text-center"
+              key={slug}
+              href={`/case-studies/${slug}`}
+              className="group flex items-start gap-6 py-6 border-b border-black/10 hover:bg-bone-100 transition-colors duration-150 -mx-4 px-4 rounded-[2px]"
             >
-              View Professional Experience
+              <span className="font-mono text-[12px] text-ink/35 w-6 shrink-0 pt-1">
+                {String(idx + 1).padStart(2, '0')}
+              </span>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-[20px] font-bold text-ink leading-snug mb-1 group-hover:text-brass transition-colors duration-150">
+                  {data.hero.title}
+                </h2>
+                <p className="text-[14px] text-ink/55 mb-3 line-clamp-2">{data.tldr.scope}</p>
+                <div className="flex flex-wrap gap-2">
+                  {data.hero.technologies.slice(0, 4).map(t => (
+                    <span key={t} className="font-mono text-[11px] text-ink/40 border border-ink/15 px-2 py-0.5 rounded-[2px]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="shrink-0 text-right hidden sm:block">
+                <div className="font-mono text-[11px] text-brass uppercase">{data.hero.client}</div>
+                <div className="font-mono text-[11px] text-ink/35 mt-0.5">{data.hero.timeline}</div>
+              </div>
             </Link>
-          </div>
-        </section>
-      </div>
+          ))}
+        </div>
 
+      </div>
       <Footer />
     </div>
   );
