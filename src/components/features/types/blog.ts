@@ -10,6 +10,7 @@ export interface BlogPost {
   date: string; // ISO date string
   readTime: string;
   featured?: boolean;
+  popular?: boolean;
 }
 
 export type BlogCategory = 

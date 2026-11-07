@@ -39,7 +39,8 @@ export const allPosts: BlogPost[] = [
     tags: ['Component Library', 'Scalability'],
     image: '/images/blog/design-system.jpg',
     date: '2025-04-15',
-    readTime: '12 min read'
+    readTime: '12 min read',
+    popular: true,
   },
   {
     id: '4',

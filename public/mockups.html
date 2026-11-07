@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Mockups — Blog & Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone-50: oklch(0.98 0.006 75);
+    --bone-100: oklch(0.955 0.008 75);
+    --ink: oklch(0.22 0.02 260);
+    --ink-950: oklch(0.15 0.035 255);
+    --brass: oklch(0.62 0.115 78);
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Archivo', system-ui, sans-serif; background: #111; color: var(--ink); }
+
+  /* NAV */
+  .page-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #111; border-bottom: 1px solid #333;
+    display: flex; gap: 0; overflow-x: auto;
+  }
+  .page-nav a {
+    padding: 12px 24px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: #888; text-decoration: none; white-space: nowrap;
+    border-bottom: 2px solid transparent; transition: all 200ms;
+  }
+  .page-nav a:hover, .page-nav a.active { color: #fff; border-bottom-color: oklch(0.62 0.115 78); }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* SHARED CHROME */
+  .header {
+    position: sticky; top: 42px; z-index: 50;
+    height: 60px; background: color-mix(in oklch, var(--bone-50) 95%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid color-mix(in oklch, var(--ink) 7%, transparent);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; max-width: 100%;
+  }
+  .header-name { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; color: var(--ink); }
+  .header-nav { display: flex; gap: 28px; }
+  .header-nav a { font-size: 13px; font-weight: 500; color: color-mix(in oklch, var(--ink) 70%, transparent); text-decoration: none; }
+  .col { max-width: 1040px; margin-inline: auto; padding-inline: 32px; }
+
+  /* ===== BLOG PAGE ===== */
+  .blog-page { background: var(--bone-50); min-height: 100vh; }
+
+  .blog-heading { padding: 48px 32px 0; max-width: 1040px; margin: 0 auto; }
+  .blog-heading .eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; color: var(--brass); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .blog-heading h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 32px; }
+
+  /* Editorial opener */
+  .editorial-card {
+    background: var(--bone-50); border: 1.5px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    border-radius: 3px; padding: 48px 56px; margin: 0 32px 40px;
+    max-width: 1040px; margin-inline: auto; margin-bottom: 40px; position: relative; overflow: hidden;
+  }
+  .editorial-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--brass);
+  }
+  .editorial-card .track-chip {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    color: var(--brass); text-transform: uppercase; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .editorial-card .track-chip span { color: color-mix(in oklch, var(--ink) 40%, transparent); }
+  .editorial-card h2 {
+    font-size: clamp(40px, 5.5vw, 72px); font-weight: 900; line-height: 1.0;
+    letter-spacing: -0.025em; color: var(--ink); margin-bottom: 20px; max-width: 700px;
+  }
+  .editorial-card p {
+    font-size: 17px; line-height: 1.65; color: color-mix(in oklch, var(--ink) 60%, transparent);
+    max-width: 540px; margin-bottom: 28px;
+  }
+  .editorial-card .read-link {
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--brass); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  /* Track filters */
+  .track-filters { max-width: 1040px; margin: 0 auto; padding: 0 32px 24px; display: flex; gap: 8px; }
+  .track-btn {
+    padding: 6px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; border-radius: 2px;
+    border: 1px solid color-mix(in oklch, var(--ink) 20%, transparent);
+    background: transparent; color: color-mix(in oklch, var(--ink) 60%, transparent); cursor: pointer;
+  }
+  .track-btn.active { background: var(--ink); color: var(--bone-50); border-color: var(--ink); }
+
+  /* Post list with ghost years */
+  .post-list { max-width: 1040px; margin: 0 auto; padding: 0 32px; border-top: 1.5px solid var(--ink); }
+
+  .year-group { position: relative; }
+  .ghost-year {
+    position: absolute; left: -8px; top: -24px;
+    font-size: 120px; font-weight: 900; letter-spacing: -0.04em;
+    color: color-mix(in oklch, var(--ink) 6%, transparent); line-height: 1;
+    pointer-events: none; select: none; z-index: 0;
+  }
+  .post-row {
+    display: flex; align-items: baseline; gap: 16px; padding: 16px 0;
+    border-bottom: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);
+    text-decoration: none; position: relative; z-index: 1;
+    transition: transform 200ms var(--ease);
+  }
+  .post-row:hover { transform: translateX(8px); }
+  .post-date {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: color-mix(in oklch, var(--ink) 35%, transparent); width: 48px; shrink: 0; flex-shrink: 0;
+  }
+  .post-date.read { color: var(--brass); }
+  .post-title { flex: 1; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .post-meta {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: color-mix(in oklch, var(--ink) 35%, transparent); flex-shrink: 0;
+  }
+  .post-row.in-progress { border-left: 3px solid var(--brass); padding-left: 12px; margin-left: -15px; }
+  .post-row.in-progress .post-meta { color: var(--brass); }
+
+  /* ===== CASE STUDY PAGE ===== */
+  .cs-page { background: var(--bone-50); min-height: 100vh; }
+
+  /* Reading progress */
+  .reading-progress {
+    position: sticky; top: 102px; z-index: 40; height: 3px;
+    background: color-mix(in oklch, var(--ink) 8%, transparent);
+  }
+  .reading-progress-fill {
+    height: 100%; background: var(--brass); width: 38%; transition: width 100ms linear;
+  }
+
+  /* Stage rail */
+  .stage-rail {
+    position: sticky; top: 105px; z-index: 39;
+    background: var(--bone-50); border-bottom: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);
+    display: flex; align-items: flex-start; padding: 14px 32px 12px;
+  }
+  .stage-track {
+    max-width: 1040px; margin: 0 auto; width: 100%;
+    display: flex; align-items: flex-start; gap: 0;
+  }
+  .stage-item {
+    display: flex; align-items: center; gap: 0; flex: 1;
+  }
+  .stage-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+    background: color-mix(in oklch, var(--ink) 20%, transparent);
+    border: 1.5px solid color-mix(in oklch, var(--ink) 20%, transparent);
+    position: relative; z-index: 2;
+  }
+  .stage-dot.done { background: var(--brass); border-color: var(--brass); }
+  .stage-dot.active { background: var(--brass); border-color: var(--brass); box-shadow: 0 0 0 3px color-mix(in oklch, var(--brass) 25%, transparent); }
+  .stage-line { flex: 1; height: 1.5px; background: color-mix(in oklch, var(--ink) 15%, transparent); margin-top: 7px; }
+  .stage-line.done { background: var(--brass); }
+  .stage-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    color: color-mix(in oklch, var(--ink) 35%, transparent); text-transform: uppercase;
+    white-space: nowrap; display: block; margin-top: 8px;
+  }
+  .stage-label.active { color: var(--ink); font-weight: 700; }
+  .stage-label.done { color: var(--brass); }
+  .stage-dot-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+
+  /* CS Hero */
+  .cs-hero { padding: 48px 32px 40px; max-width: 1040px; margin: 0 auto; }
+  .cs-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    color: var(--brass); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .cs-hero h1 {
+    font-size: clamp(32px, 4vw, 52px); font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em; color: var(--ink); margin-bottom: 24px; max-width: 700px;
+  }
+  .cs-stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+  .cs-stat {
+    background: var(--bone-100); border: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);
+    border-radius: 3px; padding: 16px 20px; min-width: 120px;
+  }
+  .cs-stat .num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 28px; font-weight: 700;
+    color: var(--brass); line-height: 1;
+  }
+  .cs-stat .lbl { font-size: 12px; color: color-mix(in oklch, var(--ink) 55%, transparent); margin-top: 4px; }
+  .role-strip {
+    display: flex; gap: 24px; padding: 16px 0; border-top: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    border-bottom: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+  }
+  .role-item { font-size: 13px; }
+  .role-item .role-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    color: color-mix(in oklch, var(--ink) 40%, transparent); text-transform: uppercase; margin-bottom: 2px;
+  }
+  .role-item .role-val { font-weight: 600; color: var(--ink); }
+
+  /* Annotated screenshot */
+  .cs-section { padding: 40px 32px; max-width: 1040px; margin: 0 auto; }
+  .cs-section h2 { font-size: 26px; font-weight: 800; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.01em; }
+  .cs-section .section-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    color: var(--brass); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .cs-section p { font-size: 16px; line-height: 1.7; color: color-mix(in oklch, var(--ink) 65%, transparent); margin-bottom: 24px; max-width: 640px; }
+
+  .annotated-frame {
+    position: relative; border-radius: 4px; overflow: hidden;
+    border: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    background: color-mix(in oklch, var(--ink) 4%, transparent);
+    aspect-ratio: 16/9; margin-bottom: 16px;
+  }
+  .screenshot-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, color-mix(in oklch, var(--ink) 6%, transparent), color-mix(in oklch, var(--ink) 10%, transparent));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .screenshot-placeholder .mock-ui {
+    width: 90%; height: 80%;
+    display: grid; grid-template-columns: 220px 1fr; gap: 16px; padding: 16px;
+  }
+  .mock-sidebar { background: white; border-radius: 3px; opacity: 0.8; }
+  .mock-main { background: white; border-radius: 3px; opacity: 0.6; }
+
+  .annot-dot {
+    position: absolute; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--brass); color: white;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 200ms, box-shadow 200ms;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .annot-dot:hover { transform: scale(1.15); box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+  .annot-dot.pulsing { animation: pulse 2s ease-in-out 1; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 0 8px color-mix(in oklch, var(--brass) 25%, transparent), 0 2px 8px rgba(0,0,0,0.3); }
+  }
+
+  .annot-callout {
+    position: absolute; background: var(--bone-50);
+    border: 1.5px solid var(--brass); border-radius: 3px;
+    padding: 12px 14px; width: 220px; z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    opacity: 0; pointer-events: none; transition: opacity 200ms, transform 200ms var(--ease);
+    transform: translateY(4px);
+  }
+  .annot-callout.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .annot-callout .callout-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700;
+    color: white; background: var(--brass); border-radius: 2px;
+    padding: 1px 5px; display: inline-block; margin-bottom: 6px;
+  }
+  .annot-callout .callout-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .annot-callout .callout-body { font-size: 11px; line-height: 1.55; color: color-mix(in oklch, var(--ink) 60%, transparent); }
+
+  /* Decision forks */
+  .decision-cards { display: flex; flex-direction: column; gap: 12px; }
+  .decision-card {
+    border: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    border-radius: 3px; overflow: hidden;
+  }
+  .decision-header {
+    padding: 14px 18px; background: color-mix(in oklch, var(--ink) 2%, transparent);
+    display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+    transition: background 150ms;
+  }
+  .decision-header:hover { background: color-mix(in oklch, var(--ink) 4%, transparent); }
+  .decision-header-left { display: flex; align-items: center; gap: 10px; }
+  .decision-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+    color: color-mix(in oklch, var(--ink) 35%, transparent); flex-shrink: 0;
+  }
+  .decision-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .decision-toggle {
+    font-size: 18px; color: color-mix(in oklch, var(--ink) 35%, transparent);
+    transition: transform 200ms;
+  }
+  .decision-toggle.open { transform: rotate(45deg); }
+  .decision-body { display: none; padding: 0 18px 18px; }
+  .decision-body.open { display: block; }
+  .fork-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; margin-bottom: 14px; }
+  .fork-card {
+    border: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    border-radius: 3px; padding: 14px;
+  }
+  .fork-card.chosen { border-color: var(--brass); }
+  .fork-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+  }
+  .fork-label .x { color: color-mix(in oklch, var(--ink) 35%, transparent); }
+  .fork-label .check { color: var(--brass); }
+  .fork-card-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .fork-card-body { font-size: 12px; line-height: 1.55; color: color-mix(in oklch, var(--ink) 55%, transparent); }
+  .decision-why {
+    border-left: 3px solid var(--brass); padding-left: 12px; margin-top: 2px;
+  }
+  .decision-why .why-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    color: var(--brass); text-transform: uppercase; margin-bottom: 3px;
+  }
+  .decision-why p { font-size: 13px; line-height: 1.55; color: color-mix(in oklch, var(--ink) 60%, transparent); }
+
+  /* Counting metrics */
+  .metric-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 32px 0; }
+  .metric-card {
+    background: var(--ink-950); border-radius: 3px; padding: 24px 28px; min-width: 160px;
+  }
+  .metric-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 44px; font-weight: 700;
+    color: var(--brass); line-height: 1; display: block;
+  }
+  .metric-lbl { font-size: 13px; color: color-mix(in oklch, white 55%, transparent); margin-top: 6px; }
+
+  /* Section divider */
+  .section-divider {
+    max-width: 1040px; margin: 0 auto; padding: 0 32px;
+    border-top: 1.5px solid color-mix(in oklch, var(--ink) 10%, transparent); margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="page-nav">
+  <a href="#" class="active" onclick="show('blog', this)">Blog index</a>
+  <a href="#" onclick="show('post', this)">Blog post (reading view)</a>
+  <a href="#" onclick="show('cs', this)">Case study page</a>
+</nav>
+
+<!-- ===== BLOG SCREEN ===== -->
+<div class="screen active" id="screen-blog">
+  <div class="blog-page">
+
+    <div class="header">
+      <span class="header-name">Brian Hall</span>
+      <nav class="header-nav">
+        <a href="#">Work</a>
+        <a href="#">Experience</a>
+        <a href="#">Writing</a>
+        <a href="#">Chicago Sports</a>
+      </nav>
+    </div>
+
+    <!-- Page heading -->
+    <div class="col" style="padding-top: 48px; padding-bottom: 32px;">
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--brass); text-transform: uppercase; margin-bottom: 6px;">Writing</p>
+      <h1 style="font-size: 40px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink);">Essays & notes.</h1>
+    </div>
+
+    <!-- Three-card featured block -->
+    <div class="col" style="padding-bottom: 48px;">
+      <div style="display: grid; grid-template-columns: 1fr 340px; grid-template-rows: auto auto; gap: 12px;">
+
+        <!-- Main featured card — spans both rows on left -->
+        <a href="#" style="text-decoration:none; grid-row: 1 / 3; background: var(--ink); border-radius: 3px; padding: 40px 44px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 320px; position: relative; overflow: hidden;">
+          <!-- ghost C watermark -->
+          <div style="position:absolute; right:-20px; top:50%; transform:translateY(-50%); font-size:280px; font-weight:900; color:white; opacity:0.04; line-height:1; pointer-events:none; letter-spacing:-0.05em;">B</div>
+          <div style="position: relative; z-index: 1;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom: 20px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.12em; color: oklch(0.72 0.11 80); text-transform:uppercase; background: color-mix(in oklch, oklch(0.72 0.11 80) 15%, transparent); padding: 3px 8px; border-radius:2px;">Featured</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:color-mix(in oklch,white 40%,transparent);">Craft · 12 min</span>
+            </div>
+            <h2 style="font-size: clamp(24px, 3vw, 36px); font-weight:900; line-height:1.1; letter-spacing:-0.02em; color:white; margin-bottom:14px;">Design systems don't scale — teams do.</h2>
+            <p style="font-size:15px; line-height:1.6; color:color-mix(in oklch,white 55%,transparent); margin-bottom:24px; max-width:480px;">After seven years building component libraries at two companies, the bottleneck was never the tokens.</p>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color: oklch(0.72 0.11 80);">Read essay →</span>
+          </div>
+        </a>
+
+        <!-- Newest card — top right -->
+        <a href="#" style="text-decoration:none; background: var(--bone-100); border: 1px solid color-mix(in oklch, var(--ink) 8%, transparent); border-radius: 3px; padding: 24px 28px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em; color:var(--brass); text-transform:uppercase;">New</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:color-mix(in oklch,var(--ink) 35%,transparent);">Chicago & life · 11 min</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:800; line-height:1.2; letter-spacing:-0.01em; color:var(--ink); margin-bottom:8px;">Growing up on 104th and Parnell</h3>
+            <p style="font-size:13px; line-height:1.6; color:color-mix(in oklch,var(--ink) 55%,transparent);">What a South Side block in the nineties taught me about systems thinking before I had a name for it.</p>
+          </div>
+          <div style="margin-top:16px; display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:color-mix(in oklch,var(--ink) 35%,transparent);">Nov 2024</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--brass);">Read →</span>
+          </div>
+        </a>
+
+        <!-- Most popular card — bottom right -->
+        <a href="#" style="text-decoration:none; background: var(--bone-100); border: 1px solid color-mix(in oklch, var(--ink) 8%, transparent); border-radius: 3px; padding: 24px 28px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em; color:var(--ink); text-transform:uppercase; opacity:0.4;">↑ Popular</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:color-mix(in oklch,var(--ink) 35%,transparent);">Craft · 9 min</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:800; line-height:1.2; letter-spacing:-0.01em; color:var(--ink); margin-bottom:8px;">Elixir for designers</h3>
+            <p style="font-size:13px; line-height:1.6; color:color-mix(in oklch,var(--ink) 55%,transparent);">You don't need to write production code. But understanding how functional patterns shape UI changes how you design.</p>
+          </div>
+          <div style="margin-top:16px; display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:color-mix(in oklch,var(--ink) 35%,transparent);">Dec 2023</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--brass);">Read →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Track filters -->
+    <div class="col" style="padding-top: 0; padding-bottom: 0; border-top: 1.5px solid var(--ink);">
+      <div style="display: flex; gap: 8px; padding: 16px 0;">
+        <button class="track-btn active">All</button>
+        <button class="track-btn">Craft</button>
+        <button class="track-btn">Chicago & life</button>
+      </div>
+    </div>
+
+    <!-- Post list with ghost years -->
+    <div class="col">
+      <div class="post-list" style="padding: 0; border-top: none;">
+        <div class="year-group" style="padding-top: 48px;">
+          <div class="ghost-year">2024</div>
+          <a class="post-row" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date">Nov</span>
+            <span class="post-title">On Tailwind and trust in a team</span>
+            <span class="post-meta">8 min</span>
+          </a>
+          <a class="post-row in-progress" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date">Oct</span>
+            <span class="post-title">Growing up on 104th and Parnell</span>
+            <span class="post-meta" style="color: var(--brass);">↩ Continue</span>
+          </a>
+          <a class="post-row" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date">Aug</span>
+            <span class="post-title">The case against the perfect component</span>
+            <span class="post-meta">6 min</span>
+          </a>
+        </div>
+        <div class="year-group" style="padding-top: 60px;">
+          <div class="ghost-year">2023</div>
+          <a class="post-row" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date read">Dec ✓</span>
+            <span class="post-title">Elixir for designers</span>
+            <span class="post-meta">9 min</span>
+          </a>
+          <a class="post-row" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date read">Sep ✓</span>
+            <span class="post-title">UX principles in complex systems</span>
+            <span class="post-meta">11 min</span>
+          </a>
+          <a class="post-row" href="#" style="color:inherit; text-decoration:none;">
+            <span class="post-date">Mar</span>
+            <span class="post-title">Accessibility basics that most teams skip</span>
+            <span class="post-meta">7 min</span>
+          </a>
+        </div>
+      </div>
+      <div style="padding: 32px 0 48px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 35%, transparent);">6 of 12 posts</span>
+        <a href="#" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--brass); text-decoration: none;">RSS →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== BLOG POST SCREEN ===== -->
+<div class="screen" id="screen-post">
+  <div class="blog-page">
+
+    <div class="header">
+      <span class="header-name">Brian Hall</span>
+      <nav class="header-nav">
+        <a href="#">Work</a>
+        <a href="#">Experience</a>
+        <a href="#">Writing</a>
+        <a href="#">Chicago Sports</a>
+      </nav>
+    </div>
+
+    <!-- Reading progress bar -->
+    <div class="reading-progress" style="top: 102px;">
+      <div class="reading-progress-fill" style="width: 55%;"></div>
+    </div>
+
+    <!-- Post hero -->
+    <div style="max-width: 1040px; margin: 0 auto; padding: 56px 32px 48px;">
+
+      <!-- Track + meta -->
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--brass); text-transform: uppercase; background: color-mix(in oklch, var(--brass) 10%, transparent); padding: 3px 8px; border-radius: 2px;">Craft</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 35%, transparent);">November 2024</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 35%, transparent);">·</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 35%, transparent);">12 min read</span>
+      </div>
+
+      <!-- Title -->
+      <h1 style="font-size: clamp(36px, 5vw, 60px); font-weight: 900; line-height: 1.08; letter-spacing: -0.025em; color: var(--ink); max-width: 760px; margin-bottom: 24px;">
+        Design systems don't scale — teams do.
+      </h1>
+
+      <!-- Dek -->
+      <p style="font-size: 20px; line-height: 1.6; color: color-mix(in oklch, var(--ink) 60%, transparent); max-width: 640px; font-weight: 400; margin-bottom: 40px;">
+        After seven years building component libraries at two companies, the bottleneck was never the tokens. It was the conversation about when to extend them.
+      </p>
+
+      <!-- Author row -->
+      <div style="display: flex; align-items: center; gap: 12px; padding: 20px 0; border-top: 1px solid color-mix(in oklch, var(--ink) 8%, transparent); border-bottom: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; color: var(--bone-50); font-size: 13px; font-weight: 700; flex-shrink: 0;">BH</div>
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--ink);">Brian Hall</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 40%, transparent);">Senior Software Engineer · M.S. HCI</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article body in a narrower reading column -->
+    <div style="max-width: 680px; margin: 0 auto; padding: 0 32px 80px;">
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        When I joined NFI in 2017 we had no design system. By 2021 we had a component library in Phoenix LiveView and Tailwind with 80+ components, documentation, and a Figma kit. That's the story you'd tell at a conference. Here's the other story.
+      </p>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        The tokens were never the problem. The spacing scale was fine. The color ramp was fine. What we kept running into was a question that no design system documentation ever answers: <em>is this a new pattern, or is this an existing pattern pushed into an edge case?</em>
+      </p>
+
+      <!-- Pull quote -->
+      <blockquote style="margin: 40px 0; padding: 28px 32px; border-left: 3px solid var(--brass); background: color-mix(in oklch, var(--brass) 5%, var(--bone-50));">
+        <p style="font-size: 22px; font-weight: 700; line-height: 1.4; color: var(--ink); letter-spacing: -0.01em; margin: 0;">
+          "The question isn't whether your tokens are right. It's whether your team can agree on what 'right' means fast enough to ship."
+        </p>
+      </blockquote>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        The engineers I worked with were excellent. They cared about consistency. But when a new screen landed in the backlog, the conversation that needed to happen — does this new table variant belong in the system or is it a one-off? — was taking 30–40 minutes per ticket. Multiply that across a two-week sprint and you've lost a day of velocity to design governance.
+      </p>
+
+      <!-- Section heading -->
+      <h2 style="font-size: 28px; font-weight: 800; letter-spacing: -0.015em; color: var(--ink); margin: 48px 0 16px; line-height: 1.2;">The pattern that actually fixed it</h2>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        We introduced what I called a "30-second rule." Before any new component got added to the library, the proposing engineer had to answer three questions out loud in standup:
+      </p>
+
+      <!-- Styled list -->
+      <ol style="margin: 0 0 32px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <li style="font-size: 17px; line-height: 1.65; color: color-mix(in oklch, var(--ink) 75%, transparent); padding-left: 8px;">Where does this component appear in the product today, and where will it appear in the next quarter?</li>
+        <li style="font-size: 17px; line-height: 1.65; color: color-mix(in oklch, var(--ink) 75%, transparent); padding-left: 8px;">Which existing component is closest, and what specifically makes it wrong for this use?</li>
+        <li style="font-size: 17px; line-height: 1.65; color: color-mix(in oklch, var(--ink) 75%, transparent); padding-left: 8px;">If we add this, what do we deprecate or what constraint do we add to prevent misuse?</li>
+      </ol>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        It sounds obvious. It wasn't. Most teams I'd seen treat the design system like a Lego bin — add pieces freely, never remove them. The discipline of answering those three questions shifted the conversation from "can we add this" to "should we add this." That's the entire game.
+      </p>
+
+      <!-- Callout / aside -->
+      <div style="margin: 40px 0; padding: 20px 24px; background: var(--bone-100); border-radius: 3px; border: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);">
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); margin-bottom: 8px;">Note</p>
+        <p style="font-size: 15px; line-height: 1.65; color: color-mix(in oklch, var(--ink) 70%, transparent); margin: 0;">This only works if the system has a steward — someone who owns the "no." Without that, the three questions become a formality and the library bloats anyway. At NFI that was me for two years, then a rotating responsibility across senior engineers.</p>
+      </div>
+
+      <h2 style="font-size: 28px; font-weight: 800; letter-spacing: -0.015em; color: var(--ink); margin: 48px 0 16px; line-height: 1.2;">What I'd do differently</h2>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 24px;">
+        I'd document the decisions, not just the components. Every component in our library had props documentation. Almost none had a record of what we decided <em>not</em> to build and why. When engineers left and new ones joined, that institutional memory walked out the door with them.
+      </p>
+
+      <p style="font-size: 18px; line-height: 1.75; color: color-mix(in oklch, var(--ink) 80%, transparent); margin-bottom: 48px;">
+        A design system is a set of bets. Document the bets. Future-you will want to know if the bet paid off.
+      </p>
+
+      <!-- Tags -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; padding: 32px 0; border-top: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 50%, transparent); border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent); border-radius: 2px; padding: 4px 10px;">design-systems</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 50%, transparent); border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent); border-radius: 2px; padding: 4px 10px;">frontend</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: color-mix(in oklch, var(--ink) 50%, transparent); border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent); border-radius: 2px; padding: 4px 10px;">craft</span>
+      </div>
+
+      <!-- Next post -->
+      <div style="margin-top: 48px; padding: 28px 32px; background: var(--bone-100); border-radius: 3px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+        <div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in oklch, var(--ink) 40%, transparent); margin-bottom: 6px;">Next essay</p>
+          <p style="font-size: 16px; font-weight: 700; color: var(--ink);">Growing up on 104th and Parnell</p>
+        </div>
+        <a href="#" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--brass); text-decoration: none; white-space: nowrap;">Read →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== CASE STUDY SCREEN ===== -->
+<div class="screen" id="screen-cs">
+  <div class="cs-page">
+
+    <div class="header">
+      <span class="header-name">Brian Hall</span>
+      <nav class="header-nav">
+        <a href="#">Work</a>
+        <a href="#">Experience</a>
+        <a href="#">Writing</a>
+        <a href="#">Chicago Sports</a>
+      </nav>
+    </div>
+
+    <!-- Reading progress -->
+    <div class="reading-progress">
+      <div class="reading-progress-fill"></div>
+    </div>
+
+    <!-- Stage rail -->
+    <div class="stage-rail">
+      <div class="stage-track">
+        <div class="stage-item">
+          <div class="stage-dot-wrap">
+            <div class="stage-dot done"></div>
+            <span class="stage-label done">Research</span>
+          </div>
+          <div class="stage-line done"></div>
+        </div>
+        <div class="stage-item">
+          <div class="stage-dot-wrap">
+            <div class="stage-dot done"></div>
+            <span class="stage-label done">Define</span>
+          </div>
+          <div class="stage-line done"></div>
+        </div>
+        <div class="stage-item">
+          <div class="stage-dot-wrap">
+            <div class="stage-dot active"></div>
+            <span class="stage-label active">Design</span>
+          </div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-dot-wrap">
+          <div class="stage-dot"></div>
+          <span class="stage-label">Outcome</span>
+        </div>
+      </div>
+    </div>
+    <div style="height: 1px;"></div>
+
+    <!-- Hero -->
+    <div class="cs-hero">
+      <p class="cs-eyebrow">UX Design Case Study · NFI Industries · 2023</p>
+      <h1>Transportation Management System redesign</h1>
+      <div class="cs-stat-row">
+        <div class="cs-stat">
+          <div class="num counting" data-target="50">0</div>
+          <div class="lbl">% less workload</div>
+        </div>
+        <div class="cs-stat">
+          <div class="num counting" data-target="2">0</div>
+          <div class="lbl">years of research</div>
+        </div>
+        <div class="cs-stat">
+          <div class="num">120+</div>
+          <div class="lbl">coordinators impacted</div>
+        </div>
+      </div>
+      <div class="role-strip">
+        <div class="role-item"><div class="role-label">Role</div><div class="role-val">UX Lead</div></div>
+        <div class="role-item"><div class="role-label">Client</div><div class="role-val">NFI Industries</div></div>
+        <div class="role-item"><div class="role-label">Year</div><div class="role-val">2021–2023</div></div>
+        <div class="role-item"><div class="role-label">Collaborators</div><div class="role-val">3 dev, 1 PM</div></div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Annotated screenshot section -->
+    <div class="cs-section">
+      <p class="section-eyebrow">02 — Design</p>
+      <h2>Exception handling flow</h2>
+      <p>Coordinators were losing 40% of their time to exception triage. Hover the numbered markers to see the reasoning behind each UI decision.</p>
+
+      <div class="annotated-frame">
+        <div class="screenshot-placeholder">
+          <div class="mock-ui">
+            <div class="mock-sidebar" style="display:flex; flex-direction:column; gap:8px; padding:12px;">
+              <div style="height:12px; background:var(--bone-100); border-radius:2px;"></div>
+              <div style="height:8px; background:var(--bone-100); border-radius:2px; width:70%;"></div>
+              <div style="height:8px; background:var(--bone-100); border-radius:2px; width:85%;"></div>
+              <div style="height:8px; background:var(--bone-100); border-radius:2px; width:60%;"></div>
+              <div style="margin-top:8px; height:36px; background:color-mix(in oklch, var(--brass) 20%, white); border-radius:2px; border: 1px solid var(--brass);"></div>
+            </div>
+            <div class="mock-main" style="display:flex; flex-direction:column; gap:8px; padding:12px;">
+              <div style="height:32px; background:var(--bone-100); border-radius:2px; display:flex; align-items:center; padding:0 10px; gap:8px;">
+                <div style="height:10px; width:60px; background:color-mix(in oklch, var(--brass) 40%, white); border-radius:2px;"></div>
+                <div style="height:10px; width:40px; background:var(--bone-50); border-radius:2px;"></div>
+                <div style="height:10px; width:50px; background:var(--bone-50); border-radius:2px;"></div>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                <div style="height:40px; background:var(--bone-100); border-radius:2px; border-left: 3px solid var(--brass);"></div>
+                <div style="height:40px; background:var(--bone-100); border-radius:2px;"></div>
+                <div style="height:40px; background:var(--bone-100); border-radius:2px;"></div>
+                <div style="height:40px; background:var(--bone-100); border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annotation dots -->
+        <div class="annot-dot pulsing" style="top: 22%; left: 24%;" onmouseenter="showCallout(1)" onmouseleave="hideCallout(1)">1</div>
+        <div class="annot-callout" id="callout-1" style="top: 10%; left: 30%;">
+          <span class="callout-num">1</span>
+          <div class="callout-title">Left nav collapsed by default</div>
+          <div class="callout-body">Eye-tracking sessions showed no one used the sidebar after initial orientation. Collapsing it reclaimed 220px for the work surface.</div>
+        </div>
+
+        <div class="annot-dot pulsing" style="top: 18%; left: 55%;" onmouseenter="showCallout(2)" onmouseleave="hideCallout(2)">2</div>
+        <div class="annot-callout" id="callout-2" style="top: 6%; left: 42%;">
+          <span class="callout-num">2</span>
+          <div class="callout-title">Filter bar moved to top</div>
+          <div class="callout-body">Coordinators scan left → right. The old sidebar filter required an extra click. Top placement cut ~3 clicks per exception.</div>
+        </div>
+
+        <div class="annot-dot pulsing" style="top: 55%; left: 38%;" onmouseenter="showCallout(3)" onmouseleave="hideCallout(3)">3</div>
+        <div class="annot-callout" id="callout-3" style="top: 42%; left: 44%;">
+          <span class="callout-num">3</span>
+          <div class="callout-title">Priority exception pinned</div>
+          <div class="callout-body">The highest-priority exception is always first with a brass left-border. Users no longer scan the full list to triage.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Counting metrics -->
+    <div style="background: var(--ink-950); padding: 48px 0; margin: 0;">
+      <div class="col">
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: color-mix(in oklch, white 40%, transparent); text-transform: uppercase; margin-bottom: 24px;">04 — Outcome</p>
+        <h2 style="font-size: 26px; font-weight: 800; color: white; margin-bottom: 32px; letter-spacing: -0.01em;">Results after 90-day rollout</h2>
+        <div class="metric-row">
+          <div class="metric-card">
+            <span class="metric-num counting-dark" data-target="50">0</span>
+            <div class="metric-lbl">% less end-user workload</div>
+          </div>
+          <div class="metric-card">
+            <span class="metric-num counting-dark" data-target="120">0</span>
+            <div class="metric-lbl">coordinators affected</div>
+          </div>
+          <div class="metric-card">
+            <span class="metric-num counting-dark" data-target="3">0</span>
+            <div class="metric-lbl">fewer clicks per exception</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision forks -->
+    <div class="cs-section">
+      <p class="section-eyebrow">Design decisions</p>
+      <h2>Key choices & what we ruled out</h2>
+      <p style="margin-bottom: 28px;">Each decision came from research, not preference. Click any card to see what we considered.</p>
+
+      <div class="decision-cards">
+        <div class="decision-card">
+          <div class="decision-header" onclick="toggleDecision(this)">
+            <div class="decision-header-left">
+              <span class="decision-num">01</span>
+              <span class="decision-title">Exception filter placement</span>
+            </div>
+            <span class="decision-toggle open">+</span>
+          </div>
+          <div class="decision-body open">
+            <div class="fork-grid">
+              <div class="fork-card">
+                <div class="fork-label"><span class="x">✕</span> Ruled out</div>
+                <div class="fork-card-title">Sidebar panel</div>
+                <div class="fork-card-body">Filter lived in a right-hand drawer. Required an extra click to open. 11 of 12 participants in usability testing didn't find it on first try.</div>
+              </div>
+              <div class="fork-card chosen">
+                <div class="fork-label"><span class="check">✓</span> Chosen</div>
+                <div class="fork-card-title">Top filter bar</div>
+                <div class="fork-card-body">Persistent, always visible. Matches the left-to-right scan pattern observed in contextual inquiry. Cut ~3 clicks per exception workflow.</div>
+              </div>
+            </div>
+            <div class="decision-why">
+              <div class="why-label">Why</div>
+              <p>Contextual inquiry revealed coordinators spend 40% of exception time just locating the right filter. Proximity to the list is what mattered.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="decision-card">
+          <div class="decision-header" onclick="toggleDecision(this)">
+            <div class="decision-header-left">
+              <span class="decision-num">02</span>
+              <span class="decision-title">Priority exception surfacing</span>
+            </div>
+            <span class="decision-toggle">+</span>
+          </div>
+          <div class="decision-body">
+            <div class="fork-grid">
+              <div class="fork-card">
+                <div class="fork-label"><span class="x">✕</span> Ruled out</div>
+                <div class="fork-card-title">Badge count in nav</div>
+                <div class="fork-card-body">Shows a number but requires navigation. Users still had to scan the full list to find the right item.</div>
+              </div>
+              <div class="fork-card chosen">
+                <div class="fork-label"><span class="check">✓</span> Chosen</div>
+                <div class="fork-card-title">Pinned row + brass border</div>
+                <div class="fork-card-body">Highest priority exception always at position 1, visually distinct. No scanning required — the right item is always first.</div>
+              </div>
+            </div>
+            <div class="decision-why">
+              <div class="why-label">Why</div>
+              <p>Cognitive task analysis showed triage was the most mentally demanding step. Eliminating the scan step was the highest-leverage change available.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="decision-card">
+          <div class="decision-header" onclick="toggleDecision(this)">
+            <div class="decision-header-left">
+              <span class="decision-num">03</span>
+              <span class="decision-title">Navigation information architecture</span>
+            </div>
+            <span class="decision-toggle">+</span>
+          </div>
+          <div class="decision-body">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Screen switching
+  function show(id, el) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.page-nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo(0, 0);
+    // Run counters when switching to CS
+    if (id === 'cs') setTimeout(() => runCounters(), 400);
+  }
+
+  // Annotation callouts
+  function showCallout(n) {
+    document.getElementById('callout-' + n).classList.add('visible');
+  }
+  function hideCallout(n) {
+    document.getElementById('callout-' + n).classList.remove('visible');
+  }
+
+  // Decision accordion
+  function toggleDecision(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.decision-toggle');
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+
+  // Counting animation
+  function animateCount(el, target, suffix) {
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + (suffix || '');
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function runCounters() {
+    document.querySelectorAll('.counting, .counting-dark').forEach(el => {
+      const target = parseInt(el.dataset.target);
+      animateCount(el, target, el.textContent.includes('%') ? '%' : '');
+    });
+  }
+
+  // Auto-run on CS screen since it's the second tab
+  // Run for blog screen on load
+  window.addEventListener('load', () => runCounters());
+</script>
+</body>
+</html>

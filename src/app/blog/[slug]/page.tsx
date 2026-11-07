@@ -1,11 +1,13 @@
 import { use } from 'react';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { ReadingProgress } from '@/components/features/case-study-detail/ReadingProgress';
 import { Footer } from '@/components/layout/Footer';
-import  Link from 'next/link';
 import { BlogPostData } from '@/components/features/types/blogPost';
+import { allPosts } from '@/data/blogPosts';
 
-import { uxPrinciplesComplexSystemsData } from '@/data/uxPrinciplesComplexSystems';
+import { uxPrinciplesComplexSystemsData } from '@/data/uxPrinciplesComplexSystems';
 import { chosenFewPicnicData } from '@/data/chosenFewPicnic';
 import { designSystemsScaleData } from '@/data/designSystemsScale';
 import { accessibilityBasicsData } from '@/data/accessibilityBasics';
@@ -14,292 +16,144 @@ import { elixirForDesignersData } from '@/data/elixirForDesigners';
 import { growingup104thparnellpart1Data } from '@/data/growing-up-104th-parnell-part-1';
 import { eventStormsTmsData } from '@/data/eventStormsTms';
 
-
 const blogPostDataMap: Record<string, BlogPostData> = {
-  'ux-principles-complex-systems': uxPrinciplesComplexSystemsData,
-  'chosen-few-picnic': chosenFewPicnicData,
-  'design-systems-scale': designSystemsScaleData,
-  'accessibility-basics': accessibilityBasicsData,
-  'chicago-design-community': chicagoDesignCommunityData,
-  'elixir-for-designers': elixirForDesignersData,
-  'growing-up-104th-parnell-part-1': growingup104thparnellpart1Data,
-  'event-storms-tms': eventStormsTmsData,
+  'ux-principles-complex-systems':    uxPrinciplesComplexSystemsData,
+  'chosen-few-picnic':                chosenFewPicnicData,
+  'design-systems-scale':             designSystemsScaleData,
+  'accessibility-basics':             accessibilityBasicsData,
+  'chicago-design-community':         chicagoDesignCommunityData,
+  'elixir-for-designers':             elixirForDesignersData,
+  'growing-up-104th-parnell-part-1':  growingup104thparnellpart1Data,
+  'event-storms-tms':                 eventStormsTmsData,
 };
 
+const sortedSlugs = [...allPosts]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .map(p => p.slug)
+  .filter(s => blogPostDataMap[s]);
+
 export async function generateStaticParams() {
-  return Object.keys(blogPostDataMap).map((slug) => ({
-    slug,
-  }));
+  return Object.keys(blogPostDataMap).map(slug => ({ slug }));
 }
+
 interface PageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
+
+const CRAFT_CATEGORIES = new Set(['UX Design', 'Design Systems', 'Accessibility', 'Development']);
 
 export default function BlogPostPage({ params }: PageProps) {
   const { slug } = use(params);
-  
-  // Find the post
   const post = blogPostDataMap[slug];
+  if (!post) notFound();
 
-  if (!post) {
-    notFound();
-  }
+  const track = CRAFT_CATEGORIES.has(post.category) ? 'Craft' : 'Chicago & life';
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'long', 
-      day: 'numeric', 
-      year: 'numeric' 
+  const fmtDate = (iso: string) =>
+    new Date(iso).toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
     });
-  };
 
-  // Simple markdown-to-JSX renderer for the content
-  const renderContent = (content?: string) => {
-    if (!content) {
-      return (
-        <div className="space-y-6 text-gray-900 dark:text-slate-300">
-          <p className="text-lg leading-relaxed">
-            {post.excerpt}
-          </p>
-          <p className="text-gray-900 dark:text-slate-400 italic">
-            Full article content coming soon...
-          </p>
-        </div>
-      );
-    }
-
-    // Split content by sections and render
-    const sections = content.split('\n\n');
-    
-    return sections.map((section, idx) => {
-      // Main heading (h1)
-      if (section.startsWith('# ')) {
-        return null; // Skip main title, it's in the header
-      }
-      
-      // Section heading (h2)
-      if (section.startsWith('## ')) {
-        return (
-          <h2 key={idx} className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">
-            {section.replace('## ', '')}
-          </h2>
-        );
-      }
-      
-      // Subsection heading (h3)
-      if (section.startsWith('### ')) {
-        return (
-          <h3 key={idx} className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">
-            {section.replace('### ', '')}
-          </h3>
-        );
-      }
-      
-      // Bullet list
-      if (section.includes('\n- ')) {
-        const items = section.split('\n- ').filter(Boolean);
-        return (
-          <ul key={idx} className="space-y-2 my-6 ml-6">
-            {items.map((item, i) => (
-              <li key={i} className="text-gray-600 dark:text-slate-300 leading-relaxed flex items-start gap-3">
-                <span className="text-orange-500 mt-2">•</span>
-                <span>{item.trim()}</span>
-              </li>
-            ))}
-          </ul>
-        );
-      }
-      
-      // Horizontal rule
-      if (section.trim() === '---') {
-        return <hr key={idx} className="border-gray-200 dark:border-slate-700 my-12" />;
-      }
-      
-      // Bold text in paragraphs
-      const renderParagraphWithBold = (text: string) => {
-        const parts = text.split(/(\*\*.*?\*\*)/g);
-        return parts.map((part, i) => {
-          if (part.startsWith('**') && part.endsWith('**')) {
-            return <strong key={i} className="font-semibold text-gray-900 dark:text-white">{part.slice(2, -2)}</strong>;
-          }
-          return part;
-        });
-      };
-      
-      // Regular paragraph
-      if (section.trim()) {
-        return (
-          <p key={idx} className="text-gray-600 dark:text-slate-300 leading-relaxed my-6">
-            {renderParagraphWithBold(section)}
-          </p>
-        );
-      }
-      
-      return null;
-    }).filter(Boolean);
-  };
+  // Next post
+  const idx = sortedSlugs.indexOf(slug);
+  const nextSlug = sortedSlugs[(idx + 1) % sortedSlugs.length];
+  const nextPost = blogPostDataMap[nextSlug];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-bone-50">
 
-      <article className="max-w-3xl mx-auto px-6 py-16">
+      <ReadingProgress />
 
-        {/* Back Navigation */}
-        <div className="mt-12">
-          <Link 
-            href="/blog"
-            className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Blog
-          </Link>
+      {/* Hero */}
+      <div className="col pt-12 pb-10 border-b border-black/[0.07]">
+        {/* Track + meta */}
+        <div className="flex items-center gap-3 mb-6">
+          <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-brass bg-brass/10 px-2 py-0.5 rounded-[2px]">
+            {track}
+          </span>
+          <span className="font-mono text-[11px] text-ink/35">{fmtDate(post.date)}</span>
+          <span className="font-mono text-[11px] text-ink/35">·</span>
+          <span className="font-mono text-[11px] text-ink/35">{post.readTime}</span>
         </div>
 
-        {/* Header */}
-        <header className="mb-8">
-          {/* Category */}
-          <div className="flex gap-2 mb-6">
-            <span className="px-3 py-1 bg-gray-100 dark:bg-slate-800/40 text-gray-600 dark:text-slate-300 text-sm rounded-md font-medium">
-              {post.category}
-            </span>
-            {post.tags.map((tag, idx) => (
-              <span 
-                key={idx}
-                className="px-3 py-1 bg-gray-100 dark:bg-slate-800/40 text-gray-600 dark:text-slate-300 text-sm rounded-md"
+        {/* Title */}
+        <h1
+          className="font-black leading-[1.08] tracking-[-0.025em] text-ink mb-6"
+          style={{ fontSize: 'clamp(32px, 5vw, 60px)', maxWidth: '760px' }}
+        >
+          {post.title}
+        </h1>
+
+        {/* Dek */}
+        <p className="text-[20px] leading-[1.6] text-ink/60 max-w-[640px] mb-10">
+          {post.excerpt}
+        </p>
+
+        {/* Author row */}
+        <div className="flex items-center gap-3 pt-5 border-t border-black/[0.07]">
+          <div className="w-9 h-9 rounded-full bg-ink flex items-center justify-center text-bone-50 text-[12px] font-bold shrink-0">
+            BH
+          </div>
+          <div>
+            <div className="text-[13px] font-semibold text-ink leading-tight">Brian Hall</div>
+            <div className="font-mono text-[11px] text-ink/40">Senior Software Engineer · M.S. HCI</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Reading body — narrow column */}
+      <div style={{ maxWidth: '680px' }} className="mx-auto px-8 py-12">
+
+        {post.content ? (
+          <MarkdownRenderer content={post.content} />
+        ) : (
+          <p className="text-[18px] leading-[1.75] text-ink/80">{post.excerpt}</p>
+        )}
+
+        {/* Tags */}
+        {post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-10 mt-10 border-t border-black/[0.07]">
+            {post.tags.map(tag => (
+              <span
+                key={tag}
+                className="font-mono text-[11px] text-ink/50 border border-ink/15 rounded-[2px] px-2.5 py-1"
               >
                 {tag}
               </span>
             ))}
           </div>
+        )}
 
-          {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {post.title}
-          </h1>
+        {/* Back + Next */}
+        <div className="mt-12 pt-8 border-t border-black/[0.07] flex flex-col gap-4">
+          <Link
+            href="/blog"
+            className="font-mono text-[12px] text-ink/40 hover:text-brass transition-colors duration-150"
+          >
+            ← All writing
+          </Link>
 
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-gray-600 dark:text-slate-400 text-sm">
-            <span>{formatDate(post.date)}</span>
-            <span>•</span>
-            <span>{post.readTime}</span>
-          </div>
-        </header>
-
-        {/* Featured Image Placeholder */}
-        <div className="mb-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 h-96 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-              </svg>
-            </div>
-            <span className="text-gray-900 dark:text-slate-500 text-sm">{post.title}</span>
-          </div>
-        </div>
-
-        {/* Lead paragraph */}
-        <div className="mb-12">
-          <p className="text-xl text-gray-400 dark:text-slate-300 leading-relaxed">
-            {post.excerpt}
-          </p>
-        </div>
-
-        {/* Content */}
-        <div className="max-w-none">
-          {post.content ? (
-            <MarkdownRenderer content={post.content} />
-          ) : (
-            <div className="space-y-6 text-gray-900 dark:text-slate-300">
-              <p className="text-lg leading-relaxed">{post.excerpt}</p>
-              <p className="text-gray-900 dark:text-slate-400 italic">
-                Full article content coming soon...
-              </p>
-            </div>
+          {nextPost && (
+            <Link
+              href={`/blog/${nextSlug}`}
+              className="group bg-bone-100 border border-black/[0.07] rounded-[3px] p-6 flex items-center justify-between gap-4 no-underline hover:bg-white transition-colors duration-200"
+            >
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-ink/35 mb-2">
+                  Next essay
+                </p>
+                <p className="text-[16px] font-bold text-ink group-hover:text-brass transition-colors duration-150 leading-snug">
+                  {nextPost.title}
+                </p>
+              </div>
+              <span className="font-mono text-[14px] text-brass shrink-0">→</span>
+            </Link>
           )}
         </div>
 
-        {/* Author Bio */}
-        <div className="mt-16 pt-8 border-t border-slate-700">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-gray-900 dark:text-white font-bold flex-shrink-0">
-              BH
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Brian Hall</h3>
-              <p className="text-slate-400 text-sm mb-3">
-                UX Designer and Frontend Developer specializing in creating intuitive interfaces for complex systems.
-              </p>
-              <div className="flex gap-4 text-sm">
-                <Link href="https://www.linkedin.com/in/hlbdg/" className="text-orange-500 hover:text-orange-400 transition-colors">
-                  LinkedIn
-                </Link>
-                <span className="text-slate-600">·</span>
-                <Link href="mailto:brian.HLBDG@outlook.com" className="text-orange-500 hover:text-orange-400 transition-colors">
-                  Email
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Related Articles */}
-        <div className="mt-16 pt-8 border-t border-gray-100 dark:border-slate-700">
-          <h3 className="text-xl font-semibold mb-6">Related Articles</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Link 
-              href="#"
-              className="flex gap-4 p-4 bg-gray=100 dark:bg-slate-800/40 border border-gray-100 dark:border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
-            >
-              <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
-                  Building Design Systems: Component Libraries vs. Style Guides
-                </h4>
-                <p className="text-slate-500 text-sm">March 22, 2025</p>
-              </div>
-            </Link>
-
-            <Link 
-              href="#"
-              className="flex gap-4 p-4 bg-gray-50 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-slate-600 transition-all group"
-            >
-              <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg className="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
-                  Bridging the Gap: From Design to Development
-                </h4>
-                <p className="text-gray-900 dark:text-slate-500 text-sm">February 15, 2025</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Back Navigation */}
-        <div className="mt-12">
-          <Link 
-            href="/blog"
-            className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Blog
-          </Link>
-        </div>
-      </article>
+      </div>
 
       <Footer />
     </div>

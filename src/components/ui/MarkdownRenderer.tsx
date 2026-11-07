@@ -1,6 +1,5 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -13,123 +12,106 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
-        // Headings
-        h1: ({ children }) => (
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-12 mb-6">
-            {children}
-          </h1>
-        ),
+        h1: ({ children }) => null, // title is in the page header
+
         h2: ({ children }) => (
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">
+          <h2 className="text-[28px] font-extrabold tracking-[-0.015em] text-ink leading-snug mt-12 mb-4">
             {children}
           </h2>
         ),
+
         h3: ({ children }) => (
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">
+          <h3 className="text-[20px] font-bold tracking-[-0.01em] text-ink leading-snug mt-8 mb-3">
             {children}
           </h3>
         ),
 
-        // Paragraphs
         p: ({ children }) => (
-          <p className="text-gray-600 dark:text-slate-300 leading-relaxed my-6">
+          <p className="text-[18px] leading-[1.75] text-ink/80 my-6">
             {children}
           </p>
         ),
 
-        // Bold & Italic
-        strong: ({ children }) => (
-          <strong className="font-semibold text-gray-900 dark:text-white">
-            {children}
-          </strong>
-        ),
-        em: ({ children }) => (
-          <em className="italic text-gray-700 dark:text-slate-200">{children}</em>
+        blockquote: ({ children }) => (
+          <blockquote className="my-10 pl-8 border-l-[3px] border-brass bg-[color-mix(in_oklch,var(--color-brass)_5%,var(--color-bone-50))] py-6 pr-6 rounded-r-[2px]">
+            <div className="text-[22px] font-bold leading-[1.4] tracking-[-0.01em] text-ink [&>p]:my-0 [&>p]:text-[22px] [&>p]:leading-[1.4] [&>p]:text-ink [&>p]:font-bold">
+              {children}
+            </div>
+          </blockquote>
         ),
 
-        // Lists
         ul: ({ children }) => (
-          <ul className="space-y-2 my-6 ml-6">{children}</ul>
+          <ul className="my-6 flex flex-col gap-3 pl-0 list-none">
+            {children}
+          </ul>
         ),
+
         ol: ({ children }) => (
-          <ol className="space-y-2 my-6 ml-6 list-decimal">{children}</ol>
+          <ol className="my-6 flex flex-col gap-3 pl-6 list-decimal marker:text-brass marker:font-mono marker:text-[14px]">
+            {children}
+          </ol>
         ),
+
         li: ({ children }) => (
-          <li className="text-gray-600 dark:text-slate-300 leading-relaxed flex items-start gap-3">
-            <span className="text-orange-500 mt-2 flex-shrink-0">•</span>
+          <li className="text-[17px] leading-[1.65] text-ink/75 flex gap-3 items-start [ol_&]:pl-2 [ul_&]:before:content-['—'] [ul_&]:before:text-brass [ul_&]:before:font-mono [ul_&]:before:text-[14px] [ul_&]:before:mt-[3px] [ul_&]:before:shrink-0">
             <span>{children}</span>
           </li>
         ),
 
-        // Blockquotes
-        blockquote: ({ children }) => (
-          <blockquote className="border-l-4 border-orange-500 pl-6 py-2 my-8 bg-gray-50 dark:bg-slate-800/50 rounded-r-lg">
-            <div className="text-gray-700 dark:text-slate-200 italic">{children}</div>
-          </blockquote>
+        strong: ({ children }) => (
+          <strong className="font-bold text-ink">{children}</strong>
         ),
 
-        // Tables
-        table: ({ children }) => (
-          <div className="overflow-x-auto my-8">
-            <table className="w-full border-collapse rounded-lg overflow-hidden">
+        em: ({ children }) => (
+          <em className="italic text-ink/70">{children}</em>
+        ),
+
+        code: ({ children, className }) => {
+          const isBlock = className?.includes('language-');
+          if (isBlock) {
+            return (
+              <code className="block font-mono text-[14px] leading-[1.6] text-ink/85 bg-bone-100 border border-black/[0.07] rounded-[3px] p-5 overflow-x-auto my-6 whitespace-pre">
+                {children}
+              </code>
+            );
+          }
+          return (
+            <code className="font-mono text-[14px] text-brass bg-bone-100 px-1.5 py-0.5 rounded-[2px]">
               {children}
-            </table>
-          </div>
-        ),
-        thead: ({ children }) => (
-          <thead className="bg-gray-100 dark:bg-slate-800">{children}</thead>
-        ),
-        tbody: ({ children }) => (
-          <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-            {children}
-          </tbody>
-        ),
-        tr: ({ children }) => (
-          <tr className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-            {children}
-          </tr>
-        ),
-        th: ({ children }) => (
-          <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-            {children}
-          </th>
-        ),
-        td: ({ children }) => (
-          <td className="px-4 py-3 text-sm text-gray-600 dark:text-slate-300">
-            {children}
-          </td>
+            </code>
+          );
+        },
+
+        pre: ({ children }) => (
+          <pre className="my-6">{children}</pre>
         ),
 
-        // Horizontal Rule
         hr: () => (
-          <hr className="border-gray-200 dark:border-slate-700 my-12" />
+          <hr className="my-12 border-t border-black/10" />
         ),
-        // Links
-        a: ({ href, children }: { href?: string; children?: ReactNode }) => (
+
+        a: ({ href, children }) => (
           <a
             href={href}
-            className="text-orange-500 hover:text-orange-400 underline transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
+            className="text-brass underline underline-offset-2 hover:text-ink transition-colors duration-150"
+            target={href?.startsWith('http') ? '_blank' : undefined}
+            rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
           >
             {children}
           </a>
         ),
 
-        // Code
-        code: ({ children }) => (
-          <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-sm font-mono text-orange-500">
-            {children}
-          </code>
-        ),
-        pre: ({ children }) => (
-          <pre className="p-4 bg-gray-100 dark:bg-slate-800 rounded-lg overflow-x-auto my-6">
-            {children}
-          </pre>
+        img: ({ src, alt }) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src}
+            alt={alt ?? ''}
+            className="w-full rounded-[3px] my-8 border border-black/[0.07]"
+          />
         ),
       }}
     >
       {content}
-    </ReactMarkdown>  
+    </ReactMarkdown>
   );
 }
