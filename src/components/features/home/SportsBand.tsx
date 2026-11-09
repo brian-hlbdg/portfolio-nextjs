@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Reveal } from '@/components/ui/Reveal';
+import { NFL_TEAMS } from '@/data/nflTeamLogos';
 
 export function SportsBand() {
   return (
@@ -7,23 +8,18 @@ export function SportsBand() {
       id="sports"
       className="relative bg-sports-ink overflow-hidden py-20"
     >
-      {/* Bears "C" watermark */}
+      {/* Bears logo watermark */}
       <div
         aria-hidden="true"
         className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[25%] select-none pointer-events-none"
         style={{ width: 'clamp(360px, 64vw, 800px)' }}
       >
-        <svg
-          viewBox="0 0 200 200"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full opacity-[0.22]"
-        >
-          <path
-            d="M100 10C50.3 10 10 50.3 10 100s40.3 90 90 90c28.4 0 53.7-13.1 70.3-33.6l-19.8-14.4C138.5 157.2 120.3 166 100 166c-36.4 0-66-29.6-66-66s29.6-66 66-66c20.3 0 38.5 8.8 51.1 22.8l19.9-14.4C153.5 22.8 128.2 10 100 10z"
-            fill="white"
-          />
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={NFL_TEAMS.CHI.logos.scoreboard}
+          alt=""
+          className="w-full h-full opacity-[0.18]"
+        />
       </div>
 
       <div className="col relative z-10">

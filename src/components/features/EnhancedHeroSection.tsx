@@ -38,15 +38,15 @@ export function EnhancedHeroSection() {
         <div className="max-w-4xl mx-auto">
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 dark:text-white leading-tight animate-fade-in">
-            Senior UX Designer &<br />
+            Forward-Deployed Engineer &<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-l from-primary to-orange-500">
-              Frontend Developer
+              UX Architect
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl leading-relaxed font-light">
-            Over a decade of proven impact turning complex ideas into usable, scalable digital 
-            experiences that drive measurable business value.
+            I go from user research and domain discovery through system architecture and production code.
+            Fifteen years of closing the gap between understanding a problem and shipping the answer.
           </p>
 
           {/* Navigation Links */}

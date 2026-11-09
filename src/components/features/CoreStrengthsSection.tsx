@@ -12,25 +12,32 @@ export function CoreStrengthsSection() {
           </h2>
 
           <div className="space-y-6">
-            
+
             <div>
-              <h3 className="text-lg font-medium mb-3 text-primary">User-Centered Design</h3>
+              <h3 className="text-lg font-medium mb-3 text-primary">Discovery and Domain Research</h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                I approach every project with a deep understanding of the people who will use the product. By putting users at the center of the design process, I create experiences that feel intuitive and purposeful.
+                My M.S. in HCI isn't a design credential, it's how I understand why users behave the way they do. I've run stakeholder interviews, usability sessions, and workflow analyses across logistics, finance, and enterprise software. That research becomes better architecture decisions, not just better wireframes.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-3 text-primary">Frontend Development</h3>
+              <h3 className="text-lg font-medium mb-3 text-primary">Full-Stack Engineering</h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                My technical expertise in modern web technologies allows me to bridge the gap between design and implementation, ensuring that the user experience vision is faithfully realized in the final product.
+                Elixir and Phoenix LiveView on the backend, React and Next.js on the front. I've built production systems that handle real scale, and I've learned that the most interesting engineering problems usually start with a user behavior that nobody thought to account for.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-3 text-primary">Problem Solving</h3>
+              <h3 className="text-lg font-medium mb-3 text-primary">AI-Augmented Development</h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                I thrive on finding elegant solutions to complex problems. By breaking down challenges into manageable pieces, I can address user needs while meeting business requirements.
+                I use Claude Code, Cursor, and Copilot every day. Not as a novelty but as a genuine shift in how I work. I spend more time thinking about systems and architecture and less time on implementation details I've already solved. I've been helping my team make that same shift.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-medium mb-3 text-primary">End-to-End Ownership</h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                The thing I'm best at is owning the whole cycle. Research, system design, implementation, production deployment, and the stakeholder conversations that happen at every step. I've done it on a company-wide TMS and I'm doing it now on an enterprise IT platform. No handoffs means no translation loss.
               </p>
             </div>
 

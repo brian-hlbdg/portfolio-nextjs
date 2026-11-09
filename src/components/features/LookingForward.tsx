@@ -3,24 +3,24 @@
 
 const lookingForwardItems = [
   {
-    title: "Innovation-Driven Companies",
-    description: "I thrive in environments where innovation is valued and where design is seen as a strategic advantage."
+    title: "Forward-Deployed or Staff Engineer Roles",
+    description: "Positions where owning the full cycle matters. I want to be in the room where the problem gets defined and still be the person writing the code that solves it. That combination is where I do my best work."
   },
   {
-    title: "Human-Centered Teams", 
-    description: "I'm drawn to teams that put people—both users and team members—at the center of their work. Creating positive experiences is as much about the process as it is about the end result."
+    title: "Complex Domains Worth Understanding",
+    description: "The most interesting engineering problems I've worked on came from industries with real operational complexity. Logistics, enterprise IT, finance. Domains where understanding the work deeply changes what you build."
   },
   {
-    title: "Remote-First Cultures",
-    description: "Companies that embrace distributed work and understand that great talent isn't limited by geography. I thrive in environments that prioritize clear communication, documentation, and results-driven work cultures."
+    title: "Teams That Take AI Seriously",
+    description: "Not teams chasing the trend, but teams genuinely rethinking how they work. I've been deep in AI-assisted development for over a year and I'm looking for environments where that mindset is shared, not sold."
   },
   {
-    title: "Impact-Focused Projects",
-    description: "I'm eager to work on products and services that solve meaningful problems and make a positive difference in users' daily lives, whether that's in healthcare, education, sustainability, or other impact-driven fields."
+    title: "Engineering and Design at the Same Table",
+    description: "Companies where the people who understand users and the people who write the systems are in the same conversation. The best products I've shipped came from that proximity. I want more of it."
   },
   {
-    title: "Collaborative Environments",
-    description: "Places that value cross-functional collaboration, where diverse perspectives come together to create solutions that wouldn't be possible in silos. The best work happens when different disciplines inform each other."
+    title: "Remote or Chicago-Based",
+    description: "I've worked distributed for years and I'm good at it. Clear communication, solid documentation, real outcomes. I'm also in Chicago and open to hybrid if the work is right."
   }
 ];
 
@@ -35,8 +35,8 @@ export function LookingForward() {
             <h2 className="text-2xl font-light mb-8 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
               Looking Forward
             </h2>
-            <p className=" text-gray-600 dark:text-gray-400">
-              I'm passionate about creating digital experiences that make a real difference in people's lives. Looking ahead, I'm particularly interested in opportunities with:
+            <p className="text-gray-600 dark:text-gray-400">
+              I'm open to the right opportunity and I know what that looks like. Here's what I'm actually looking for:
             </p>
           </div>
 

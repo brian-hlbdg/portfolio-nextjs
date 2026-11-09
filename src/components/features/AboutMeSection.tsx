@@ -26,15 +26,15 @@ export function AboutMeSection() {
               </p>
               
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                My approach to design blends technical expertise with a human-centered mindset. I believe the best digital products not only function flawlessly but also connect with users on a meaningful level. This philosophy has guided my work across finance, logistics, e-commerce, and retail sectors.
+                Professionally I sit at the intersection of design and engineering, and I've been there long enough to see what goes wrong when the two are separated. The handoff problem is real. Someone understands the users, someone else designs the system, a third person writes the code, and by the time it ships the original insight is three translations removed from the product. I've built my career being all three of those people.
               </p>
-              
+
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                Whether I'm collaborating with cross-functional teams or diving deep into user research, my goal is always the same: to create intuitive, impactful experiences that make a difference in people's lives.
+                Right now I'm at AHEAD building Hatch, an enterprise IT lifecycle management platform, in Elixir, Phoenix LiveView, and React. I own features from the first conversation about requirements through to code running in production. I've also been deep in AI-assisted development for the past year, using Claude Code, Cursor, and Copilot as part of my daily workflow, and helping my team do the same.
               </p>
-              
+
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                With 8+ years of remote collaboration experience, I excel at working with distributed teams across multiple time zones. My hybrid design-development skill set eliminates handoff friction and accelerates project delivery.
+                Before that I spent nine years at NFI Industries leading the design and engineering of a Transportation Management System now used company-wide. Built the design system, owned the architecture, mentored the team, presented to the C-suite. The whole cycle. End-user workload dropped by more than 50%, which is the kind of outcome that makes the work feel worth it.
               </p>
             </div>
 
