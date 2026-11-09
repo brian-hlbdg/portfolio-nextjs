@@ -294,6 +294,48 @@ export const nfiCaseStudyData: CaseStudyDetailData = {
     ]
   },
 
+  decisions: [
+    {
+      num: '01',
+      title: 'Exception filter placement',
+      rejected: {
+        title: 'Right-hand drawer panel',
+        description: 'Filter controls lived inside a collapsible sidebar. Required an extra click to open. 11 of 12 usability test participants failed to find it on first try.',
+      },
+      chosen: {
+        title: 'Persistent top filter bar',
+        description: 'Always-visible bar above the exception list. Matched the left-to-right scan pattern observed in contextual inquiry sessions.',
+      },
+      why: 'Coordinators spend 40% of exception time locating the right filter. Proximity to the list — not raw capability — was the entire design problem.',
+    },
+    {
+      num: '02',
+      title: 'Priority exception surfacing',
+      rejected: {
+        title: 'Badge count in navigation',
+        description: 'A number badge on the nav item communicated volume but still required the user to scan the full list to find the highest-priority item.',
+      },
+      chosen: {
+        title: 'Pinned row with brass left-border',
+        description: 'The highest-priority exception is always in position 1, visually distinct. No scanning required — the right item is always first.',
+      },
+      why: 'Cognitive task analysis showed triage was the most mentally demanding step in the workflow. Eliminating the scan was higher leverage than any other change available.',
+    },
+    {
+      num: '03',
+      title: 'Component library approach',
+      rejected: {
+        title: 'Shared design token file only',
+        description: 'An early proposal was to standardize colors and spacing in a tokens file and let each team build their own components. Created divergence within two sprints.',
+      },
+      chosen: {
+        title: 'LiveView component library with Tailwind',
+        description: 'A shared set of Phoenix LiveView components with Tailwind utility classes. One source of truth for behavior and styling across all TMS modules.',
+      },
+      why: 'Tokens without components solved the aesthetic problem but not the interaction problem. Coordinators in different modules were learning different patterns for the same task.',
+    },
+  ],
+
   reflections: {
     description: 'Working on the TMS platform wasn\'t just a long-term project — it was a long-term education. This experience challenged me to grow as a designer, collaborator, and developer. It gave me the opportunity to shift from supporting workflows to shaping them, and from executing UI to helping architect the system behind it.',
     whatWorkedWell: [

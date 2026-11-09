@@ -85,6 +85,9 @@ export interface CaseStudyDetailData {
     longTermValue: LongTermValue[];
   };
 
+  // Design decisions (optional — shown as fork cards)
+  decisions?: DecisionFork[];
+
   // Reflections
   reflections: {
     description: string;
@@ -174,4 +177,12 @@ export interface ReflectionItem {
 export interface KeyTakeaway {
   title: string;
   description: string;
+}
+
+export interface DecisionFork {
+  num: string;
+  title: string;
+  rejected: { title: string; description: string };
+  chosen:   { title: string; description: string };
+  why: string;
 }

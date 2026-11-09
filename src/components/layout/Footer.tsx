@@ -25,12 +25,10 @@ export function Footer() {
         <div className="flex flex-wrap items-center gap-4 mb-16">
           <CopyEmailButton variant="brass" />
           <a
-            href="/BrianLHall_Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:brian@hlbdesigngroup.com?subject=Resume%20Request&body=Hi%20Brian%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20see%20your%20resume.%0A%0AThanks"
             className="inline-flex items-center gap-2 font-mono text-[13px] text-white/80 border border-white/25 px-5 py-3 rounded-[2px] hover:border-white/50 hover:text-white transition-colors duration-200"
           >
-            Résumé PDF ↗
+            Request résumé ↗
           </a>
         </div>
 
