@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { CopyEmailButton } from '@/components/ui/CopyEmailButton';
 
 const social = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/brian-hall-hlbdg/' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hlbdg/' },
   { label: 'GitHub',   href: 'https://github.com/brian-hlbdg' },
 ];
 
@@ -49,6 +49,12 @@ export function Footer() {
                 {label}
               </a>
             ))}
+            <Link
+              href="/about"
+              className="font-mono text-[11px] tracking-[0.05em] text-white/40 hover:text-white/80 transition-colors duration-200"
+            >
+              About
+            </Link>
             <Link
               href="/#work"
               className="font-mono text-[11px] tracking-[0.05em] text-white/40 hover:text-white/80 transition-colors duration-200"
