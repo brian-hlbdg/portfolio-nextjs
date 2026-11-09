@@ -5,6 +5,7 @@ import { palateCollectifCaseStudyData } from '@/data/palateCollectifCaseStudy';
 import { nfiRelayExceptionHandlingCaseStudyData } from '@/data/nfiRelayExceptionHandlingCaseStudy';
 import { portfolioRedesignCaseStudyData } from '@/data/portfolioRedesignCaseStudy';
 import { chicagoSportsDashboardCaseStudyData } from '@/data/chicagoSportsDashboardCaseStudy';
+import { aheadCapabilityMatrixCaseStudyData } from '@/data/aheadCapabilityMatrixCaseStudy';
 import { CaseStudyDetailData } from '@/components/features/types/caseStudyDetail';
 
 const dataMap: Record<string, CaseStudyDetailData> = {
@@ -13,6 +14,7 @@ const dataMap: Record<string, CaseStudyDetailData> = {
   'nfi-relay-exception-handling': nfiRelayExceptionHandlingCaseStudyData,
   'portfolio-redesign':           portfolioRedesignCaseStudyData,
   'chicago-sports-dashboard':     chicagoSportsDashboardCaseStudyData,
+  'ahead-capability-matrix':      aheadCapabilityMatrixCaseStudyData,
 };
 
 const slugOrder = Object.keys(dataMap);

@@ -69,6 +69,19 @@ export const allCaseStudies: CaseStudy[] = [
     slug: 'nfi-relay-exception-handling'
   },
   {
+    id: '9',
+    title: 'Manufacturer Capability Matrix',
+    description: 'A three-phase feature at AHEAD that set client expectations about manufacturer order-data capabilities before purchase. Built a Unity admin tab, a Hatch client-facing display, and a full redesign — navigating two rounds of structural data model changes, a security hole caught in review, and an "it feels clunky" brief with no specific defect.',
+    tags: ['Elixir', 'Phoenix LiveView', 'Ecto', 'Product Engineering', 'UX Design'],
+    client: 'AHEAD',
+    year: 'Aug – Oct 2026',
+    readTime: '14 min',
+    icon: 'layers',
+    featured: false,
+    badge: 'Product Engineering',
+    slug: 'ahead-capability-matrix'
+  },
+  {
     id: '6',
     title: 'E-commerce Platform Optimization',
     description: 'Complete redesign of checkout flow and product discovery for major retailer. Improved conversion rates by 28% and reduced cart abandonment by 40%.',
