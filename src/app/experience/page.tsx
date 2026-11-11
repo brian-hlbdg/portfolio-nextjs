@@ -11,40 +11,42 @@ const roles = [
     company: 'AHEAD',
     period: '2026 – now',
     role: 'Senior Software Engineer',
-    description: 'Building enterprise IT lifecycle management tools in Elixir and Phoenix LiveView. Full-stack ownership from architecture through production — the same research-first approach applied to backend system design.',
+    description: 'Building enterprise IT lifecycle management tools for one of the largest IT solutions providers in the country. Full-stack ownership from schema design through client-facing UI — end-to-end, with no handoff chain between research, design, and implementation.',
     contributions: [
-      'Architecting LiveView-based interfaces for asset lifecycle workflows used across enterprise IT teams',
-      'Applying contextual inquiry and task analysis to inform data model and UI decisions before implementation begins',
-      'Contributing to shared component patterns and engineering standards across the product',
+      'Owned full feature delivery end-to-end — data model design, API layer, LiveView and React UI, test coverage, and production release — with direct accountability at every stage',
+      'Navigated structured code review cycles with architectural feedback on schema design, security model, and query structure; each round reshaped the implementation rather than just the surface',
+      'Designed and shipped a client-facing capability matrix used by every enterprise customer on the platform, built from a shared read model so the display layer owns no queries',
+      'Applied contextual inquiry and task analysis to backend data model decisions before writing code, reducing structural rework during review',
+      'Contributed to shared component patterns, engineering standards, and cross-team documentation',
     ],
-    tags: ['Elixir', 'Phoenix LiveView', 'PostgreSQL', 'TypeScript', 'React'],
+    tags: ['React', 'TypeScript', 'Elixir', 'Phoenix LiveView', 'PostgreSQL', 'End-to-End Ownership'],
   },
   {
     company: 'NFI Industries',
     period: '2017 – 2025',
-    role: 'UX Lead & Design Systems',
-    description: 'Led user research, information architecture, and component system design for a national logistics platform serving 120+ coordinators. Eight years, two major platform generations.',
+    role: 'UI Engineering Lead & Design Systems',
+    description: 'Led frontend engineering, UX, and design systems for a national logistics platform serving 120+ daily users across operations centers nationwide. Eight years of end-to-end ownership across two major platform generations — from initial user research through component architecture, frontend code, and production release.',
     contributions: [
-      'Led the UX redesign of the Transportation Management System — reduced end-user operational workload by 50% across coordinators nationwide',
-      'Built a LiveView + Tailwind component library from scratch; became the shared foundation for all TMS modules',
-      'Ran contextual inquiry sessions, cognitive task analysis, and usability tests that directly shaped feature priorities',
-      'Championed inclusive design and accessibility standards across engineering and product teams',
-      'Mentored engineers on design thinking and established shared critique practices across the team',
+      'Led end-to-end feature development for the Transportation Management System — owned the full cycle from brief and user research through UI architecture and production frontend implementation, cutting operational workload by 50% for coordinators',
+      'Architected a component library in LiveView and Tailwind from scratch; became the shared frontend foundation for all TMS modules and the cross-team standard for new feature development',
+      'Mentored engineers on component architecture, design system standards, and accessibility practices — built shared critique and code review processes that improved implementation consistency across a distributed team',
+      'Facilitated 20+ event storming workshops with engineering, product, and operations stakeholders, aligning on complex workflow requirements before a line of code was written',
+      'Championed WCAG accessibility standards across all production interfaces; introduced inclusive design practices into the development pipeline and engineering review process',
     ],
-    tags: ['UX Research', 'Design Systems', 'Figma', 'Elixir', 'Phoenix LiveView', 'Tailwind CSS', 'Accessibility'],
+    tags: ['React', 'TypeScript', 'Design Systems', 'Component Architecture', 'Elixir', 'Phoenix LiveView', 'Tailwind CSS', 'Accessibility', 'Team Leadership'],
   },
   {
     company: 'Calamos Investments',
     period: '2015 – 2017',
-    role: 'Web Developer',
-    description: 'Sole web developer for a global investment management firm. Rebuilt the corporate site and built interactive data visualization tools for client-facing financial reporting.',
+    role: 'Web Developer — Financial Services',
+    description: 'Sole web developer for a global investment management firm operating in a regulated financial environment. Built client-facing investment data tools and enterprise content infrastructure under strict compliance and brand governance requirements.',
     contributions: [
-      'Redesigned the main corporate website — 35% improvement in user engagement, 28% reduction in bounce rate',
-      'Built an interactive financial dashboard making complex investment data accessible to clients',
-      'Developed custom Sitecore CMS templates, reducing content update time by 60%',
-      'Executed marketing microsites and campaign landing pages with strong conversion metrics',
+      'Engineered an interactive financial dashboard surfacing complex investment portfolio data for high-net-worth clients and institutional investors — translating dense financial data into a navigable, accessible UI',
+      'Rebuilt the corporate website for a registered investment advisor, improving user engagement 35% and reducing bounce rate 28% while meeting compliance and legal review cycles',
+      'Developed custom Sitecore CMS templates in a regulated content environment, reducing content operations time by 60% across editorial and marketing teams',
+      'Executed campaign microsites and conversion-focused landing pages under compliance review, contributing measurably to lead generation goals',
     ],
-    tags: ['Web Development', 'Sitecore CMS', 'JavaScript', 'Data Visualization', 'Bootstrap'],
+    tags: ['Financial Services UI', 'JavaScript', 'Data Visualization', 'Sitecore CMS', 'Regulated Environment', 'Bootstrap'],
   },
   {
     company: 'GKIC · PMall',
@@ -52,12 +54,12 @@ const roles = [
     role: 'Web Designer & UX',
     description: 'Two e-commerce and marketing organizations in sequence. At PMall (a top-500 e-commerce retailer) redesigned the product customization interface. At GKIC built and maintained the web presence through a period of rapid digital expansion.',
     contributions: [
-      'Redesigned PMall product customization interface — 22% increase in completed orders',
-      'Conducted user interviews and usability tests that directly informed UX improvements',
+      'Redesigned PMall product customization interface — 22% increase in completed orders driven by user research findings',
+      'Conducted user interviews and usability tests that directly shaped UX improvements across the product',
       'Created three new GKIC websites and redesigned four heavily utilized existing properties',
       'Designed high-converting landing pages contributing to 25% increase in lead generation',
     ],
-    tags: ['UI Design', 'User Research', 'E-commerce', 'WordPress', 'HTML/CSS', 'Usability Testing'],
+    tags: ['UI Design', 'User Research', 'E-commerce', 'JavaScript', 'HTML/CSS', 'Usability Testing'],
   },
 ];
 
@@ -85,10 +87,10 @@ export default function ExperiencePage() {
         <div className="pt-12 pb-10 border-b border-black/[0.08]">
           <p className="font-mono text-[11px] tracking-[0.1em] text-brass uppercase mb-3">Experience</p>
           <h1 className="text-[40px] font-extrabold leading-[1.08] tracking-[-0.02em] text-ink mb-4">
-            Fifteen years, four chapters.
+            Twenty years. Full-stack, end-to-end.
           </h1>
           <p className="text-[17px] leading-[1.6] text-ink/60 max-w-[560px]">
-            From contextual inquiry and cognitive task analysis to production Elixir and React — with no handoff chain in between.
+            React and TypeScript in production, component systems at enterprise scale, and a research background that shapes architecture decisions before the first line of code — with no handoff chain in between.
           </p>
         </div>
 
