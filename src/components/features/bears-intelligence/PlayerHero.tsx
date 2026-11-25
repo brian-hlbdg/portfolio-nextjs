@@ -1,5 +1,26 @@
 'use client';
-import { motion,useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
 import type { Player } from './data';
-export function PlayerHero({player,animate=true}:{player:Player;animate?:boolean}){const reduced=useReducedMotion();const [failed,setFailed]=useState(false);return <section className="bi-hero"><div className="bi-hero-copy"><small>CHICAGO / PLAYER INTELLIGENCE</small><div className="bi-number">#{player.number} <span>{player.position}</span></div><h1>{player.name}</h1><p>Season profile · sample data</p><div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div></div><motion.div className="bi-athlete" animate={animate&&!reduced?{y:[0,-2,0],scale:[1,1.008,1]}:{y:0,scale:1}} transition={{duration:4,repeat:animate&&!reduced?Infinity:0,ease:'easeInOut'}}><svg viewBox="0 0 180 330" role="img" aria-label="Stylized uniform illustration, not a player likeness"><defs><linearGradient id="bi-jersey" x2="1" y2="1"><stop stopColor="#28466b"/><stop offset="1" stopColor="#071425"/></linearGradient></defs><ellipse cx="90" cy="318" rx="66" ry="7" fill="#000" opacity=".5"/><path d="M62 177 L59 242 48 302 73 304 91 222 107 303 132 302 119 240 118 177Z" fill="#dbe2e8" stroke="#8a98a8" strokeWidth="2"/><path d="M59 199 L55 250 48 294 M121 199 L125 250 132 294" stroke="#d65b21" strokeWidth="5" fill="none"/><path d="M46 298 L74 298 79 314 34 314Z M108 298 L132 298 145 314 103 314Z" fill="#101c2c"/><path d="M38 84 Q43 65 69 63 L111 63 Q140 65 145 84 L137 117 123 112 118 184 62 184 57 112 42 117Z" fill="url(#bi-jersey)" stroke="#546b84" strokeWidth="2"/><path d="M42 94 L57 98 M42 102 L57 106 M123 98 L139 94 M123 106 L139 102" stroke="#ff702d" strokeWidth="4"/><path d="M43 117 L33 163 46 191 58 183 48 160 57 115 M137 117 L147 163 134 191 122 183 132 160 123 115" fill="#9c6447" stroke="#713d28" strokeWidth="2"/><rect x="79" y="47" width="22" height="22" rx="8" fill="#9c6447"/><path d="M61 32 Q61 5 90 5 Q119 5 119 32 L113 55 67 55Z" fill="#142844" stroke="#e65c25" strokeWidth="2"/><path d="M70 39 H113 L108 57 H77Z" fill="#0a111c" stroke="#b9c5d2" strokeWidth="2"/><path d="M82 39 V56 M98 39 V56 M72 48 H111" stroke="#a9b6c5" strokeWidth="2"/><text x="90" y="143" textAnchor="middle" fontSize="43" fontWeight="900" fill="#fff" stroke="#ff702d" strokeWidth="1">{player.number}</text></svg></motion.div><div className="bi-portrait">{!failed&&<img src={'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png'} alt="" onError={()=>setFailed(true)}/>}<small>ILLUSTRATED UNIFORM · HEADSHOT VIA ESPN</small></div></section>}
+
+export function PlayerHero({player}:{player:Player}) {
+  const [failed,setFailed] = useState(false);
+  const [first,...last] = player.name.split(' ');
+  const isQB = player.position === 'QB';
+  return <section className="bi-hero">
+    <span className="bi-watermark" aria-hidden="true">{player.number}</span>
+    <div className="bi-art">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className={isQB&&!failed?'bi-art-cinematic':'bi-art-fallback'}
+        src={isQB&&!failed?'/images/bears-intelligence/cw18-hero.webp':'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png'}
+        alt={isQB&&!failed?'AI-generated quarterback concept artwork':player.name+' headshot'}
+        onError={()=>setFailed(true)}/>
+    </div>
+    <div className="bi-hero-copy">
+      <small>PLAYER SPOTLIGHT / CHICAGO</small>
+      <h1><span>{first}</span><em>{last.join(' ')}</em></h1>
+      <p className="bi-identity">#{player.number} / {player.position} / CHICAGO BEARS</p>
+      <div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
+      <p className="bi-credit">Illustrative statistics · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
+    </div>
+  </section>;
+}
