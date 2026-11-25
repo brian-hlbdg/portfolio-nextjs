@@ -1,7 +1,38 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import { players } from './data';
-import { Field,ThirdDown,Trend } from './Charts';
+import { Field,ThirdDown,Trend,League } from './Charts';
 import { PlayerHero } from './PlayerHero';
 import './studio.css';
-export default function Studio(){const [mode,setMode]=useState('Experience');const [theme,setTheme]=useState('Cinematic');const [device,setDevice]=useState('Desktop');const [motion,setMotion]=useState(true);const [player,setPlayer]=useState(0);const [state,setState]=useState('Ready');return <main className={'bi-root '+theme.toLowerCase()}><nav className="bi-nav"><div><b>BEARS<span> / INTELLIGENCE</span></b><small>DESIGN STUDIO · 01</small></div><a href="/chicago-sports/bears/">Back to dashboard ↗</a></nav><div className="bi-toolbar"><div className="bi-controls">{['Experience','Components','Motion'].map(m=><button key={m} aria-pressed={mode===m} onClick={()=>setMode(m)}>{m}</button>)}</div><div className="bi-controls">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div><label>Theme <select value={theme} onChange={e=>setTheme(e.target.value)}>{['Cinematic','Editorial','Tactical'].map(t=><option key={t}>{t}</option>)}</select></label></div><div className="bi-notice">DESIGN FIXTURES · All statistics and benchmarks are illustrative, not live NFL data.</div><div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}><div className="bi-context"><label>Player <select value={player} onChange={e=>setPlayer(Number(e.target.value))}>{players.map((p,i)=><option key={p.id} value={i}>{p.name}</option>)}</select></label><label><input type="checkbox" checked={motion} onChange={e=>setMotion(e.target.checked)}/> Idle motion</label>{mode==='Components'&&<label>Preview state <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}</div>{mode==='Components'&&state!=='Ready'?<div className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated component state.</p><button onClick={()=>setState('Ready')}>Reset preview</button></div>:<><PlayerHero key={players[player].id} player={players[player]} animate={motion}/>{mode!=='Motion'&&<div className={'bi-grid '+(mode==='Components'?'bi-stack':'')} >{(player===0||mode==='Components')&&<Field/>}<ThirdDown/>{(player===0||mode==='Components')&&<Trend/>}</div>}{mode==='Motion'&&<div className="bi-panel"><h2>Motion study</h2><p>Subtle whole-figure movement, not anatomical breathing. Reduced-motion preference is respected. Replace the stylized figure with licensed layered or rigged assets in production.</p></div>}</>}</div><footer className="bi-footer">Independent design experiment · No live data connection · Not affiliated with the Chicago Bears</footer></main>}
+
+export default function Studio(){
+  const [device,setDevice]=useState('Desktop');
+  const [player,setPlayer]=useState(0);
+  const [mode,setMode]=useState('Experience');
+  const [state,setState]=useState('Ready');
+  return <main className="bi-root">
+    <nav className="bi-nav">
+      <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
+      <div className="bi-controls" aria-label="Studio mode">{['Experience','Components'].map(m=><button key={m} aria-pressed={mode===m} onClick={()=>setMode(m)}>{m}</button>)}</div>
+      <Link href="/chicago-sports/bears/">Back to dashboard ↗</Link>
+    </nav>
+    <div className="bi-toolbar">
+      <label>Player <select value={player} onChange={e=>setPlayer(Number(e.target.value))}>{players.map((p,i)=><option key={p.id} value={i}>{p.name}</option>)}</select></label>
+      <div className="bi-controls" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div>
+      <span className="bi-sample">SAMPLE DATA</span>
+      {mode==='Components'&&<label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}
+    </div>
+    <div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}>
+      {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:<>
+      <PlayerHero key={players[player].id} player={players[player]}/>
+      <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>Performance, tendencies and context. All numbers are illustrative.</p></section>
+      <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
+        {player===0?<><Trend/><League/><Field/></>:<section className="bi-panel"><h2>Position analytics</h2><p>Detailed player splits are not yet available for this position.</p></section>}
+        <ThirdDown/>
+      </div>
+      </>}
+    </div>
+    <footer className="bi-footer">Design prototype · Sample statistics · Independent, unofficial Bears project</footer>
+  </main>;
+}
