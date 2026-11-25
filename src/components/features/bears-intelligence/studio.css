@@ -58,3 +58,48 @@
 @container (max-width:850px){.bi-grid{grid-template-columns:1fr}.bi-hero{min-height:300px}.bi-hero h1{font-size:clamp(32px,7cqw,64px)}.bi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container (max-width:500px){.bi-hero{grid-template-columns:1fr;min-height:0}.bi-art{height:240px}.bi-art .bi-art-cinematic{mask-image:linear-gradient(#000 70%,transparent 100%)}.bi-hero-copy{padding:0 12px 18px;margin-top:-12px}.bi-hero h1{font-size:49px;line-height:.94}.bi-stats{margin:16px 0 8px}.bi-stats strong{font-size:29px}.bi-section-title{display:block;margin-top:22px}.bi-section-title p{margin-top:8px}.bi-panel{padding:14px}.bi-detail{grid-template-columns:1fr 1fr}.bi-down{grid-template-columns:45px minmax(15px,1fr) 47px 32px 55px;gap:4px;font-size:11px}.bi-zones strong{font-size:18px}.bi-field{padding:8px}.bi-heading h2{font-size:26px}.bi-root .bi-weeks button{font-size:9px}}
 @media(max-width:500px){.bi-nav a{font-size:11px}.bi-brand b{font-size:14px}.bi-toolbar{justify-content:flex-start}.bi-root button,.bi-root select{padding:8px 9px}}
+
+/* Round 3: tactical field, direct chart selection and compact mobile rhythm. */
+.bi-insight{margin-top:16px!important;padding:12px 0 0 12px;border-top:1px solid var(--line);border-left:2px solid var(--accent);color:var(--text)!important}
+.bi-field-v2{padding:10px clamp(12px,4cqw,44px);background:repeating-linear-gradient(90deg,transparent 0 8%,#ffffff12 8% 8.25%,transparent 8.25% 16%),repeating-linear-gradient(0deg,#193c2d 0 43px,#214b37 43px 86px);border:1px solid #819c8a;box-shadow:inset 0 0 32px #081b16;position:relative}
+.bi-endzone{background:#0b192b;border-block:2px solid #c6d5cb;text-align:center;color:#f4a277;font-weight:900;font-size:12px;letter-spacing:.25em;padding:7px}
+.bi-field-v2 .bi-zones{gap:0;border:2px solid #c6d5cb}
+.bi-root .bi-field-v2 .bi-zones button{min-height:58px;border:1px solid #c6d5cb80;background-clip:padding-box}
+.bi-root .bi-field-v2 .bi-zones button.bi-behind{border-top:3px dashed #f4f0e6}
+.bi-field-v2 .bi-zone-labels{letter-spacing:.12em}
+.bi-trend-v2{position:relative;touch-action:pan-y}
+.bi-trend-v2 svg{max-height:none;width:100%;height:auto}
+.bi-chart-hit{position:absolute;display:grid}
+.bi-root .bi-chart-hit button{background:transparent;border:0;border-radius:0;padding:0;min-width:0}
+.bi-root .bi-chart-hit button[aria-pressed=true]{background:#ffffff06}
+.bi-root .bi-chart-hit button:hover{background:#ffffff0a}
+.bi-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.bi-picker{min-width:0}
+.bi-root .bi-picker-trigger{display:flex;align-items:center;gap:12px;text-align:left;padding:6px 12px 6px 6px;min-height:44px}
+.bi-picker-trigger small,.bi-picker-results small{display:block;font-size:9px;letter-spacing:.08em;margin-top:3px}
+.bi-picker-number{display:grid;place-items:center;width:36px;height:36px;background:#263a50;color:var(--accent);font-weight:900;font-size:20px}
+.bi-picker-dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);border-top:3px solid var(--accent);padding:0;max-width:min(480px,calc(100vw - 24px));width:480px;margin:auto;max-height:85dvh;overflow:auto}
+.bi-picker-dialog::backdrop{background:#02060bd9}
+.bi-picker-inner{padding:22px}
+.bi-picker-inner header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.bi-picker-inner h2{font-size:24px;font-family:Impact,'Arial Narrow',sans-serif;text-transform:uppercase}
+.bi-picker-inner input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:12px;margin:8px 0 14px}
+.bi-picker-results{display:grid;gap:6px}
+.bi-root .bi-picker-results button{display:grid;grid-template-columns:50px 1fr auto;align-items:center;text-align:left;gap:12px;min-height:58px}
+.bi-picker-results img{width:50px;height:44px;object-fit:contain}
+@container (max-width:500px){
+  .bi-art{height:200px}
+  .bi-hero-copy{margin-top:-24px;padding:0 12px 12px}
+  .bi-hero h1{font-size:clamp(36px,12cqw,49px);margin:8px 0}
+  .bi-stats>div{padding:9px 8px;border-bottom:1px solid var(--line)}
+  .bi-stats>div:nth-child(2n){border-right:0}
+  .bi-stats strong{font-size:26px}
+  .bi-stats{margin-top:12px}
+  .bi-section-title h2{font-size:30px}
+  .bi-root .bi-controls button{min-height:40px}
+  .bi-root .bi-field-v2 .bi-zones button{min-height:60px}
+  .bi-field-v2{padding:8px}
+  .bi-zones strong{font-size:16px}
+  .bi-highlight strong{font-size:40px}
+}
+@media(max-width:500px){.bi-picker-dialog{position:fixed;inset:auto 0 0;margin:0;max-width:100%;width:100%;border-radius:12px 12px 0 0}.bi-picker-inner{padding:18px 18px max(18px,env(safe-area-inset-bottom))}}
