@@ -9,6 +9,8 @@ import { Field,ThirdDown,Trend,League } from './Charts';
 import { PlayerHero } from './PlayerHero';
 import { sampleRushing,rushStats } from './rushing';
 import { RushingCorridors,RushTrend,ExplosiveRuns } from './RushingCharts';
+import { sampleReceiving,receivingStats } from './receiving';
+import { ReceiverField,ReceiverTrend,AfterCatch,Connections } from './ReceivingCharts';
 import './studio.css';
 
 export default function Studio(){
@@ -33,8 +35,9 @@ export default function Studio(){
   const ranks=current?file?.players.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)?.ranks:undefined;
   const snapshot=source==='Sample'&&current?fixtureSnapshot(current):loaded?.snapshot;
   const rushing=current&&(current.position==='RB'||current.position==='FB')?(source==='Sample'?sampleRushing:file?.rushing?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
+  const receiving=current&&['WR','TE','RB','FB'].includes(current.position)?(source==='Sample'?(current.position==='WR'?sampleReceiving:undefined):file?.receiving?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
   const basePlayer=current?(source==='Sample'?current:loaded?.player??{...current,stats:[]}):undefined;
-  const shownPlayer=rushing&&basePlayer?{...basePlayer,stats:rushStats(rushing)}:basePlayer;
+  const shownPlayer=basePlayer?(rushing?{...basePlayer,stats:rushStats(rushing)}:receiving?{...basePlayer,stats:receivingStats(receiving)}:basePlayer):undefined;
   return <main className="bi-root">
     <nav className="bi-nav">
       <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -55,7 +58,7 @@ export default function Studio(){
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
         {!snapshot?<section className="bi-panel" role="status"><h2>{error?'Dataset unavailable':'Loading analytics'}</h2><p>{error??'Retrieving season data…'}</p></section>:<>
-        {rushing?<><RushTrend key={'rush-trend-'+current.id+'-'+season+'-'+source} profile={rushing}/><ExplosiveRuns profile={rushing}/><RushingCorridors key={'rush-corridors-'+current.id+'-'+season+'-'+source} profile={rushing}/></>:<>
+        {rushing?<><RushTrend key={'rush-trend-'+current.id+'-'+season+'-'+source} profile={rushing}/><ExplosiveRuns profile={rushing}/><RushingCorridors key={'rush-corridors-'+current.id+'-'+season+'-'+source} profile={rushing}/>{receiving&&<AfterCatch profile={receiving}/>}</>:receiving?<><ReceiverTrend key={'rec-trend-'+current.id+'-'+season+'-'+source} profile={receiving}/><AfterCatch profile={receiving}/><ReceiverField key={'rec-field-'+current.id+'-'+season+'-'+source} profile={receiving}/><Connections profile={receiving}/></>:<>
         {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching position-specific data available.</p></section>}
         {source==='Sample'&&snapshot.weeklyRatings?<League/>:ranks?.length&&file?.qualifiedPassers?<League actual={ranks} count={file.qualifiedPassers}/>:null}
         {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>No passing zone data for this player.</p></section>}
