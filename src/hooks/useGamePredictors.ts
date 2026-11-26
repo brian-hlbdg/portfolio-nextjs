@@ -92,7 +92,7 @@ const PREDICTOR_BASE_URL = 'https://sports.core.api.espn.com/v2/sports/football/
  */
 function extractStat(stats: ESPNPredictorStat[], statName: string): number {
   const stat = stats.find((s) => s.name === statName);
-  return stat?.value ?? 0;
+  return typeof stat?.value === 'number' && Number.isFinite(stat.value) ? stat.value : NaN;
 }
 
 /**
@@ -150,6 +150,7 @@ async function fetchSingleGamePredictor(
     const matchupQuality = extractStat(bearsStats, 'matchupQuality');
     const chanceOfTie = extractStat(bearsStats, 'teamChanceTie');
 
+    if (![bearsWinProb, opponentWinProb, predictedSpread, matchupQuality, chanceOfTie].every(Number.isFinite) || bearsWinProb<0 || bearsWinProb>100 || opponentWinProb<0 || opponentWinProb>100) return null;
     return {
       gameId,
       bearsWinProbability: Math.round(bearsWinProb),
