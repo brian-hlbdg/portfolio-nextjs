@@ -55,7 +55,7 @@ export default function Studio(){
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
         {!snapshot?<section className="bi-panel" role="status"><h2>{error?'Dataset unavailable':'Loading analytics'}</h2><p>{error??'Retrieving season data…'}</p></section>:<>
-        {rushing?<><RushTrend key={current.id+'-'+season} profile={rushing}/><ExplosiveRuns profile={rushing}/><RushingCorridors key={current.id+'-'+season} profile={rushing}/></>:<>
+        {rushing?<><RushTrend key={'rush-trend-'+current.id+'-'+season+'-'+source} profile={rushing}/><ExplosiveRuns profile={rushing}/><RushingCorridors key={'rush-corridors-'+current.id+'-'+season+'-'+source} profile={rushing}/></>:<>
         {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching position-specific data available.</p></section>}
         {source==='Sample'&&snapshot.weeklyRatings?<League/>:ranks?.length&&file?.qualifiedPassers?<League actual={ranks} count={file.qualifiedPassers}/>:null}
         {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>No passing zone data for this player.</p></section>}
