@@ -365,3 +365,10 @@
 .bi-root .bi-primary-nav button:focus-visible{outline-offset:-4px}
 @media(max-width:680px){.bi-primary-nav{box-shadow:0 4px 12px #080f1955}.bi-preview,.bi-game-analysis{scroll-margin-top:120px}}
 @media print{.bi-primary-nav{position:static;box-shadow:none}}
+
+/* Editorial chapter banners */
+.bi-chapter-banner h2{font-family:var(--display);font-style:italic;font-size:clamp(38px,8cqw,112px);line-height:.95;margin:14px 0;text-transform:uppercase}
+.bi-chapter-banner h2 em{color:var(--accent)}
+.bi-defense-chapter{margin-top:40px;background:radial-gradient(ellipse at 75% 25%,#233b54,transparent 70%),linear-gradient(120deg,#142437,#080f19)}
+.bi-chapter-note{font-size:11px!important;margin-top:8px!important}
+@container(max-width:500px){.bi-chapter-banner h2{font-size:clamp(34px,10cqw,50px)}.bi-defense-chapter{margin-top:26px}}
