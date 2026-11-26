@@ -162,3 +162,24 @@
 
 /* Defensive intelligence */
 .bi-defense-trend .bi-rush-bar i{background:#84b6eb}
+
+/* Team intelligence */
+.bi-team-hero{position:relative;isolation:isolate;overflow:hidden;padding:clamp(20px,4cqw,60px);background:radial-gradient(ellipse at 75% 25%,#263e59,transparent 70%),linear-gradient(120deg,#162538,#080f19);border-bottom:1px solid var(--line)}
+.bi-team-hero h1{font-family:Impact,'Arial Narrow',sans-serif;font-style:italic;font-size:clamp(38px,8cqw,112px);line-height:.95;margin:14px 0;text-transform:uppercase}
+.bi-team-hero h1 em{color:var(--accent)}
+.bi-team-hero>div:first-child>small{color:var(--accent);font-weight:800}
+.bi-team-hero-mark{position:absolute;z-index:-1;right:-.02em;top:-.18em;font-size:clamp(110px,35cqw,440px);font-weight:900;color:transparent;-webkit-text-stroke:1px #ffffff19;line-height:1}
+.bi-team-hero .bi-stats{position:relative}
+.bi-team-rank{margin:14px 0}
+.bi-team-rank>div:not(.bi-track){display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.bi-team-rank .bi-track{margin:6px 0}
+.bi-team-defense .bi-track i{background:#84b6eb}
+.bi-team-trend{display:grid;grid-template-columns:repeat(auto-fit,minmax(35px,1fr));gap:4px}
+.bi-root .bi-team-trend button{padding:4px 2px;min-width:0}
+.bi-team-week-bars{height:130px;display:flex;justify-content:center;gap:3px;background:linear-gradient(to bottom,transparent 49%,#a9b6c6 49%,#a9b6c6 50%,transparent 50%)}
+.bi-team-signed{width:40%;height:100%;position:relative}
+.bi-team-signed i{position:absolute;width:100%;background:var(--accent);display:block}
+.bi-team-signed.defense i{background:#84b6eb}
+.bi-team-downs>div{display:grid;grid-template-columns:.65fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.bi-team-downs>div>*:not(:first-child){text-align:right}
+@container(max-width:500px){.bi-team-hero .bi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-team-week-bars{height:100px}.bi-team-downs>div{gap:4px}.bi-team-downs small{letter-spacing:0}}
