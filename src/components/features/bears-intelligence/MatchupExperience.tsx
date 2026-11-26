@@ -1,5 +1,7 @@
 'use client';
 import {useState} from 'react';
+import {useTeamSchedule} from '@/hooks/useTeamSchedule';
+import {normalizeTeam} from './scheduleMatch';
 import type {SeasonFile} from './seasonData';
 import {teamMetrics,teamLabels,teamValue,type TeamMetric} from './teamIdentity';
 import {teamName,type MatchupTeam} from './matchupData';
@@ -37,12 +39,22 @@ export function MatchupExperience({file,initialOpponent}:{file:SeasonFile;initia
  const teams=file.matchupTeams??[];
  const chicago=teams.find(t=>t.id==='CHI');
  const opponents=teams.filter(t=>t.id!=='CHI');
- const [choice,setChoice]=useState(initialOpponent==='LAR'?'LA':initialOpponent==='WSH'?'WAS':initialOpponent??'GB');
- const opp=opponents.find(t=>t.id===choice)??opponents[0];
+ const {scheduleData,loading:scheduleLoading}=useTeamSchedule('bears',undefined,file.season);
+ const [choice,setChoice]=useState<string|undefined>(normalizeTeam(initialOpponent));
+ const fixtures=(scheduleData?.games??[]).filter(g=>g.gameType==='regular'||g.gameType==='postseason').sort((a,b)=>(a.kickoff??'').localeCompare(b.kickoff??''));
+ const next=fixtures.find(g=>g.status==='live')??fixtures.find(g=>g.status==='scheduled');
+ const latest=(file.games??[]).filter(g=>g.final).at(-1);
+ const defaultId=normalizeTeam(next?.opponentAbbreviation)??(latest?normalizeTeam(latest.home==='CHI'?latest.away:latest.home):undefined);
+ const target=choice??defaultId;
+ const opp=opponents.find(t=>normalizeTeam(t.id)===target);
+ const options=[...opponents].sort((a,b)=>teamName(a.id).localeCompare(teamName(b.id)));
+ const picker=<div className="bi-game-select"><label htmlFor="bi-match-opponent">Select opponent</label><select id="bi-match-opponent" value={opp?.id??''} onChange={e=>setChoice(normalizeTeam(e.target.value))}><option value="" disabled>{scheduleLoading&&!choice?'Finding next opponent…':'Choose an opponent'}</option>{options.map(t=><option key={t.id} value={t.id}>{teamName(t.id)}{normalizeTeam(t.id)===normalizeTeam(next?.opponentAbbreviation)?' · Next opponent':''}</option>)}</select>{next&&normalizeTeam(next.opponentAbbreviation)&&<button type="button" onClick={()=>setChoice(undefined)}>Next opponent</button>}</div>;
+ if(!choice&&scheduleLoading)return <>{picker}<section className="bi-panel" role="status"><h2>Finding the next matchup</h2><p>Retrieving the selected season schedule…</p></section></>;
+ if(chicago&&!opp)return <>{picker}<section className="bi-panel"><h2>Choose an opponent</h2><p>{target?'The scheduled or selected opponent has no matching season analytics. Choose another team.':'No upcoming or completed opponent could be identified.'}</p></section></>;
  if(!chicago||!opp)return <section className="bi-panel"><h2>Matchup intelligence unavailable</h2><p>Regenerate the season dataset to include league-wide team profiles.</p></section>;
  const meetings=(file.games??[]).filter(g=>g.home===opp.id||g.away===opp.id);
  return <>
- <div className="bi-game-select"><label htmlFor="bi-match-opponent">Select opponent</label><select id="bi-match-opponent" value={opp.id} onChange={e=>setChoice(e.target.value)}>{opponents.map(t=><option key={t.id} value={t.id}>{teamName(t.id)}</option>)}</select></div>
+ {picker}
  <section className="bi-team-hero bi-match-hero"><div><small>MATCHUP INTELLIGENCE / {file.season} REGULAR SEASON</small><h1>CHI <span>VS</span> <em>{opp.id}</em></h1><p>Chicago Bears vs {teamName(opp.id)} · descriptive season comparison</p></div><div className="bi-stats">{[['CHI OFF EPA',teamValue(chicago.offense.epa,'epa')],[opp.id+' DEF EPA',teamValue(opp.defense.epa,'epa')],[opp.id+' OFF EPA',teamValue(opp.offense.epa,'epa')],['CHI DEF EPA',teamValue(chicago.defense.epa,'epa')]].map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div></section>
  <section className="bi-section-title"><div><small>01 / HEAD TO HEAD</small><h2>Know your opponent</h2></div><p>Season-to-date profiles, not pregame snapshots or forecasts.</p></section>
  <div className="bi-grid"><Alignment attack={chicago} stop={opp}/><Alignment attack={opp} stop={chicago}/><StyleMatch chi={chicago} opp={opp}/><RedZoneMatch chi={chicago} opp={opp}/><RecentForm key={opp.id} chi={chicago} opp={opp}/>
