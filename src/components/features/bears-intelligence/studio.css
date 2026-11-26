@@ -335,3 +335,24 @@
 .bi-news-item:hover strong{color:#ffb08a;text-decoration:underline}
 .bi-news-item p{font-size:12px}
 @container(max-width:850px){.bi-live-grid,.bi-news-grid{grid-template-columns:1fr}}
+
+/* Season schedule */
+.bi-season-schedule{margin-bottom:24px}
+.bi-schedule-filters{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.bi-schedule-filters label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.bi-schedule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:10px}
+.bi-schedule-card{display:flex;flex-direction:column;gap:12px;min-width:0;padding:14px;background:#0b1624;border:1px solid var(--line);border-top:2px solid #607389;border-radius:4px}
+.bi-schedule-card.selected{border-color:var(--accent)}
+.bi-schedule-meta{display:flex;justify-content:space-between;gap:6px;align-items:baseline;font-size:11px}
+.bi-schedule-meta small{letter-spacing:.04em;text-transform:uppercase}
+.bi-schedule-opponent{display:grid;gap:4px}
+.bi-schedule-opponent strong{font-family:var(--display);font-size:28px;text-transform:uppercase;line-height:1.1}
+.bi-schedule-opponent span{font-size:12px;color:var(--muted)}
+.bi-schedule-score{display:grid;gap:4px}
+.bi-schedule-score strong{font-size:23px;font-variant-numeric:tabular-nums}
+.bi-schedule-score small{letter-spacing:.04em}
+.bi-schedule-card>button,.bi-schedule-card>small{margin-top:auto}
+.bi-schedule-card>button{min-height:40px}
+.bi-game-analysis{scroll-margin-top:100px;min-width:0}
+@container(max-width:440px){.bi-schedule-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.bi-schedule-card{padding:10px;gap:8px}.bi-schedule-opponent strong{font-size:24px}.bi-schedule-score strong{font-size:20px}.bi-schedule-meta{flex-wrap:wrap}.bi-schedule-card>button{padding:6px;font-size:11px}}
+@container(max-width:280px){.bi-schedule-grid{grid-template-columns:1fr}}
