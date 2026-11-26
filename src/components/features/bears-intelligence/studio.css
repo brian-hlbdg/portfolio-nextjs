@@ -239,3 +239,65 @@
 .bi-match-form-grid strong{font-size:12px;font-variant-numeric:tabular-nums}
 .bi-match-form-grid .bi-team-week-bars{height:90px;margin:4px 0}
 @container(max-width:500px){.bi-match-values{font-size:10px}.bi-match-form-grid strong{font-size:10px}.bi-match-form-grid .bi-team-week-bars{height:65px}}
+
+/* Product shell / editorial system */
+.bi-root{--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-6:24px;--space-8:32px;--defense:#84b6eb;--radius:6px;--max-width:1440px;--display:Impact,'Arial Narrow',sans-serif}
+.bi-shell-header{max-width:var(--max-width);margin:auto}
+.bi-shell-header .bi-nav{padding:18px 0;border-bottom:0}
+.bi-shell-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.bi-root .bi-studio-toggle{background:transparent;color:var(--muted);border-color:var(--line);font-size:11px}
+.bi-primary-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--line);gap:0}
+.bi-root .bi-primary-nav button{position:relative;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:baseline;text-align:left;min-width:0;padding:18px 16px;border:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
+.bi-root .bi-primary-nav button:last-child{border-right:0}
+.bi-primary-nav button>small{font-size:10px;color:var(--muted);letter-spacing:.08em}
+.bi-primary-nav button>span:nth-child(2){font-family:var(--display);font-weight:800;font-size:clamp(20px,2.4vw,30px);text-transform:uppercase;line-height:1.1}
+.bi-primary-nav .bi-nav-description{grid-column:2;color:var(--muted);font-size:11px;line-height:1.3}
+.bi-root .bi-primary-nav button[aria-current=page]{background:linear-gradient(0deg,#ff702d12,transparent);color:#ffad83}
+.bi-primary-nav button[aria-current=page]::after{content:'';position:absolute;inset:auto 0 0;height:3px;background:var(--accent)}
+.bi-root .bi-primary-nav button:hover{background:#ffffff08}
+.bi-context-bar{padding:12px 0;margin-bottom:18px;gap:16px;justify-content:space-between}
+.bi-context-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-width:0}
+.bi-context-label>span{font-size:10px;font-weight:700;letter-spacing:.09em}
+.bi-context-label select{font-weight:700;min-height:44px}
+.bi-data-meta{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;line-height:1.4}
+.bi-data-meta small{display:block;letter-spacing:.035em;font-size:10px}
+.bi-source-dot{width:7px;height:7px;flex:0 0 7px;background:var(--muted);border-radius:50%}
+.bi-source-dot.sample{background:var(--accent)}
+.bi-lab-bar{max-width:var(--max-width);margin:0 auto 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px;border:1px dashed var(--line);background:#132030}
+.bi-lab-bar>div:first-child{margin-right:auto}
+.bi-lab-bar>div:first-child small,.bi-lab-bar>div:first-child strong{display:block}
+.bi-lab-bar label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.bi-panel{padding:clamp(14px,2cqw,24px);border:1px solid var(--line);border-top:2px solid var(--line);border-radius:var(--radius);background:linear-gradient(155deg,#111f30,var(--surface) 56%);overflow-wrap:anywhere}
+.bi-panel:before{left:clamp(14px,2cqw,24px)}
+.bi-heading{gap:12px;margin-bottom:18px}
+.bi-heading h2{font-size:clamp(23px,2.7cqw,34px)}
+.bi-heading p{font-size:12px;max-width:65ch}
+.bi-heading .bi-controls{padding:3px;border:1px solid var(--line);border-radius:var(--radius);gap:3px;max-width:100%}
+.bi-root .bi-heading .bi-controls button{border-color:transparent;background:transparent;padding:7px 9px}
+.bi-root .bi-heading .bi-controls button[aria-pressed=true]{border-color:#9b532f;background:#492918;color:#ffc3a3}
+.bi-highlight{flex-wrap:wrap;gap:8px 12px}
+.bi-highlight strong{font-size:clamp(34px,5cqw,48px);font-variant-numeric:tabular-nums}
+.bi-detail{padding:12px 0;border-top:1px solid var(--line);gap:12px}
+.bi-detail>div{min-width:0}
+.bi-detail strong{font-variant-numeric:tabular-nums}
+.bi-insight{border-left:0;padding:10px 0 0;margin-top:14px!important;font-size:12px!important;color:var(--muted)!important}
+.bi-grid{gap:clamp(12px,1.6cqw,20px)}
+.bi-grid>.bi-panel{container-type:inline-size}
+.bi-section-title{border-bottom:1px solid var(--line);padding-bottom:12px}
+.bi-stats strong{white-space:normal;overflow-wrap:anywhere;line-height:1.12}
+.bi-stats small{line-height:1.4}
+.bi-art img{max-width:100%}
+.bi-art-empty{height:100%;min-height:180px;display:grid;place-content:center;text-align:center;color:var(--muted)}
+.bi-art-empty strong{font-family:var(--display);font-size:clamp(64px,14cqw,180px);color:#ffffff1a;line-height:1}
+.bi-art-empty small{letter-spacing:.09em}
+.bi-root .bi-picker-results button{grid-template-columns:50px minmax(0,1fr) auto}
+.bi-picker-results button>span{overflow-wrap:anywhere}
+.bi-picker-count{margin-bottom:12px!important}
+.bi-root .bi-drive-timeline button,.bi-root .bi-play-log button{scroll-margin:8px}
+.bi-drive-scroll,.bi-drive-timeline,.bi-play-log{overscroll-behavior-inline:contain;scrollbar-color:#61758c #142233}
+.bi-root .bi-controls button,.bi-root select{min-height:36px}
+.bi-root button:disabled{opacity:.55;cursor:not-allowed}
+.bi-root button:focus-visible,.bi-root select:focus-visible,.bi-root input:focus-visible,.bi-root a:focus-visible{outline:2px solid #ffd0b4;outline-offset:2px}
+@container(max-width:440px){.bi-heading .bi-controls{width:100%}.bi-root .bi-heading .bi-controls button{flex:1 1 auto}.bi-detail{grid-template-columns:1fr 1fr}.bi-down{grid-template-columns:42px minmax(12px,1fr) 44px 31px 48px;gap:4px}.bi-root .bi-rush-lanes button{padding-inline:0}.bi-rush-lanes small{overflow-wrap:anywhere}.bi-rush-lanes strong{font-size:12px}.bi-rush-lanes svg{height:60px}.bi-redzone-band strong{font-size:18px}.bi-team-downs>div{gap:4px}.bi-team-downs small{letter-spacing:0}}
+@media(max-width:680px){.bi-shell-header .bi-nav{padding:12px 0}.bi-shell-actions{gap:8px}.bi-root .bi-primary-nav button{grid-template-columns:1fr;padding:12px 6px;gap:4px;text-align:center}.bi-primary-nav button>small{display:none}.bi-primary-nav button>span:nth-child(2){font-size:clamp(17px,5vw,24px)}.bi-primary-nav .bi-nav-description{display:none}.bi-context-bar{gap:12px;margin-bottom:12px}.bi-context-controls{gap:8px;flex-wrap:wrap}.bi-data-meta{font-size:11px}.bi-root .bi-studio-toggle{min-height:36px}.bi-context-label{gap:5px!important}.bi-context-controls .bi-picker{max-width:100%}.bi-root .bi-picker-trigger{max-width:100%}.bi-picker-trigger>span:nth-child(2){overflow-wrap:anywhere}.bi-lab-bar{gap:8px}}
+@media(prefers-reduced-motion:reduce){.bi-root *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
