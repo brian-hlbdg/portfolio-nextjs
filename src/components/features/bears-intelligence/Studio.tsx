@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import Link from 'next/link';
 import { players } from './data';
 import { fixtureSnapshot } from './analytics';
+import { loadSeason,liveSnapshot,type SeasonFile } from './seasonData';
 import { PlayerPicker } from './PlayerPicker';
 import { Field,ThirdDown,Trend,League } from './Charts';
 import { PlayerHero } from './PlayerHero';
@@ -13,7 +14,19 @@ export default function Studio(){
   const [player,setPlayer]=useState(0);
   const [mode,setMode]=useState('Experience');
   const [state,setState]=useState('Ready');
-  const snapshot=fixtureSnapshot(players[player]);
+  const [source,setSource]=useState('Sample');
+  const [season,setSeason]=useState(2025);
+  const [file,setFile]=useState<SeasonFile|null>(null);
+  const [error,setError]=useState<string|null>(null);
+  useEffect(()=>{
+    if(source!=='nflverse') return;
+    const controller=new AbortController();
+    loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
+    return ()=>controller.abort();
+  },[source,season]);
+  const loaded=source==='nflverse'&&file?.season===season?liveSnapshot(file,players[player]):null;
+  const snapshot=source==='Sample'?fixtureSnapshot(players[player]):loaded?.snapshot;
+  const shownPlayer=source==='Sample'?players[player]:loaded?.player??{...players[player],stats:[]};
   return <main className="bi-root">
     <nav className="bi-nav">
       <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -23,19 +36,25 @@ export default function Studio(){
     <div className="bi-toolbar">
       <PlayerPicker players={players} selected={player} onSelect={setPlayer}/>
       <div className="bi-controls" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div>
-      <span className="bi-sample">SAMPLE DATA</span>
+      <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setError(null);setFile(null)}}><option>Sample</option><option>nflverse</option></select></label>
+      {source==='nflverse'&&<label>Season <select value={season} onChange={e=>{setSeason(Number(e.target.value));setError(null);setFile(null)}}>{[2026,2025,2024].map(y=><option key={y}>{y}</option>)}</select></label>}
+      <span className="bi-sample">{source==='Sample'?'SAMPLE DATA':'NFLVERSE / '+season}</span>
       {mode==='Components'&&<label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}
     </div>
     <div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}>
       {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:<>
-      <PlayerHero key={players[player].id} player={players[player]}/>
-      <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>Performance, tendencies and context. All numbers are illustrative.</p></section>
+      <PlayerHero key={players[player].id} player={shownPlayer} sample={source==='Sample'}/>
+      <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
-        {snapshot.passing&&snapshot.weeklyRatings&&snapshot.leagueRating!==null?<><Trend key={snapshot.playerId} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating}/><League/><Field zones={snapshot.passing}/></>:<section className="bi-panel"><h2>Position analytics</h2><p>Detailed player splits are not yet available for this position.</p></section>}
-        {snapshot.thirdDown&&<ThirdDown downs={snapshot.thirdDown}/>}
+        {!snapshot?<section className="bi-panel" role="status"><h2>{error?'Dataset unavailable':'Loading analytics'}</h2><p>{error??'Retrieving season data…'}</p></section>:<>
+        {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching passing data available.</p></section>}
+        {source==='Sample'&&snapshot.weeklyRatings&&<League/>}
+        {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>Complete zone data unavailable for this player.</p></section>}
+        {snapshot.thirdDown&&<ThirdDown downs={snapshot.thirdDown} sample={source==='Sample'}/>}
+        </>}
       </div>
       </>}
     </div>
-    <footer className="bi-footer">Design prototype · Sample statistics · Independent, unofficial Bears project</footer>
+    <footer className="bi-footer">{source==='Sample'?'Design prototype · Sample statistics':'Data: nflverse / nflfastR · CC BY 4.0 · Regular season'} · Independent, unofficial Bears project</footer>
   </main>;
 }
