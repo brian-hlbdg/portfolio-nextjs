@@ -103,3 +103,24 @@
   .bi-highlight strong{font-size:40px}
 }
 @media(max-width:500px){.bi-picker-dialog{position:fixed;inset:auto 0 0;margin:0;max-width:100%;width:100%;border-radius:12px 12px 0 0}.bi-picker-inner{padding:18px 18px max(18px,env(safe-area-inset-bottom))}}
+
+/* Rushing intelligence */
+.bi-rush-controls{margin-bottom:14px}
+.bi-rush-field{background:repeating-linear-gradient(0deg,#193c2d 0 35px,#214b37 35px 70px);border:1px solid #819c8a;padding:10px;border-radius:6px}
+.bi-rush-lanes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.bi-root .bi-rush-lanes button{min-width:0;padding:8px 1px;background:#0c241bb5;border:1px solid #91b5a14d;display:flex;flex-direction:column;align-items:center;gap:4px;color:white}
+.bi-root .bi-rush-lanes button[aria-pressed=true]{border-color:#fff;box-shadow:inset 0 0 16px #ff702d55}
+.bi-rush-lanes small{font-size:9px;letter-spacing:0;min-height:26px;line-height:1.2;text-align:center;color:#e0e8df}
+.bi-rush-lanes strong{font-size:20px;line-height:1}
+.bi-rush-lanes svg{width:100%;max-width:48px;height:90px}
+.bi-rush-lanes span{font-size:10px}
+.bi-rush-los{border-top:2px dashed #fff;text-align:center;padding:6px;font-size:9px;color:white;letter-spacing:.1em}
+.bi-rush-line{display:flex;justify-content:center;gap:5%;margin:8px 0}
+.bi-rush-line span,.bi-rush-back{border:1px solid #b9c8da;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;background:#102237;color:white;font-size:10px;font-weight:700}
+.bi-rush-back{margin:8px auto;background:#a33d12}
+.bi-rush-trend{display:grid;grid-template-columns:repeat(auto-fit,minmax(38px,1fr));gap:5px}
+.bi-root .bi-rush-trend button{padding:6px 2px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;background:transparent}
+.bi-rush-trend button span{font-size:10px;font-variant-numeric:tabular-nums}
+.bi-rush-bar{width:65%;height:100px;display:flex;align-items:end;background:#ffffff08}
+.bi-rush-bar i{display:block;width:100%;background:var(--accent)}
+@container (max-width:500px){.bi-rush-field{padding:5px}.bi-rush-lanes strong{font-size:12px}.bi-rush-lanes small{font-size:8px;min-height:30px}.bi-rush-lanes svg{height:65px}.bi-rush-lanes span{font-size:9px}.bi-rush-trend{grid-template-columns:repeat(auto-fit,minmax(36px,1fr))}.bi-rush-bar{height:70px}}
