@@ -301,3 +301,12 @@
 @container(max-width:440px){.bi-heading .bi-controls{width:100%}.bi-root .bi-heading .bi-controls button{flex:1 1 auto}.bi-detail{grid-template-columns:1fr 1fr}.bi-down{grid-template-columns:42px minmax(12px,1fr) 44px 31px 48px;gap:4px}.bi-root .bi-rush-lanes button{padding-inline:0}.bi-rush-lanes small{overflow-wrap:anywhere}.bi-rush-lanes strong{font-size:12px}.bi-rush-lanes svg{height:60px}.bi-redzone-band strong{font-size:18px}.bi-team-downs>div{gap:4px}.bi-team-downs small{letter-spacing:0}}
 @media(max-width:680px){.bi-shell-header .bi-nav{padding:12px 0}.bi-shell-actions{gap:8px}.bi-root .bi-primary-nav button{grid-template-columns:1fr;padding:12px 6px;gap:4px;text-align:center}.bi-primary-nav button>small{display:none}.bi-primary-nav button>span:nth-child(2){font-size:clamp(17px,5vw,24px)}.bi-primary-nav .bi-nav-description{display:none}.bi-context-bar{gap:12px;margin-bottom:12px}.bi-context-controls{gap:8px;flex-wrap:wrap}.bi-data-meta{font-size:11px}.bi-root .bi-studio-toggle{min-height:36px}.bi-context-label{gap:5px!important}.bi-context-controls .bi-picker{max-width:100%}.bi-root .bi-picker-trigger{max-width:100%}.bi-picker-trigger>span:nth-child(2){overflow-wrap:anywhere}.bi-lab-bar{gap:8px}}
 @media(prefers-reduced-motion:reduce){.bi-root *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Public accessibility and recovery */
+.bi-skip-link{position:absolute;left:16px;top:8px;z-index:100;transform:translateY(-200%);background:var(--surface);color:var(--text);padding:12px;border:2px solid var(--accent)}
+.bi-skip-link:focus{transform:none}
+.bi-preview:focus{outline:none}
+.bi-picker-placeholder{display:grid;place-items:center;width:50px;height:44px;background:#263a50;color:var(--muted);font-weight:800}
+.bi-retry-panel{margin-bottom:16px}.bi-retry-panel button{margin-top:12px}
+.bi-scroll-hint{font-size:11px!important;margin:6px 0!important}
+.bi-drive-scroll:focus-visible,.bi-drive-timeline:focus-visible{outline:2px solid #ffd0b4;outline-offset:2px}
