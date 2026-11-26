@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { Player } from './data';
 
 export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean}) {
-  return <PlayerHeroContent key={player.id+':'+player.name} player={player} sample={sample}/>;
+  return <PlayerHeroContent key={player.id+':'+player.name+':'+player.number} player={player} sample={sample}/>;
 }
 
 function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
@@ -12,6 +12,7 @@ function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
   const slug=player.name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   const base='/images/bears-intelligence/';
   const images=[
+    ...(slug&&player.number>=0?[{src:base+slug+'-'+player.number+'.webp',cinematic:true}]:[]),
     ...(slug?[{src:base+slug+'.webp',cinematic:true}]:[]),
     ...(player.name==='Caleb Williams'?[{src:base+'cw18-hero.webp',cinematic:true}]:[]),
     ...(/^\d+$/.test(player.id)?[{src:'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png',cinematic:false}]:[])
