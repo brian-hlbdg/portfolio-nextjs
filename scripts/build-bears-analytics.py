@@ -52,9 +52,14 @@ def run(year):
     player_week=defaultdict(lambda:defaultdict(lambda:[0,0,0,0,0]))
     all_pass=[0,0,0,0,0]
     names={}
+    passer_totals=defaultdict(lambda:[0,0,0,0,0])
+    passer_teams=defaultdict(set)
+    team_games=defaultdict(set)
     for r in rows:
         if r["season_type"]!="REG" or r["play_type"]=="no_play" or num(r,"two_point_attempt")==1: continue
         chi=r["posteam"]=="CHI"
+        if r.get("game_id") and r["posteam"] not in ("","NA"):
+            team_games[r["posteam"]].add(r["game_id"])
         y=num(r,"ydstogo")
         conv=num(r,"third_down_converted")==1
         fail=num(r,"third_down_failed")==1
@@ -68,7 +73,10 @@ def run(year):
         c=int(num(r,"complete_pass")==1); yards=num(r,"passing_yards") or 0
         t=int(num(r,"pass_touchdown")==1); i=int(num(r,"interception")==1)
         values=[1,c,yards,t,i]
-        for j,v in enumerate(values): all_pass[j]+=v
+        for j,v in enumerate(values):
+            all_pass[j]+=v
+            passer_totals[pid][j]+=v
+        passer_teams[pid].add(r["posteam"])
         week=num(r,"week")
         if chi and week is not None:
             names[pid]=r.get("passer_player_name","")
@@ -85,6 +93,11 @@ def run(year):
     for k,label in enumerate(["1","2–3","4–6","7–10","11+"]):
         c,a=team[k];lc,la=league[k]
         if a and la:result["thirdDown"].append({"distance":label,"made":c,"total":a,"league":lc/la})
+    def metrics(v):
+        a,c,y,t,i=v
+        return [rating(*v), c/a*100, y/a, t/a*100, i/a*100]
+    qualified={pid:metrics(v) for pid,v in passer_totals.items() if v[0]>=14*max((len(team_games[t]) for t in passer_teams[pid]),default=1)}
+    result["qualifiedPassers"]=len(qualified)
     for pid,weeks in player_week.items():
         totals=[sum(w[j] for w in weeks.values()) for j in range(5)]
         a,c,y,t,i=totals
@@ -93,12 +106,27 @@ def run(year):
             for j,direction in enumerate(["left","middle","right"]):
                 c,a,e,ec=player_z[pid][(d,direction)];lc,la=league_z[(d,direction)]
                 p["passing"].append({"id":f"{d}-{j}","depth":label,"direction":direction.title(),"attempts":a,"completions":c,"epa":e/ec if ec else None,"benchmark":lc/la if la else None})
+        if pid in qualified and len(passer_teams[pid])==1:
+            values=qualified[pid]
+            labels=["Passer rating","Completion","Yards / attempt","TD rate","INT rate"]
+            p["ranks"]=[{"label":label,"value":f"{values[j]:.1f}"+("%" if j in (1,3,4) else ""),"rank":1+sum((v[j]<values[j] if j==4 else v[j]>values[j]) for v in qualified.values())} for j,label in enumerate(labels)]
         result["players"].append(p)
     # Map GSIS IDs to ESPN IDs without guessing by name.
     roster,_=load("rosters",f"roster_{year}.csv")
     if not roster or not {"gsis_id","espn_id"}.issubset(roster[0]): raise ValueError("Roster ID mapping schema missing")
     ids={r["gsis_id"]:r["espn_id"].split(".")[0] for r in roster if r.get("gsis_id") and r.get("espn_id") not in ("",None,"NA")}
     for p in result["players"]:p["espnId"]=ids.get(p["gsisId"])
+    result["roster"]=[]
+    seen=set()
+    for r in roster:
+        pid=r.get("gsis_id")
+        if r.get("team")!="CHI" or not pid or pid=="NA" or pid in seen:continue
+        name=r.get("full_name") or r.get("player_name")
+        if not name or name=="NA":continue
+        seen.add(pid)
+        jersey=num(r,"jersey_number")
+        result["roster"].append({"gsisId":pid,"espnId":ids.get(pid),"name":name,"number":int(jersey) if jersey is not None else None,"position":r.get("position") or "POS"})
+    if not result["roster"]:raise ValueError("No Chicago roster entries; verify roster schema")
     dest=Path("public/data/bears-intelligence")/f"{year}.json"
     dest.parent.mkdir(parents=True,exist_ok=True)
     dest.write_text(json.dumps(result,ensure_ascii=False,allow_nan=False),encoding="utf-8")
