@@ -100,6 +100,7 @@ interface ESPNScheduleResponse {
 
 export interface ScheduleGame {
   id: string;
+  kickoff?: string;
   date: string;
   time: string;
   opponent: string;
@@ -298,6 +299,7 @@ function parseGame(
 
   return {
     id: event.id,
+    kickoff: event.date,
     date,
     time,
     opponent: opponent.name,
@@ -352,7 +354,7 @@ interface UseTeamScheduleReturn {
  * @param teamId - One of the team keys from TEAM_ENDPOINTS
  * @param seasonType - Optional ESPN season type: 1=preseason, 2=regular, 3=postseason
  */
-export function useTeamSchedule(teamId: string, seasonType?: number): UseTeamScheduleReturn {
+export function useTeamSchedule(teamId: string, seasonType?: number, season?: number): UseTeamScheduleReturn {
   const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -367,9 +369,10 @@ export function useTeamSchedule(teamId: string, seasonType?: number): UseTeamSch
         throw new Error(`Unknown team: ${teamId}`);
       }
 
-      const url = seasonType
-        ? `${config.endpoint}?seasontype=${seasonType}`
-        : config.endpoint;
+      const params = new URLSearchParams();
+      if (seasonType) params.set('seasontype', String(seasonType));
+      if (season) params.set('season', String(season));
+      const url = config.endpoint + (params.size ? '?' + params.toString() : '');
 
       console.log(`📅 Fetching ${teamId} schedule from ESPN...`);
       console.log(`   Endpoint: ${url}`);
@@ -430,7 +433,7 @@ export function useTeamSchedule(teamId: string, seasonType?: number): UseTeamSch
     } finally {
       setLoading(false);
     }
-  }, [teamId, seasonType]);
+  }, [teamId, seasonType, season]);
 
   const refetch = useCallback(async (): Promise<void> => {
     console.log(`🔄 Refetching schedule...`);
