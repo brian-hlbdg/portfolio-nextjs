@@ -183,3 +183,34 @@
 .bi-team-downs>div{display:grid;grid-template-columns:.65fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
 .bi-team-downs>div>*:not(:first-child){text-align:right}
 @container(max-width:500px){.bi-team-hero .bi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-team-week-bars{height:100px}.bi-team-downs>div{gap:4px}.bi-team-downs small{letter-spacing:0}}
+
+/* Game intelligence */
+.bi-game-select{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0}
+.bi-game-select label{font-size:12px;color:var(--muted)}
+.bi-game-select select{max-width:100%}
+.bi-game-hero{padding:clamp(20px,4cqw,60px);background:radial-gradient(ellipse at 80% 30%,#2c425b,transparent 70%),linear-gradient(120deg,#17283c,#080f19);border-bottom:1px solid var(--line)}
+.bi-game-hero h1{font-family:Impact,'Arial Narrow',sans-serif;font-size:clamp(32px,7cqw,100px);font-style:italic;line-height:1;margin:14px 0;letter-spacing:-.025em}
+.bi-game-hero h1 em{color:var(--accent)}
+.bi-game-hero h1 span{color:var(--muted);font-weight:400}
+.bi-game-hero>div:first-child>small{color:var(--accent);font-weight:800}
+.bi-drive-timeline{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 0 14px}
+.bi-root .bi-drive-timeline button{flex:0 0 156px;min-width:0;scroll-snap-align:start;text-align:left;display:flex;flex-direction:column;gap:7px;padding:14px 10px;border-top:3px solid var(--accent)}
+.bi-root .bi-drive-timeline button.opp{border-top-color:#84b6eb}
+.bi-drive-timeline button strong{text-transform:capitalize;overflow-wrap:anywhere}
+.bi-drive-timeline button span{font-size:11px}
+.bi-drive-timeline button small{letter-spacing:.05em}
+.bi-drive-scroll{overflow-x:auto;margin-top:10px}
+.bi-drive-scroll svg{width:100%;height:auto;display:block}
+.bi-drive-steps{display:flex;gap:4px;flex-wrap:wrap;margin:12px 0}
+.bi-root .bi-drive-steps button{min-width:32px;padding:7px}
+.bi-drive-detail{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.bi-drive-detail small{display:block;letter-spacing:.04em}
+.bi-drive-detail h3{text-transform:capitalize;font-size:16px}
+.bi-drive-detail p{grid-column:1/-1}
+.bi-play-log{max-height:560px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:12px}
+.bi-root .bi-play-log button{display:grid;grid-template-columns:24px minmax(0,1fr) 40px;gap:8px;text-align:left;align-items:start;padding:12px 8px;border-radius:3px}
+.bi-play-log button strong{display:block;font-size:12px;line-height:1.5;font-weight:500;overflow-wrap:anywhere}
+.bi-play-log button small{display:block;letter-spacing:0;text-transform:uppercase;line-height:1.5}
+.bi-play-index{color:var(--muted);font-variant-numeric:tabular-nums}
+.bi-play-yards{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+@container(max-width:500px){.bi-game-hero .bi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-root .bi-drive-timeline button{flex-basis:135px}.bi-drive-detail{grid-template-columns:1fr 1fr}.bi-drive-detail>div:first-child{grid-column:1/-1}}
