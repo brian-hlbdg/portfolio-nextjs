@@ -14,6 +14,7 @@ from urllib.request import urlopen
 from redzone import RedZone
 from defense import Defense
 from team_identity import TeamIdentity
+from game_drives import GameDrives
 
 BASE = "https://github.com/nflverse/nflverse-data/releases/download"
 def load(tag, name):
@@ -74,9 +75,11 @@ def run(year):
     redzone=RedZone()
     defense=Defense(rows[0])
     identity=TeamIdentity()
+    games=GameDrives()
     if not {'defteam','yards_gained','qb_spike','fumble_lost','sack'}.issubset(rows[0]):raise ValueError('Missing team identity columns')
     if not {"yardline_100","game_id","drive"}.issubset(rows[0]):raise ValueError("Missing red-zone columns")
     for r in rows:
+        if r["season_type"]=="REG":games.observe(r,num)
         if r["season_type"]!="REG" or r["play_type"]=="no_play" or num(r,"two_point_attempt")==1: continue
         redzone.observe(r,num)
         defense.observe(r,num)
@@ -218,6 +221,7 @@ def run(year):
     result["redzone"]=redzone.export(ids)
     result["defense"]=defense.export(ids)
     result["teamIdentity"]=identity.export()
+    result["games"]=games.export()
     result["roster"]=[]
     seen=set()
     for r in roster:
