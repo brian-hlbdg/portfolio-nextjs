@@ -15,6 +15,7 @@ from redzone import RedZone
 from defense import Defense
 from team_identity import TeamIdentity
 from game_drives import GameDrives
+from depth_chart import normalize_depth
 
 BASE = "https://github.com/nflverse/nflverse-data/releases/download"
 def load(tag, name):
@@ -223,6 +224,15 @@ def run(year):
     result["teamIdentity"]=identity.export()
     result["matchupTeams"]=identity.matchup_export()
     result["games"]=games.export()
+    depth={}
+    try:
+        depth_rows,_=load("depth_charts",f"depth_charts_{year}.csv.gz")
+        dates=[g["date"] for g in result["games"] if g.get("date") and g["date"]!="NA"]
+        cutoff=max(dates) if year<datetime.now().year and dates else None
+        result["depthChart"],depth=normalize_depth(depth_rows,year,cutoff)
+    except (OSError,ValueError,KeyError) as exc:
+        print(f"Depth chart unavailable: {exc}",file=sys.stderr)
+        result["depthChart"]=None
     result["roster"]=[]
     seen=set()
     for r in roster:
@@ -232,7 +242,7 @@ def run(year):
         if not name or name=="NA":continue
         seen.add(pid)
         jersey=num(r,"jersey_number")
-        result["roster"].append({"gsisId":pid,"espnId":ids.get(pid),"name":name,"number":int(jersey) if jersey is not None else None,"position":r.get("position") or "POS"})
+        result["roster"].append({"gsisId":pid,"espnId":ids.get(pid),"name":name,"number":int(jersey) if jersey is not None else None,"position":r.get("position") or "POS","depth":depth.get("gsis:"+pid) or depth.get("espn:"+str(ids.get(pid)))})
     if not result["roster"]:raise ValueError("No Chicago roster entries; verify roster schema")
     dest=Path("public/data/bears-intelligence")/f"{year}.json"
     dest.parent.mkdir(parents=True,exist_ok=True)
