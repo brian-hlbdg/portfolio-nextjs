@@ -1,3 +1,5 @@
+import PrintButton from './PrintButton';
+
 export const metadata = {
   title: 'Resume — Brian Hall',
   robots: { index: false },
@@ -23,12 +25,7 @@ export default function ResumePage() {
       {/* Print bar — hidden when printing */}
       <div className="no-print bg-ink-950 text-white/70 text-[12px] font-mono py-3 px-6 flex items-center justify-between sticky top-[60px] z-10">
         <span>Resume · Brian Hall</span>
-        <button
-          onClick={() => window.print()}
-          className="bg-white/10 hover:bg-white/20 transition-colors text-white px-4 py-1.5 rounded-[3px] text-[11px] tracking-[0.05em] cursor-pointer"
-        >
-          Print / Save as PDF
-        </button>
+        <PrintButton />
       </div>
 
       <div className="page font-sans text-[#111]">
