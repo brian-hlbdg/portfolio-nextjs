@@ -21,7 +21,7 @@ import { MatchupExperience } from './MatchupExperience';
 import './studio.css';
 
 export default function Studio({lab=false}:{lab?:boolean}){
-  const [view,setView]=useState<'Player'|'Team'|'Game'|'Matchup'>('Player');
+  const [view,setView]=useState<'Player'|'Team'|'Game'|'Matchup'>('Team');
   const [device,setDevice]=useState('Desktop');
   const [player,setPlayer]=useState<{id:string;gsisId?:string;name:string}|null>(null);
   const [mode,setMode]=useState('Experience');
@@ -37,7 +37,7 @@ export default function Studio({lab=false}:{lab?:boolean}){
     loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
     return ()=>controller.abort();
   },[source,season,retry]);
-  const roster=source==='Sample'?players.map(p=>({...p,gsisId:undefined as string|undefined})):file?.season===season?(file.roster??[]).map(p=>({id:p.espnId??'gsis:'+p.gsisId,gsisId:p.gsisId,name:p.name,number:p.number??-1,position:p.position,stats:[]})):[];
+  const roster=source==='Sample'?players.map(p=>({...p,gsisId:undefined as string|undefined})):file?.season===season?(file.roster??[]).map(p=>({id:p.espnId??'gsis:'+p.gsisId,gsisId:p.gsisId,name:p.name,number:p.number??-1,position:p.position,depth:p.depth,stats:[]})):[];
   const selected=player?roster.findIndex(p=>p.id===player.id||(!!player.gsisId&&p.gsisId===player.gsisId)):roster.findIndex(p=>p.name==='Caleb Williams');
   const activeIndex=player?selected:Math.max(0,selected);
   const current=roster[activeIndex];
@@ -61,13 +61,13 @@ export default function Studio({lab=false}:{lab?:boolean}){
         <div className="bi-shell-actions"><Link href="/chicago-sports/bears/">Back to dashboard ↗</Link>{lab&&<button type="button" className="bi-studio-toggle" aria-pressed={mode==='Components'} onClick={()=>{if(mode==='Components'){setMode('Experience');setState('Ready');setDevice('Desktop');if(source==='Sample'){setSource('nflverse');setFile(null);setError(null)}}else setMode('Components')}}>{mode==='Components'?'Exit component lab':'Component lab'}</button>}</div>
       </div>
       <nav className="bi-primary-nav" aria-label="Intelligence experiences">
-        {(['Player','Team','Game','Matchup'] as const).map((v,i)=><button type="button" key={v} aria-current={view===v?'page':undefined} onClick={()=>{setView(v);if(v!=='Player'&&source==='Sample'){setSource('nflverse');setFile(null);setError(null)}}}><small>0{i+1}</small><span>{v}</span><span className="bi-nav-description">{({Player:'Individual performance',Team:'Season identity',Game:'Drive explorer',Matchup:'Opponent comparison'})[v]}</span></button>)}
+        {(['Team','Player','Game','Matchup'] as const).map((v,i)=><button type="button" key={v} aria-current={view===v?'page':undefined} onClick={()=>{setView(v);if(v!=='Player'&&source==='Sample'){setSource('nflverse');setFile(null);setError(null)}}}><small>0{i+1}</small><span>{v}</span><span className="bi-nav-description">{({Player:'Individual performance',Team:'Season identity',Game:'Drive explorer',Matchup:'Opponent comparison'})[v]}</span></button>)}
       </nav>
     </header>
     <div className="bi-toolbar bi-context-bar">
       <div className="bi-context-controls">
         {source==='nflverse'&&<label className="bi-context-label"><span>SEASON</span><select value={season} onChange={e=>{setSeason(Number(e.target.value));setError(null);setFile(null)}}>{[2026,2025,2024].map(y=><option key={y}>{y}</option>)}</select></label>}
-        {view==='Player'&&(roster.length?<PlayerPicker players={roster} selected={activeIndex} onSelect={i=>{const p=roster[i];if(p)setPlayer({id:p.id,gsisId:p.gsisId,name:p.name})}} sample={source==='Sample'}/>:<span role="status" className="bi-data-meta">{error||file?'Roster unavailable':'Loading roster…'}</span>)}
+        {view==='Player'&&(roster.length?<PlayerPicker players={roster} selected={activeIndex} onSelect={i=>{const p=roster[i];if(p)setPlayer({id:p.id,gsisId:p.gsisId,name:p.name})}} sample={source==='Sample'} depthAsOf={file?.depthChart?.asOf}/>:<span role="status" className="bi-data-meta">{error||file?'Roster unavailable':'Loading roster…'}</span>)}
       </div>
       <div className="bi-data-meta" role="status"><span className={source==='Sample'?'bi-source-dot sample':'bi-source-dot'} aria-hidden="true"/><span>{source==='Sample'?'Illustrative sample data':file?.season===season?'nflverse · Regular season':'nflverse · '+season}{source!=='Sample'&&file?.season===season&&<small>Retrieved {file.retrievedAt.slice(0,10)}</small>}</span></div>
     </div>
