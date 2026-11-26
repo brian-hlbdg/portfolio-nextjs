@@ -16,7 +16,7 @@ export default function Studio(){
   const [player,setPlayer]=useState(0);
   const [mode,setMode]=useState('Experience');
   const [state,setState]=useState('Ready');
-  const [source,setSource]=useState('Sample');
+  const [source,setSource]=useState('nflverse');
   const [season,setSeason]=useState(2025);
   const [file,setFile]=useState<SeasonFile|null>(null);
   const [error,setError]=useState<string|null>(null);
@@ -26,15 +26,15 @@ export default function Studio(){
     loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
     return ()=>controller.abort();
   },[source,season]);
-  const roster=source==='nflverse'&&file?.season===season&&file.roster?.length?file.roster.map(p=>({id:p.espnId??'gsis:'+p.gsisId,name:p.name,number:p.number??-1,position:p.position,stats:[]})):players;
-  const selected=Math.min(player,roster.length-1);
+  const roster=source==='Sample'?players:file?.season===season?(file.roster??[]).map(p=>({id:p.espnId??'gsis:'+p.gsisId,name:p.name,number:p.number??-1,position:p.position,stats:[]})):[];
+  const selected=Math.max(0,Math.min(player,roster.length-1));
   const current=roster[selected];
-  const loaded=source==='nflverse'&&file?.season===season?liveSnapshot(file,current):null;
-  const ranks=file?.players.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)?.ranks;
-  const snapshot=source==='Sample'?fixtureSnapshot(current):loaded?.snapshot;
-  const rushing=current.position==='RB'||current.position==='FB'?(source==='Sample'?sampleRushing:file?.rushing?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
-  const basePlayer=source==='Sample'?current:loaded?.player??{...current,stats:[]};
-  const shownPlayer=rushing?{...basePlayer,stats:rushStats(rushing)}:basePlayer;
+  const loaded=source==='nflverse'&&file?.season===season&&current?liveSnapshot(file,current):null;
+  const ranks=current?file?.players.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)?.ranks:undefined;
+  const snapshot=source==='Sample'&&current?fixtureSnapshot(current):loaded?.snapshot;
+  const rushing=current&&(current.position==='RB'||current.position==='FB')?(source==='Sample'?sampleRushing:file?.rushing?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
+  const basePlayer=current?(source==='Sample'?current:loaded?.player??{...current,stats:[]}):undefined;
+  const shownPlayer=rushing&&basePlayer?{...basePlayer,stats:rushStats(rushing)}:basePlayer;
   return <main className="bi-root">
     <nav className="bi-nav">
       <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -42,15 +42,15 @@ export default function Studio(){
       <Link href="/chicago-sports/bears/">Back to dashboard ↗</Link>
     </nav>
     <div className="bi-toolbar">
-      <PlayerPicker players={roster} selected={selected} onSelect={setPlayer} sample={source==='Sample'||!file?.roster?.length}/>
+      {roster.length?<PlayerPicker players={roster} selected={selected} onSelect={setPlayer} sample={source==='Sample'}/>:<span role="status" className="bi-sample">{error||file?'ROSTER UNAVAILABLE':'LOADING ROSTER…'}</span>}
       <div className="bi-controls" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div>
-      <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setPlayer(0);setError(null);setFile(null)}}><option>Sample</option><option>nflverse</option></select></label>
+      <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setPlayer(0);setError(null);setFile(null)}}><option value="nflverse">nflverse</option><option value="Sample">Sample (3 players)</option></select></label>
       {source==='nflverse'&&<label>Season <select value={season} onChange={e=>{setSeason(Number(e.target.value));setPlayer(0);setError(null);setFile(null)}}>{[2026,2025,2024].map(y=><option key={y}>{y}</option>)}</select></label>}
       <span className="bi-sample">{source==='Sample'?'SAMPLE DATA':'NFLVERSE / '+season}</span>
       {mode==='Components'&&<label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}
     </div>
     <div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}>
-      {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:<>
+      {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:!current||!shownPlayer?<section className="bi-panel" role="status"><h2>{error||file?'Season roster unavailable':'Loading season roster'}</h2><p>{error??(file?'The season file has no roster. Regenerate the dataset using the latest analytics script.':'Retrieving the selected season dataset…')}</p></section>:<>
       <PlayerHero key={current.id} player={shownPlayer} sample={source==='Sample'}/>
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
