@@ -4,7 +4,7 @@ import { rate,type Metric,type Zone } from './data';
 import { passingInsight,conversionInsight,signed,type ConversionBucket,type WeeklyRating } from './analytics';
 
 type ViewMetric = Metric|'relative';
-export function Field({zones}:{zones:readonly Zone[]}){
+export function Field({zones,sample=true}:{zones:readonly Zone[];sample?:boolean}){
   const [metric,setMetric]=useState<ViewMetric>('relative');
   const [selected,setSelected]=useState('1-1');
   const z=zones.find(v=>v.id===selected) ?? zones[0];
@@ -27,21 +27,21 @@ export function Field({zones}:{zones:readonly Zone[]}){
       })}</div>
       <div className="bi-field-label">DEPTH BINS · NOT EXACT FIELD COORDINATES</div>
     </div>
-    <div className="bi-detail" aria-live="polite"><div><small>SELECTED ZONE</small><h3>{z.depth} · {z.direction}</h3></div><div><strong>{(rate(z)*100).toFixed(1)}%</strong><small>COMPLETION</small></div><div><strong>{((rate(z)-z.benchmark)*100).toFixed(1)} pp</strong><small>VS SAMPLE LEAGUE</small></div><div><strong>{z.epa.toFixed(2)}</strong><small>EPA / ATT</small></div></div>
+    <div className="bi-detail" aria-live="polite"><div><small>SELECTED ZONE</small><h3>{z.depth} · {z.direction}</h3></div><div><strong>{(rate(z)*100).toFixed(1)}%</strong><small>COMPLETION</small></div><div><strong>{((rate(z)-z.benchmark)*100).toFixed(1)} pp</strong><small>{sample?'VS SAMPLE LEAGUE':'VS NFL AVERAGE'}</small></div><div><strong>{z.epa.toFixed(2)}</strong><small>EPA / ATT</small></div></div>
     <p className="bi-insight">{passingInsight(zones)}</p>
   </section>;
 }
-export function ThirdDown({downs}:{downs:readonly ConversionBucket[]}){
+export function ThirdDown({downs,sample=true}:{downs:readonly ConversionBucket[];sample?:boolean}){
   const total=downs.reduce((s,d)=>s+d.total,0), made=downs.reduce((s,d)=>s+d.made,0);
   return <section className="bi-panel bi-down-panel">
     <header className="bi-heading"><div><small>04 / TEAM SITUATIONS</small><h2>Moving the chains</h2><p>Team third-down conversion by distance</p></div></header>
     <div className="bi-highlight"><strong>{total?(100*made/total).toFixed(1)+"%":"—"}</strong><span>{made} of {total} converted</span></div>
-    <div className="bi-legend">Orange: Chicago · White marker: sample NFL average</div>
+    <div className="bi-legend">Orange: Chicago · White marker: {sample?'sample NFL average':'NFL average'}</div>
     {downs.map(d=>{const r=d.total?d.made/d.total:0,delta=(r-d.league)*100;return <div className="bi-down" key={d.distance}><b>{d.distance} yd</b><div className="bi-track" aria-label={Math.round(r*100)+' percent; league '+Math.round(d.league*100)+' percent'}><i style={{width:r*100+'%'}}/><em style={{left:d.league*100+'%'}}/></div><strong>{(r*100).toFixed(1)}%</strong><small>{d.made}/{d.total}</small><span className={delta>=0?'bi-pos':'bi-neg'}>{delta>=0?'+':''}{delta.toFixed(1)} pp</span></div>})}
     <p className="bi-insight">{conversionInsight(downs)}</p>
   </section>;
 }
-export function Trend({ratings,benchmark}:{ratings:readonly WeeklyRating[];benchmark:number}){
+export function Trend({ratings,benchmark,sample=true}:{ratings:readonly WeeklyRating[];benchmark:number;sample?:boolean}){
   const [active,setActive]=useState(ratings.length-1);
   const [range,setRange]=useState<'Auto'|'Season'|'Last 5'>('Auto');
   const id=useId();
@@ -64,7 +64,7 @@ export function Trend({ratings,benchmark}:{ratings:readonly WeeklyRating[];bench
   const y=(v:number)=>T+(max-v)*(H-T-B)/max;
   const points=visible.map((v,i)=>x(i)+','+y(v.rating)).join(' ');
   return <section className="bi-panel bi-trend-panel">
-    <header className="bi-heading"><div><small>WEEKLY PERFORMANCE</small><h2>Passer rating by week</h2><p>Sample NFL reference {benchmark.toFixed(1)}</p></div><div className="bi-controls">{(['Season','Last 5'] as const).map(w=><button key={w} aria-pressed={range===w||(range==='Auto'&&w===(compact?'Last 5':'Season'))} onClick={()=>{setRange(w);setActive(ratings.length-1)}}>{w}</button>)}</div></header>
+    <header className="bi-heading"><div><small>WEEKLY PERFORMANCE</small><h2>Passer rating by week</h2><p>{sample?'Sample NFL reference':'NFL season passer rating'} {benchmark.toFixed(1)}</p></div><div className="bi-controls">{(['Season','Last 5'] as const).map(w=><button key={w} aria-pressed={range===w||(range==='Auto'&&w===(compact?'Last 5':'Season'))} onClick={()=>{setRange(w);setActive(ratings.length-1)}}>{w}</button>)}</div></header>
     <div className="bi-highlight" aria-live="polite"><strong>{current.rating.toFixed(1)}</strong><span>Week {current.week} · {signed(current.rating-benchmark)} vs reference</span></div>
     <div className="bi-trend bi-trend-v2" ref={setChartNode}>
       <svg viewBox={'0 0 '+W+' '+H} role="group" aria-label="Select weekly passer ratings">
