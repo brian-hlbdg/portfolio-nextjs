@@ -11,7 +11,8 @@ import type { AnalyticsSnapshot, ConversionBucket, WeeklyRating } from './analyt
 export interface SeasonFile {
   season: number; source: 'nflverse'; retrievedAt: string; sourceModified: string|null;
   leagueRating: number|null; thirdDown: ConversionBucket[];
-  roster?: {gsisId:string;espnId:string|null;name:string;number:number;position:string}[];
+  roster?: {gsisId:string;espnId:string|null;name:string;number:number|null;position:string;depth?:{rank:number;position:string|null;group:string|null}|null}[];
+  depthChart?:{source:string;asOf:string}|null;
   qualifiedPassers?:number;
   rushing?:RushingProfile[];
   receiving?:ReceivingProfile[];
