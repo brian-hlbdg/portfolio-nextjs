@@ -20,7 +20,7 @@ export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean})
       <h1><span>{first}</span><em>{last.join(' ')}</em></h1>
       <p className="bi-identity">#{player.number} / {player.position} / CHICAGO BEARS</p>
       {!player.stats.length&&<p>Player statistics unavailable.</p>}<div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
-      <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season passing data'} · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
+      <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season player data'} · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
     </div>
   </section>;
 }
