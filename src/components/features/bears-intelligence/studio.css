@@ -317,3 +317,21 @@
 .bi-root .bi-depth-group h3{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#ffb08a;padding:9px 0;border-bottom:1px solid var(--line)}
 .bi-depth-group h3 span{color:var(--muted);font-variant-numeric:tabular-nums}
 .bi-root .bi-depth-group button{width:100%;min-width:0}
+
+/* ESPN editorial context */
+.bi-live-grid{margin-bottom:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.bi-live-standings{display:grid;gap:3px;margin:14px 0}
+.bi-live-standings>div{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px solid var(--line);font-size:12px}
+.bi-live-standings>div.current{background:#ff702d12;border-left:2px solid var(--accent)}
+.bi-live-standings>div.current strong{color:#ffb08a}
+.bi-live-standings>div span:last-child{font-variant-numeric:tabular-nums}
+.bi-live-opponent{padding:12px 0 20px}
+.bi-live-opponent h3{font-family:var(--display);font-size:clamp(24px,6cqw,42px);text-transform:uppercase;margin:6px 0}
+.bi-live-news{margin:0 0 24px}
+.bi-live-news .bi-heading a{color:#ffb08a;font-size:12px}
+.bi-news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.bi-news-item{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px solid var(--line);color:var(--text);text-decoration:none}
+.bi-news-item strong{font-size:15px;line-height:1.4}
+.bi-news-item:hover strong{color:#ffb08a;text-decoration:underline}
+.bi-news-item p{font-size:12px}
+@container(max-width:850px){.bi-live-grid,.bi-news-grid{grid-template-columns:1fr}}
