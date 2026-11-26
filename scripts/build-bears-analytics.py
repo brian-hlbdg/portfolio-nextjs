@@ -221,6 +221,7 @@ def run(year):
     result["redzone"]=redzone.export(ids)
     result["defense"]=defense.export(ids)
     result["teamIdentity"]=identity.export()
+    result["matchupTeams"]=identity.matchup_export()
     result["games"]=games.export()
     result["roster"]=[]
     seen=set()
