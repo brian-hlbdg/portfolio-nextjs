@@ -30,12 +30,13 @@ export default function Studio(){
   const [season,setSeason]=useState(2025);
   const [file,setFile]=useState<SeasonFile|null>(null);
   const [error,setError]=useState<string|null>(null);
+  const [retry,setRetry]=useState(0);
   useEffect(()=>{
     if(source!=='nflverse') return;
     const controller=new AbortController();
     loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
     return ()=>controller.abort();
-  },[source,season]);
+  },[source,season,retry]);
   const roster=source==='Sample'?players.map(p=>({...p,gsisId:undefined as string|undefined})):file?.season===season?(file.roster??[]).map(p=>({id:p.espnId??'gsis:'+p.gsisId,gsisId:p.gsisId,name:p.name,number:p.number??-1,position:p.position,stats:[]})):[];
   const selected=player?roster.findIndex(p=>p.id===player.id||(!!player.gsisId&&p.gsisId===player.gsisId)):roster.findIndex(p=>p.name==='Caleb Williams');
   const activeIndex=player?selected:Math.max(0,selected);
@@ -53,6 +54,7 @@ export default function Studio(){
   const basePlayer=current?(source==='Sample'?current:loaded?.player??{...current,stats:[]}):undefined;
   const shownPlayer=basePlayer?(isDefender?{...basePlayer,stats:defenseStats(defender,basePlayer.position)}:rushing?{...basePlayer,stats:rushStats(rushing)}:receiving?{...basePlayer,stats:receivingStats(receiving)}:basePlayer):undefined;
   return <main className="bi-root">
+    <a className="bi-skip-link" href="#bi-analytics-content">Skip to analytics</a>
     <header className="bi-shell-header">
       <div className="bi-nav">
         <div className="bi-brand"><span aria-hidden="true">BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -70,7 +72,8 @@ export default function Studio(){
       <div className="bi-data-meta" role="status"><span className={source==='Sample'?'bi-source-dot sample':'bi-source-dot'} aria-hidden="true"/><span>{source==='Sample'?'Illustrative sample data':file?.season===season?'nflverse · Regular season':'nflverse · '+season}{source!=='Sample'&&file?.season===season&&<small>Retrieved {file.retrievedAt.slice(0,10)}</small>}</span></div>
     </div>
     {mode==='Components'&&<div className="bi-lab-bar"><div><small>DEVELOPMENT ONLY</small><strong>Component lab</strong></div><div className="bi-controls" role="group" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button type="button" key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div><label>Data <select value={source} onChange={e=>{setSource(e.target.value);setError(null);setFile(null)}}><option value="nflverse">nflverse</option>{view==='Player'&&<option value="Sample">Sample (3 players)</option>}</select></label><label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label></div>}
-    <div className="bi-preview" style={{maxWidth:mode==='Components'&&device==='Mobile'?390:mode==='Components'&&device==='Tablet'?768:1440}}>
+    <div className="bi-preview" id="bi-analytics-content" tabIndex={-1} aria-busy={source==='nflverse'&&!file&&!error} style={{maxWidth:mode==='Components'&&device==='Mobile'?390:mode==='Components'&&device==='Tablet'?768:1440}}>
+      {error&&source==='nflverse'&&<section className="bi-panel bi-retry-panel" role="alert"><h2>Unable to load season data</h2><p>{error}</p><button type="button" onClick={()=>{setError(null);setFile(null);setRetry(n=>n+1)}}>Retry dataset</button></section>}
       {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:view==='Matchup'?(file?.season===season?<MatchupExperience key={'matchup-'+season} file={file}/>:<section className="bi-panel" role="status"><h2>{error?'Matchup dataset unavailable':'Loading matchup intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):view==='Game'?(file?.season===season?<GameExperience key={'game-'+season} games={file.games}/>:<section className="bi-panel" role="status"><h2>{error?'Game dataset unavailable':'Loading game intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):view==='Team'?(file?.season===season?<TeamExperience key={'team-'+season} file={file}/>:<section className="bi-panel" role="status"><h2>{error?'Team dataset unavailable':'Loading team intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):!current||!shownPlayer?<section className="bi-panel" role="status"><h2>{playerMissing?'Player not on selected roster':error||file?'Season roster unavailable':'Loading season roster'}</h2><p>{playerMissing?player?.name+' is not listed on the '+(source==='Sample'?'sample':season)+' roster. Choose another player or return to a season where this player is listed.':error??(file?'The season file has no roster. Regenerate the dataset using the latest analytics script.':'Retrieving the selected season dataset…')}</p></section>:<>
       <PlayerHero key={current.id+'-'+season+'-'+source} player={shownPlayer} sample={source==='Sample'}/>
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
