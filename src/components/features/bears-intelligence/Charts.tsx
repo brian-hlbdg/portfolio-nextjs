@@ -16,18 +16,19 @@ export function Field({zones,sample=true}:{zones:readonly Zone[];sample?:boolean
       <div className="bi-field-label">ATTACK DIRECTION ↑</div>
       <div className="bi-zone-labels"><span>LEFT</span><span>MIDDLE</span><span>RIGHT</span></div>
       <div className="bi-zones">{zones.map((v,index)=>{
-        const delta=(rate(v)-v.benchmark)*100;
-        const score=metric==='relative'?delta/25:metric==='epa'?v.epa/.4:metric==='completion'?rate(v):v.attempts/64;
+        const completion=rate(v);
+        const delta=completion!==null&&v.benchmark!==null?(completion-v.benchmark)*100:null;
+        const score=metric==='relative'?(delta===null?null:delta/25):metric==='epa'?(v.epa===null?null:v.epa/.4):metric==='completion'?completion:v.attempts/Math.max(1,...zones.map(z=>z.attempts));
         const signed=metric==='relative'||metric==='epa';
-        const color=signed&&score<0?'120,150,195':'255,100,30';
-        const label=metric==='completion'?Math.round(rate(v)*100)+'%':metric==='attempts'?String(v.attempts):metric==='relative'?(delta>=0?'+':'')+delta.toFixed(1)+' pp':v.epa.toFixed(2);
-        return <button key={v.id} className={index>=9?"bi-behind":""} aria-pressed={v.id===selected} aria-label={v.depth+' '+v.direction+' '+label} onClick={()=>setSelected(v.id)} style={{backgroundColor:'rgba('+color+','+(.12+Math.min(1,Math.abs(score))*.65)+')'}}>
+        const color=signed&&score!==null&&score<0?'120,150,195':'255,100,30';
+        const label=metric==='completion'?completion===null?'—':Math.round(completion*100)+'%':metric==='attempts'?String(v.attempts):metric==='relative'?delta===null?'—':(delta>=0?'+':'')+delta.toFixed(1)+' pp':v.epa===null?'—':v.epa.toFixed(2);
+        return <button key={v.id} className={index>=9?"bi-behind":""} aria-pressed={v.id===selected} aria-label={v.depth+' '+v.direction+' '+label} onClick={()=>setSelected(v.id)} style={{backgroundColor:'rgba('+color+','+(.12+Math.min(1,Math.abs(score??0))*.65)+')'}}>
           <span>{v.depth} {v.depth==='Behind LOS'?'':'yd'}</span><strong>{label}</strong><small>{v.completions}/{v.attempts}</small>
         </button>;
       })}</div>
       <div className="bi-field-label">DEPTH BINS · NOT EXACT FIELD COORDINATES</div>
     </div>
-    <div className="bi-detail" aria-live="polite"><div><small>SELECTED ZONE</small><h3>{z.depth} · {z.direction}</h3></div><div><strong>{(rate(z)*100).toFixed(1)}%</strong><small>COMPLETION</small></div><div><strong>{((rate(z)-z.benchmark)*100).toFixed(1)} pp</strong><small>{sample?'VS SAMPLE LEAGUE':'VS NFL AVERAGE'}</small></div><div><strong>{z.epa.toFixed(2)}</strong><small>EPA / ATT</small></div></div>
+    <div className="bi-detail" aria-live="polite"><div><small>SELECTED ZONE</small><h3>{z.depth} · {z.direction}</h3></div><div><strong>{rate(z)===null?'—':((rate(z)??0)*100).toFixed(1)+'%'}</strong><small>COMPLETION</small></div><div><strong>{rate(z)===null||z.benchmark===null?'—':signed(((rate(z)??0)-z.benchmark)*100)+' pp'}</strong><small>{sample?'VS SAMPLE LEAGUE':'VS NFL AVERAGE'}</small></div><div><strong>{z.epa===null?'—':z.epa.toFixed(2)}</strong><small>EPA / ATT</small></div></div>
     <p className="bi-insight">{passingInsight(zones)}</p>
   </section>;
 }
@@ -82,10 +83,11 @@ export function Trend({ratings,benchmark,sample=true}:{ratings:readonly WeeklyRa
     <p className="bi-insight">Best displayed game: Week {best.week}, {best.rating.toFixed(1)} passer rating.</p>
   </section>;
 }
-export function League(){
-  const ranks=[['Passer rating','98.1',9],['Completion','67.4%',13],['Yards / attempt','7.8',5],['TD rate','5.9%',6],['INT rate','1.5%',8]] as const;
-  return <section className="bi-panel bi-league"><header className="bi-heading"><div><small>LEAGUE COMPARISON</small><h2>Rank of 32 starters</h2><p>Illustrative rankings · lower rank is better</p></div></header>
-    {ranks.map(([label,val,rank])=><div key={label} className="bi-rank"><div><span>{label} <b>{val}</b></span><strong>#{rank}</strong></div><div className="bi-track"><i style={{width:((33-rank)/32*100)+'%'}}/><em style={{left:'50%'}}/></div></div>)}
+export function League({actual,count=32}:{actual?:readonly {label:string;value:string;rank:number}[];count?:number}={}){
+  const fixtureRanks=[['Passer rating','98.1',9],['Completion','67.4%',13],['Yards / attempt','7.8',5],['TD rate','5.9%',6],['INT rate','1.5%',8]] as const;
+  const ranks=actual?actual.map(r=>[r.label,r.value,r.rank] as const):fixtureRanks;
+  return <section className="bi-panel bi-league"><header className="bi-heading"><div><small>LEAGUE COMPARISON</small><h2>Rank of {count} {actual?'qualified passers':'starters'}</h2><p>{actual?'Minimum 14 attempts per team game':'Illustrative rankings'} · lower rank is better</p></div></header>
+    {ranks.map(([label,val,rank])=><div key={label} className="bi-rank"><div><span>{label} <b>{val}</b></span><strong>#{rank}</strong></div><div className="bi-track"><i style={{width:((count+1-rank)/count*100)+'%'}}/><em style={{left:'50%'}}/></div></div>)}
     <p className="bi-rank-note">Bars show relative rank, not the raw metric. Marker represents midpoint.</p>
   </section>;
 }
