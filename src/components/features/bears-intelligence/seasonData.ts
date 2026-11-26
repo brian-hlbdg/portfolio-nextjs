@@ -1,3 +1,4 @@
+import type { ReceivingProfile } from './receiving';
 import type { RushingProfile } from './rushing';
 import type { Player, Zone } from './data';
 import type { AnalyticsSnapshot, ConversionBucket, WeeklyRating } from './analytics';
@@ -8,6 +9,7 @@ export interface SeasonFile {
   roster?: {gsisId:string;espnId:string|null;name:string;number:number;position:string}[];
   qualifiedPassers?:number;
   rushing?:RushingProfile[];
+  receiving?:ReceivingProfile[];
   players: {gsisId:string; espnId:string|null; name:string; stats:string[][]; ranks?:{label:string;value:string;rank:number}[]; weeklyRatings:WeeklyRating[]; passing: (Omit<Zone,'epa'|'benchmark'> & {epa:number|null;benchmark:number|null})[]}[];
 }
 export async function loadSeason(season:number, signal:AbortSignal):Promise<SeasonFile>{
