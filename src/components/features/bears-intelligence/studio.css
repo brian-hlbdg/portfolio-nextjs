@@ -409,3 +409,9 @@
 .bi-live-opponent .bi-opponent-title{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,42%);gap:12px;align-items:center}
 .bi-live-opponent .bi-opponent-title img{justify-self:center;align-self:center;width:clamp(84px,36cqw,200px);max-width:100%;height:auto;max-height:200px;object-fit:contain}
 @container(max-width:340px){.bi-live-opponent .bi-opponent-title{grid-template-columns:minmax(0,1fr) minmax(0,36%);gap:8px}.bi-live-opponent .bi-opponent-title img{width:100%;max-height:110px}}
+
+/* Game-first navigation: compact controls, readable disabled states, and schedule separation. */
+.bi-game-select select{flex:1 1 220px;min-width:0}
+.bi-game-select button:disabled{opacity:.42;cursor:default}
+.bi-game-analysis+.bi-season-schedule{margin-top:28px}
+@container(max-width:500px){.bi-game-select{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bi-game-select label{grid-column:1/-1;grid-row:1}.bi-game-select select{grid-column:1/-1;grid-row:2;width:100%}.bi-game-select button{grid-row:3}}
