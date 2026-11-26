@@ -4,7 +4,9 @@ import type { AnalyticsSnapshot, ConversionBucket, WeeklyRating } from './analyt
 export interface SeasonFile {
   season: number; source: 'nflverse'; retrievedAt: string; sourceModified: string|null;
   leagueRating: number|null; thirdDown: ConversionBucket[];
-  players: {gsisId:string; espnId:string|null; name:string; stats:string[][]; weeklyRatings:WeeklyRating[]; passing: (Omit<Zone,'epa'|'benchmark'> & {epa:number|null;benchmark:number|null})[]}[];
+  roster?: {gsisId:string;espnId:string|null;name:string;number:number;position:string}[];
+  qualifiedPassers?:number;
+  players: {gsisId:string; espnId:string|null; name:string; stats:string[][]; ranks?:{label:string;value:string;rank:number}[]; weeklyRatings:WeeklyRating[]; passing: (Omit<Zone,'epa'|'benchmark'> & {epa:number|null;benchmark:number|null})[]}[];
 }
 export async function loadSeason(season:number, signal:AbortSignal):Promise<SeasonFile>{
   const response=await fetch('/data/bears-intelligence/'+season+'.json',{signal,cache:'no-cache'});
@@ -14,13 +16,11 @@ export async function loadSeason(season:number, signal:AbortSignal):Promise<Seas
   return data;
 }
 export function liveSnapshot(file:SeasonFile,player:Player):{snapshot:AnalyticsSnapshot;player:Player}{
-  const match=file.players.find(p=>p.espnId===player.id);
-  // Existing chart contract requires finite benchmark and EPA. Leave unsupported zones unavailable rather than invent values.
+  const match=file.players.find(p=>p.espnId===player.id||'gsis:'+p.gsisId===player.id);
   const passing=match?.passing;
-  const complete=passing?.length===12&&passing.every(z=>z.attempts>0&&z.epa!==null&&z.benchmark!==null);
   return {player:{...player,stats:match?.stats??[]},snapshot:{
     source:'nflverse',season:file.season,updatedAt:file.sourceModified,playerId:player.id,
-    passing:complete?passing as Zone[]:null,weeklyRatings:match?.weeklyRatings??null,
+    passing:passing?.length?passing:null,weeklyRatings:match?.weeklyRatings??null,
     leagueRating:file.leagueRating,thirdDown:file.thirdDown
   }};
 }
