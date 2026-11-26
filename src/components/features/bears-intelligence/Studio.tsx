@@ -16,10 +16,11 @@ import { RedZoneField,RedZoneOpportunities,RedZonePlayMix } from './RedZoneChart
 import { defensePosition,defenseStats } from './defense';
 import { DefenderProduction,DefenderImpact,CoverageTerritory,RunDefense } from './DefenseCharts';
 import { TeamExperience } from './TeamExperience';
+import { GameExperience } from './GameExperience';
 import './studio.css';
 
 export default function Studio(){
-  const [view,setView]=useState<'Player'|'Team'>('Player');
+  const [view,setView]=useState<'Player'|'Team'|'Game'>('Player');
   const [device,setDevice]=useState('Desktop');
   const [player,setPlayer]=useState<{id:string;gsisId?:string;name:string}|null>(null);
   const [mode,setMode]=useState('Experience');
@@ -57,7 +58,7 @@ export default function Studio(){
       <Link href="/chicago-sports/bears/">Back to dashboard ↗</Link>
     </nav>
     <div className="bi-toolbar">
-      <div className="bi-controls" aria-label="Analytics view">{(['Player','Team'] as const).map(v=><button key={v} aria-pressed={view===v} onClick={()=>{setView(v);if(v==='Team'&&source==='Sample'){setSource('nflverse');setFile(null);setError(null)}}}>{v} intelligence</button>)}</div>
+      <div className="bi-controls" aria-label="Analytics view">{(['Player','Team','Game'] as const).map(v=><button key={v} aria-pressed={view===v} onClick={()=>{setView(v);if(v!=='Player'&&source==='Sample'){setSource('nflverse');setFile(null);setError(null)}}}>{v} intelligence</button>)}</div>
       {view==='Player'&&(roster.length?<PlayerPicker players={roster} selected={activeIndex} onSelect={i=>{const p=roster[i];if(p)setPlayer({id:p.id,gsisId:p.gsisId,name:p.name})}} sample={source==='Sample'}/>:<span role="status" className="bi-sample">{error||file?'ROSTER UNAVAILABLE':'LOADING ROSTER…'}</span>)}
       <div className="bi-controls" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div>
       <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setError(null);setFile(null)}}><option value="nflverse">nflverse</option>{view==='Player'&&<option value="Sample">Sample (3 players)</option>}</select></label>
@@ -66,7 +67,7 @@ export default function Studio(){
       {mode==='Components'&&<label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}
     </div>
     <div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}>
-      {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:view==='Team'?(file?.season===season?<TeamExperience key={'team-'+season} file={file}/>:<section className="bi-panel" role="status"><h2>{error?'Team dataset unavailable':'Loading team intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):!current||!shownPlayer?<section className="bi-panel" role="status"><h2>{playerMissing?'Player not on selected roster':error||file?'Season roster unavailable':'Loading season roster'}</h2><p>{playerMissing?player?.name+' is not listed on the '+season+' roster. Choose another player or return to a season where this player is listed.':error??(file?'The season file has no roster. Regenerate the dataset using the latest analytics script.':'Retrieving the selected season dataset…')}</p></section>:<>
+      {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:view==='Game'?(file?.season===season?<GameExperience key={'game-'+season} games={file.games}/>:<section className="bi-panel" role="status"><h2>{error?'Game dataset unavailable':'Loading game intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):view==='Team'?(file?.season===season?<TeamExperience key={'team-'+season} file={file}/>:<section className="bi-panel" role="status"><h2>{error?'Team dataset unavailable':'Loading team intelligence'}</h2><p>{error??'Retrieving season data…'}</p></section>):!current||!shownPlayer?<section className="bi-panel" role="status"><h2>{playerMissing?'Player not on selected roster':error||file?'Season roster unavailable':'Loading season roster'}</h2><p>{playerMissing?player?.name+' is not listed on the '+season+' roster. Choose another player or return to a season where this player is listed.':error??(file?'The season file has no roster. Regenerate the dataset using the latest analytics script.':'Retrieving the selected season dataset…')}</p></section>:<>
       <PlayerHero key={current.id+'-'+season+'-'+source} player={shownPlayer} sample={source==='Sample'}/>
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
