@@ -1,0 +1,55 @@
+name: Refresh Bears Intelligence
+on:
+  schedule:
+    - cron: '23 3,9,15,21 * * *'
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Optional NFL season (defaults to active season)'
+        required: false
+        type: string
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/refresh-bears-intelligence.yml'
+permissions:
+  contents: read
+concurrency:
+  group: bears-refresh-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Run offline tests
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+  refresh:
+    needs: validate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+      - name: Generate and validate season snapshot
+        env:
+          SEASON: ${{ inputs.season }}
+        run: python3 scripts/refresh-bears-analytics.py "$SEASON"
+      - name: Publish changed data only
+        run: |
+          git add -- public/data/bears-intelligence/
+          if git diff --cached --quiet; then
+            echo "No data changes; skipping deployment."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh Bears Intelligence season analytics"
+          git push origin HEAD:main
