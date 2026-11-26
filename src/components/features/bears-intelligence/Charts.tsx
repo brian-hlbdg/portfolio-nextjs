@@ -11,11 +11,11 @@ export function Field({zones,sample=true}:{zones:readonly Zone[];sample?:boolean
   if(!z) return <section className="bi-panel">No passing territory data available.</section>;
   return <section className="bi-panel bi-field-panel">
     <header className="bi-heading"><div><small>03 / PASSING INTELLIGENCE</small><h2>Where the ball goes</h2><p>Depth and direction relative to the line of scrimmage</p></div>
-    <div className="bi-controls">{(['completion','relative','attempts','epa'] as const).map(m=><button key={m} aria-pressed={metric===m} onClick={()=>setMetric(m)}>{({completion:'Comp %',relative:'Vs league',attempts:'Attempts',epa:'EPA'})[m]}</button>)}</div></header>
+    <div className="bi-controls" role="group" aria-label="Passing metric">{(['completion','relative','attempts','epa'] as const).map(m=><button key={m} aria-pressed={metric===m} onClick={()=>setMetric(m)}>{({completion:'Comp %',relative:'Vs league',attempts:'Attempts',epa:'EPA'})[m]}</button>)}</div></header>
     <div className="bi-field bi-field-v2"><div className="bi-endzone" aria-hidden="true">C H I C A G O</div>
       <div className="bi-field-label">ATTACK DIRECTION ↑</div>
       <div className="bi-zone-labels"><span>LEFT</span><span>MIDDLE</span><span>RIGHT</span></div>
-      <div className="bi-zones">{zones.map((v,index)=>{
+      <div className="bi-zones" role="group" aria-label="Passing territory zones">{zones.map((v,index)=>{
         const completion=rate(v);
         const delta=completion!==null&&v.benchmark!==null?(completion-v.benchmark)*100:null;
         const score=metric==='relative'?(delta===null?null:delta/25):metric==='epa'?(v.epa===null?null:v.epa/.4):metric==='completion'?completion:v.attempts/Math.max(1,...zones.map(z=>z.attempts));
@@ -38,7 +38,7 @@ export function ThirdDown({downs,sample=true}:{downs:readonly ConversionBucket[]
     <header className="bi-heading"><div><small>04 / TEAM SITUATIONS</small><h2>Moving the chains</h2><p>Team third-down conversion by distance</p></div></header>
     <div className="bi-highlight"><strong>{total?(100*made/total).toFixed(1)+"%":"—"}</strong><span>{made} of {total} converted</span></div>
     <div className="bi-legend">Orange: Chicago · White marker: {sample?'sample NFL average':'NFL average'}</div>
-    {downs.map(d=>{const r=d.total?d.made/d.total:0,delta=(r-d.league)*100;return <div className="bi-down" key={d.distance}><b>{d.distance} yd</b><div className="bi-track" aria-label={Math.round(r*100)+' percent; league '+Math.round(d.league*100)+' percent'}><i style={{width:r*100+'%'}}/><em style={{left:d.league*100+'%'}}/></div><strong>{(r*100).toFixed(1)}%</strong><small>{d.made}/{d.total}</small><span className={delta>=0?'bi-pos':'bi-neg'}>{delta>=0?'+':''}{delta.toFixed(1)} pp</span></div>})}
+    {downs.map(d=>{const r=d.total?d.made/d.total:0,delta=(r-d.league)*100;return <div className="bi-down" key={d.distance}><b>{d.distance} yd</b><div className="bi-track" role="img" aria-label={Math.round(r*100)+' percent; league '+Math.round(d.league*100)+' percent'}><i style={{width:r*100+'%'}}/><em style={{left:d.league*100+'%'}}/></div><strong>{(r*100).toFixed(1)}%</strong><small>{d.made}/{d.total}</small><span className={delta>=0?'bi-pos':'bi-neg'}>{delta>=0?'+':''}{delta.toFixed(1)} pp</span></div>})}
     <p className="bi-insight">{conversionInsight(downs)}</p>
   </section>;
 }
@@ -49,7 +49,7 @@ export function Trend({ratings,benchmark,sample=true}:{ratings:readonly WeeklyRa
   const [compact,setCompact]=useState(false);
   const [chartNode,setChartNode]=useState<HTMLDivElement|null>(null);
   useEffect(()=>{
-    if(!chartNode) return;
+    if(!chartNode||typeof ResizeObserver==='undefined') return;
     const observer=new ResizeObserver(([entry])=>setCompact(entry.contentRect.width<480));
     observer.observe(chartNode);return ()=>observer.disconnect();
   },[chartNode]);
@@ -65,10 +65,10 @@ export function Trend({ratings,benchmark,sample=true}:{ratings:readonly WeeklyRa
   const y=(v:number)=>T+(max-v)*(H-T-B)/max;
   const points=visible.map((v,i)=>x(i)+','+y(v.rating)).join(' ');
   return <section className="bi-panel bi-trend-panel">
-    <header className="bi-heading"><div><small>WEEKLY PERFORMANCE</small><h2>Passer rating by week</h2><p>{sample?'Sample NFL reference':'NFL season passer rating'} {benchmark.toFixed(1)}</p></div><div className="bi-controls">{(['Season','Last 5'] as const).map(w=><button key={w} aria-pressed={range===w||(range==='Auto'&&w===(compact?'Last 5':'Season'))} onClick={()=>{setRange(w);setActive(ratings.length-1)}}>{w}</button>)}</div></header>
+    <header className="bi-heading"><div><small>WEEKLY PERFORMANCE</small><h2>Passer rating by week</h2><p>{sample?'Sample NFL reference':'NFL season passer rating'} {benchmark.toFixed(1)}</p></div><div className="bi-controls" role="group" aria-label="Weekly rating range">{(['Season','Last 5'] as const).map(w=><button key={w} aria-pressed={range===w||(range==='Auto'&&w===(compact?'Last 5':'Season'))} onClick={()=>{setRange(w);setActive(ratings.length-1)}}>{w}</button>)}</div></header>
     <div className="bi-highlight" aria-live="polite"><strong>{current.rating.toFixed(1)}</strong><span>Week {current.week} · {signed(current.rating-benchmark)} vs reference</span></div>
     <div className="bi-trend bi-trend-v2" ref={setChartNode}>
-      <svg viewBox={'0 0 '+W+' '+H} role="group" aria-label="Select weekly passer ratings">
+      <svg viewBox={'0 0 '+W+' '+H} aria-hidden="true">
         <defs><linearGradient id={id} x1="0" x2="0" y1="0" y2="1"><stop stopColor="#ff702d" stopOpacity=".4"/><stop offset="1" stopColor="#ff702d" stopOpacity="0"/></linearGradient></defs>
         {Array.from({length:5},(_,i)=>max*i/4).map(v=><g key={v}><line x1={L} x2={W-R} y1={y(v)} y2={y(v)} stroke="currentColor" opacity=".2"/><text x="2" y={y(v)+4} fill="currentColor" fontSize="11">{Math.round(v)}</text></g>)}
         <line x1={L} x2={W-R} y1={y(benchmark)} y2={y(benchmark)} stroke="currentColor" strokeDasharray="5 4"/>
@@ -76,8 +76,8 @@ export function Trend({ratings,benchmark,sample=true}:{ratings:readonly WeeklyRa
         <polyline points={points} fill="none" stroke="#ff702d" strokeWidth="2.5"/>
         {visible.map((v,i)=><g key={v.week}><circle cx={x(i)} cy={y(v.rating)} r={i+start===index?6:4} fill="#ff702d" stroke="#fff" strokeWidth="1.5"/><text x={x(i)} y={H-10} textAnchor="middle" fill="currentColor" fontSize="10">W{v.week}</text></g>)}
       </svg>
-      <div className="bi-chart-hit" style={{left:L/W*100+'%',right:R/W*100+'%',top:T/H*100+'%',bottom:B/H*100+'%',gridTemplateColumns:'repeat('+visible.length+',1fr)'}}>
-        {visible.map((v,i)=><button key={v.week} aria-label={'Week '+v.week+', rating '+v.rating} aria-pressed={i+start===index} onClick={()=>setActive(i+start)}><span className="bi-sr-only">Week {v.week}</span></button>)}
+      <div className="bi-chart-hit" role="group" aria-label="Select weekly passer rating" style={{left:0,right:0,top:T/H*100+'%',bottom:B/H*100+'%',display:'block'}}> 
+        {visible.map((v,i)=>{const left=i===0?0:(x(i-1)+x(i))/2;const right=i===visible.length-1?W:(x(i)+x(i+1))/2;return <button key={v.week} style={{position:'absolute',left:left/W*100+'%',width:(right-left)/W*100+'%',height:'100%'}} aria-label={'Week '+v.week+', rating '+v.rating} aria-pressed={i+start===index} onClick={()=>setActive(i+start)}><span className="bi-sr-only">Week {v.week}</span></button>})}
       </div>
     </div>
     <p className="bi-insight">Best displayed game: Week {best.week}, {best.rating.toFixed(1)} passer rating.</p>
