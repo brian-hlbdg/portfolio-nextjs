@@ -7,6 +7,8 @@ import { loadSeason,liveSnapshot,type SeasonFile } from './seasonData';
 import { PlayerPicker } from './PlayerPicker';
 import { Field,ThirdDown,Trend,League } from './Charts';
 import { PlayerHero } from './PlayerHero';
+import { sampleRushing,rushStats } from './rushing';
+import { RushingCorridors,RushTrend,ExplosiveRuns } from './RushingCharts';
 import './studio.css';
 
 export default function Studio(){
@@ -30,7 +32,9 @@ export default function Studio(){
   const loaded=source==='nflverse'&&file?.season===season?liveSnapshot(file,current):null;
   const ranks=file?.players.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)?.ranks;
   const snapshot=source==='Sample'?fixtureSnapshot(current):loaded?.snapshot;
-  const shownPlayer=source==='Sample'?current:loaded?.player??{...current,stats:[]};
+  const rushing=current.position==='RB'||current.position==='FB'?(source==='Sample'?sampleRushing:file?.rushing?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
+  const basePlayer=source==='Sample'?current:loaded?.player??{...current,stats:[]};
+  const shownPlayer=rushing?{...basePlayer,stats:rushStats(rushing)}:basePlayer;
   return <main className="bi-root">
     <nav className="bi-nav">
       <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -51,9 +55,11 @@ export default function Studio(){
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
         {!snapshot?<section className="bi-panel" role="status"><h2>{error?'Dataset unavailable':'Loading analytics'}</h2><p>{error??'Retrieving season data…'}</p></section>:<>
-        {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching passing data available.</p></section>}
+        {rushing?<><RushTrend key={current.id+'-'+season} profile={rushing}/><ExplosiveRuns profile={rushing}/><RushingCorridors key={current.id+'-'+season} profile={rushing}/></>:<>
+        {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching position-specific data available.</p></section>}
         {source==='Sample'&&snapshot.weeklyRatings?<League/>:ranks?.length&&file?.qualifiedPassers?<League actual={ranks} count={file.qualifiedPassers}/>:null}
-        {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>Complete zone data unavailable for this player.</p></section>}
+        {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>No passing zone data for this player.</p></section>}
+        </>}
         {snapshot.thirdDown&&<ThirdDown downs={snapshot.thirdDown} sample={source==='Sample'}/>}
         </>}
       </div>
