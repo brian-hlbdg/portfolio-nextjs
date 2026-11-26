@@ -404,3 +404,8 @@
 .bi-home-away small,.bi-traditional-grid small{font-size:10px;letter-spacing:.06em}
 .bi-upcoming-opponents{margin-top:24px}
 @container(max-width:340px){.bi-opponent-title{gap:8px}.bi-opponent-title img{width:56px}.bi-schedule-card .bi-opponent-title img{width:36px}}
+
+/* Give the featured opponent logo its own centered visual column. */
+.bi-live-opponent .bi-opponent-title{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,42%);gap:12px;align-items:center}
+.bi-live-opponent .bi-opponent-title img{justify-self:center;align-self:center;width:clamp(84px,36cqw,200px);max-width:100%;height:auto;max-height:200px;object-fit:contain}
+@container(max-width:340px){.bi-live-opponent .bi-opponent-title{grid-template-columns:minmax(0,1fr) minmax(0,36%);gap:8px}.bi-live-opponent .bi-opponent-title img{width:100%;max-height:110px}}
