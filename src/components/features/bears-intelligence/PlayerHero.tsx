@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import type { Player } from './data';
 
-export function PlayerHero({player}:{player:Player}) {
+export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean}) {
   const [failed,setFailed] = useState(false);
   const [first,...last] = player.name.split(' ');
   const isQB = player.position === 'QB';
@@ -19,8 +19,8 @@ export function PlayerHero({player}:{player:Player}) {
       <small>PLAYER SPOTLIGHT / CHICAGO</small>
       <h1><span>{first}</span><em>{last.join(' ')}</em></h1>
       <p className="bi-identity">#{player.number} / {player.position} / CHICAGO BEARS</p>
-      <div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
-      <p className="bi-credit">Illustrative statistics · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
+      {!player.stats.length&&<p>Player statistics unavailable.</p>}<div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
+      <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season passing data'} · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
     </div>
   </section>;
 }
