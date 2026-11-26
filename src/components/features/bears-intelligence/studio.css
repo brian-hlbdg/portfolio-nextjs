@@ -310,3 +310,10 @@
 .bi-retry-panel{margin-bottom:16px}.bi-retry-panel button{margin-top:12px}
 .bi-scroll-hint{font-size:11px!important;margin:6px 0!important}
 .bi-drive-scroll:focus-visible,.bi-drive-timeline:focus-visible{outline:2px solid #ffd0b4;outline-offset:2px}
+
+/* Depth chart selector */
+.bi-depth-note{font-size:11px!important;margin:0 0 14px!important;overflow-wrap:anywhere}
+.bi-depth-group{display:grid;gap:5px;margin-bottom:14px}
+.bi-root .bi-depth-group h3{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#ffb08a;padding:9px 0;border-bottom:1px solid var(--line)}
+.bi-depth-group h3 span{color:var(--muted);font-variant-numeric:tabular-nums}
+.bi-root .bi-depth-group button{width:100%;min-width:0}
