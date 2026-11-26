@@ -5,13 +5,13 @@ import type { Player } from './data';
 export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean}) {
   const [failed,setFailed] = useState(false);
   const [first,...last] = player.name.split(' ');
-  const isQB = player.position === 'QB';
+  const isQB = player.name === 'Caleb Williams';
   return <section className="bi-hero">
     <span className="bi-watermark" aria-hidden="true">{player.number}</span>
     <div className="bi-art">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className={isQB&&!failed?'bi-art-cinematic':'bi-art-fallback'}
-        src={isQB&&!failed?'/images/bears-intelligence/cw18-hero.webp':'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png'}
+        src={isQB&&!failed?'/images/bears-intelligence/cw18-hero.webp':player.id.startsWith('gsis:')?undefined:'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png'}
         alt={isQB&&!failed?'AI-generated quarterback concept artwork':player.name+' headshot'}
         onError={()=>setFailed(true)}/>
     </div>
