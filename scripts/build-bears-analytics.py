@@ -55,6 +55,12 @@ def run(year):
     passer_totals=defaultdict(lambda:[0,0,0,0,0])
     passer_teams=defaultdict(set)
     team_games=defaultdict(set)
+    rushing=defaultdict(lambda:defaultdict(lambda:[0,0,0,0,0,0.0,0,0]))
+    rush_weeks=defaultdict(lambda:defaultdict(lambda:[0,0]))
+    rush_league=defaultdict(lambda:[0,0])
+    rush_names={}
+    rush_columns={"rush_attempt","rusher_player_id","rushing_yards","rush_touchdown","run_location","run_gap","qb_kneel"}
+    if not rush_columns.issubset(rows[0]):raise ValueError("Missing rushing columns")
     for r in rows:
         if r["season_type"]!="REG" or r["play_type"]=="no_play" or num(r,"two_point_attempt")==1: continue
         chi=r["posteam"]=="CHI"
@@ -67,6 +73,26 @@ def run(year):
             k=bucket(y)
             league[k][0]+=int(conv);league[k][1]+=1
             if chi: team[k][0]+=int(conv);team[k][1]+=1
+        if num(r,"rush_attempt")==1 and num(r,"qb_kneel")!=1:
+            rid=r.get("rusher_player_id")
+            gain=num(r,"rushing_yards")
+            if rid and rid!="NA" and gain is not None:
+                loc=r.get("run_location")
+                gap=r.get("run_gap")
+                lane="middle" if loc=="middle" else f"{loc}_{gap}" if loc in ("left","right") and gap in ("end","tackle","guard") else "unknown"
+                rush_league[lane][0]+=1
+                rush_league[lane][1]+=gain
+                if chi:
+                    rush_names[rid]=r.get("rusher_player_name","")
+                    v=rushing[rid][lane]
+                    v[0]+=1;v[1]+=gain;v[2]+=int(num(r,"rush_touchdown")==1)
+                    v[3]+=int(gain>=10);v[4]+=int(gain>=20)
+                    e=num(r,"epa")
+                    if e is not None:v[5]+=e;v[6]+=1;v[7]+=int(e>0)
+                    w=num(r,"week")
+                    if w is not None:
+                        rush_weeks[rid][int(w)][0]+=1
+                        rush_weeks[rid][int(w)][1]+=gain
         if num(r,"pass_attempt")!=1 or num(r,"sack")==1: continue
         pid=r["passer_player_id"]
         if not pid or pid=="NA": continue
@@ -116,6 +142,21 @@ def run(year):
     if not roster or not {"gsis_id","espn_id"}.issubset(roster[0]): raise ValueError("Roster ID mapping schema missing")
     ids={r["gsis_id"]:r["espn_id"].split(".")[0] for r in roster if r.get("gsis_id") and r.get("espn_id") not in ("",None,"NA")}
     for p in result["players"]:p["espnId"]=ids.get(p["gsisId"])
+    result["rushing"]=[]
+    lanes=["left_end","left_tackle","left_guard","middle","right_guard","right_tackle","right_end","unknown"]
+    for rid,by_lane in rushing.items():
+        total=[sum(v[j] for v in by_lane.values()) for j in range(8)]
+        a,y,td,ten,twenty,epa,ec,success=total
+        result["rushing"].append({"gsisId":rid,"espnId":ids.get(rid),"name":rush_names[rid],
+            "attempts":a,"yards":y,"touchdowns":td,"explosive10":ten,"explosive20":twenty,
+            "successRate":success/ec if ec else None,"epa":epa/ec if ec else None,
+            "weeks":[{"week":w,"attempts":v[0],"yards":v[1]} for w,v in sorted(rush_weeks[rid].items())],
+            "lanes":[{"id":lane,"attempts":by_lane[lane][0],"yards":by_lane[lane][1],
+                "touchdowns":by_lane[lane][2],"explosive10":by_lane[lane][3],
+                "epa":by_lane[lane][5]/by_lane[lane][6] if by_lane[lane][6] else None,
+                "leagueYpc":rush_league[lane][1]/rush_league[lane][0] if rush_league[lane][0] else None}
+                for lane in lanes]})
+
     result["roster"]=[]
     seen=set()
     for r in roster:
