@@ -11,6 +11,7 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import urlopen
+from redzone import RedZone
 
 BASE = "https://github.com/nflverse/nflverse-data/releases/download"
 def load(tag, name):
@@ -68,8 +69,11 @@ def run(year):
     connections=defaultdict(lambda:defaultdict(lambda:[0,0,0,0]))
     rec_names={}
     if not {"receiver_player_id","receiving_yards","yards_after_catch","first_down_pass"}.issubset(rows[0]):raise ValueError("Missing receiving columns")
+    redzone=RedZone()
+    if not {"yardline_100","game_id","drive"}.issubset(rows[0]):raise ValueError("Missing red-zone columns")
     for r in rows:
         if r["season_type"]!="REG" or r["play_type"]=="no_play" or num(r,"two_point_attempt")==1: continue
+        redzone.observe(r,num)
         chi=r["posteam"]=="CHI"
         if r.get("game_id") and r["posteam"] not in ("","NA"):
             team_games[r["posteam"]].add(r["game_id"])
@@ -204,6 +208,7 @@ def run(year):
                 a,c,y,e,ec=rec_zones[rid][(d,direction)];lc,la=rec_league[(d,direction)]
                 p["zones"].append({"id":f"{d}-{j}","depth":label,"direction":direction.title(),"attempts":a,"completions":c,"yards":y,"epa":e/ec if ec else None,"benchmark":lc/la if la else None})
         result["receiving"].append(p)
+    result["redzone"]=redzone.export(ids)
     result["roster"]=[]
     seen=set()
     for r in roster:
