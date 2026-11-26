@@ -11,7 +11,7 @@ export function PlayerPicker({players,selected,onSelect,sample=true}:{players:re
   function close(){dialog.current?.close();}
   return <div className="bi-picker">
     <button ref={trigger} type="button" className="bi-picker-trigger" aria-haspopup="dialog" onClick={()=>{setQuery('');dialog.current?.showModal();}}>
-      <span className="bi-picker-number">{player.number}</span><span>{player.name}<small>{player.position} · SELECT PLAYER</small></span><span aria-hidden="true">⌄</span>
+      <span className="bi-picker-number">{player?.number??'—'}</span><span>{player?.name??'Choose a player'}<small>{player?.position??'ROSTER'} · SELECT PLAYER</small></span><span aria-hidden="true">⌄</span>
     </button>
     <dialog ref={dialog} className="bi-picker-dialog" aria-label="Choose a player" onClose={()=>trigger.current?.focus()} onClick={e=>{if(e.target===e.currentTarget)close();}}>
       <div className="bi-picker-inner">
