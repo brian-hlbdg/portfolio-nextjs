@@ -1,3 +1,4 @@
+import type { TeamIdentityData } from './teamIdentity';
 import type { DefenseData } from './defense';
 import type { RedZoneData } from './redzone';
 import type { ReceivingProfile } from './receiving';
@@ -14,6 +15,7 @@ export interface SeasonFile {
   receiving?:ReceivingProfile[];
   redzone?:RedZoneData;
   defense?:DefenseData;
+  teamIdentity?:TeamIdentityData;
   players: {gsisId:string; espnId:string|null; name:string; stats:string[][]; ranks?:{label:string;value:string;rank:number}[]; weeklyRatings:WeeklyRating[]; passing: (Omit<Zone,'epa'|'benchmark'> & {epa:number|null;benchmark:number|null})[]}[];
 }
 export async function loadSeason(season:number, signal:AbortSignal):Promise<SeasonFile>{
