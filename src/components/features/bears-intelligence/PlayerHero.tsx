@@ -7,7 +7,7 @@ export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean})
   const [first,...last] = player.name.split(' ');
   const isQB = player.name === 'Caleb Williams';
   return <section className="bi-hero">
-    <span className="bi-watermark" aria-hidden="true">{player.number}</span>
+    <span className="bi-watermark" aria-hidden="true">{player.number>=0?player.number:""}</span>
     <div className="bi-art">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className={isQB&&!failed?'bi-art-cinematic':'bi-art-fallback'}
@@ -18,7 +18,7 @@ export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean})
     <div className="bi-hero-copy">
       <small>PLAYER SPOTLIGHT / CHICAGO</small>
       <h1><span>{first}</span><em>{last.join(' ')}</em></h1>
-      <p className="bi-identity">#{player.number} / {player.position} / CHICAGO BEARS</p>
+      <p className="bi-identity">#{player.number>=0?player.number:"—"} / {player.position} / CHICAGO BEARS</p>
       {!player.stats.length&&<p>Player statistics unavailable.</p>}<div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
       <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season player data'} · {isQB&&!failed?'AI concept art':'Headshot via ESPN'}</p>
     </div>
