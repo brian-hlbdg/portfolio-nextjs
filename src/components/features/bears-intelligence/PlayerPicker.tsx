@@ -21,7 +21,7 @@ export function PlayerPicker({players,selected,onSelect,sample=true}:{players:re
         <p role="status" className="bi-picker-count">{matches.length} of {players.length} players</p>
         <div className="bi-picker-results">{matches.map(({p,i})=><button key={p.id} type="button" aria-pressed={selected===i} onClick={()=>{onSelect(i);close();}}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.id.startsWith('gsis:')?undefined:'https://a.espncdn.com/i/headshots/nfl/players/full/'+p.id+'.png'} alt="" loading="lazy" onError={e=>{e.currentTarget.style.visibility='hidden';}}/>
+          {p.id.startsWith('gsis:')?<span className="bi-picker-placeholder" aria-hidden="true">{p.number>=0?p.number:p.position}</span>:<img src={'https://a.espncdn.com/i/headshots/nfl/players/full/'+p.id+'.png'} alt="" loading="lazy" onError={e=>{e.currentTarget.style.visibility='hidden';}}/>}
           <span><strong>{p.name}</strong><small>#{p.number>=0?p.number:'—'} / {p.position}</small></span><span aria-hidden="true">{i===selected?'✓':'→'}</span>
         </button>)}{!matches.length&&<p>No matching players.</p>}</div>
       </div>
