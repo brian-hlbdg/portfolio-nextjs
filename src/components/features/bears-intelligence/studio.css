@@ -159,3 +159,6 @@
 .bi-redzone-mix b{background:#84b6eb}
 .bi-rz-unavailable{margin-top:16px}
 @container (max-width:500px){.bi-redzone-band strong{font-size:20px}.bi-root .bi-redzone-band{padding:11px 5px;gap:4px}.bi-redzone-band small{font-size:9px}.bi-redzone-top>div:last-child{padding:5px 8px}}
+
+/* Defensive intelligence */
+.bi-defense-trend .bi-rush-bar i{background:#84b6eb}
