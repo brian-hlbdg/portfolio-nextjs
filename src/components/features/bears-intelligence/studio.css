@@ -214,3 +214,28 @@
 .bi-play-index{color:var(--muted);font-variant-numeric:tabular-nums}
 .bi-play-yards{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
 @container(max-width:500px){.bi-game-hero .bi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.bi-root .bi-drive-timeline button{flex-basis:135px}.bi-drive-detail{grid-template-columns:1fr 1fr}.bi-drive-detail>div:first-child{grid-column:1/-1}}
+
+/* Matchup intelligence */
+.bi-match-hero h1 span{font-size:.46em;color:var(--muted);font-weight:400}
+.bi-match-legend,.bi-match-values{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.bi-match-legend span:first-child,.bi-match-values span:first-child{color:#ffad83}
+.bi-match-legend span:last-child,.bi-match-values span:last-child{color:#a6cefa;text-align:right}
+.bi-match-row{padding:14px 0;border-bottom:1px solid var(--line)}
+.bi-match-row>small{display:block;margin-top:6px;letter-spacing:.04em}
+.bi-match-values{margin:8px 0}
+.bi-match-rank-bars{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.bi-match-rank-bars>div{height:8px;background:#26374b;display:flex;overflow:hidden}
+.bi-match-rank-bars>div:first-child{justify-content:flex-end}
+.bi-match-rank-bars i{display:block;height:100%;background:var(--accent)}
+.bi-match-rank-bars>div:last-child i{background:#84b6eb}
+.bi-match-table{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding-top:12px;font-size:13px}
+.bi-match-table strong{text-align:right;font-variant-numeric:tabular-nums}
+.bi-match-table span{color:var(--muted)}
+.bi-match-rz{margin-top:12px}
+.bi-match-rz>div:first-child{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+.bi-match-rz+.bi-match-rz .bi-track i{background:#84b6eb}
+.bi-match-form{margin:14px 0}
+.bi-match-form-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;text-align:center;margin-top:8px}
+.bi-match-form-grid strong{font-size:12px;font-variant-numeric:tabular-nums}
+.bi-match-form-grid .bi-team-week-bars{height:90px;margin:4px 0}
+@container(max-width:500px){.bi-match-values{font-size:10px}.bi-match-form-grid strong{font-size:10px}.bi-match-form-grid .bi-team-week-bars{height:65px}}
