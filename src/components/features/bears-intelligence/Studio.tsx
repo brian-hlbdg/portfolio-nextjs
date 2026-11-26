@@ -11,6 +11,8 @@ import { sampleRushing,rushStats } from './rushing';
 import { RushingCorridors,RushTrend,ExplosiveRuns } from './RushingCharts';
 import { sampleReceiving,receivingStats } from './receiving';
 import { ReceiverField,ReceiverTrend,AfterCatch,Connections } from './ReceivingCharts';
+import { sampleRedZone } from './redzone';
+import { RedZoneField,RedZoneOpportunities,RedZonePlayMix } from './RedZoneCharts';
 import './studio.css';
 
 export default function Studio(){
@@ -36,6 +38,7 @@ export default function Studio(){
   const snapshot=source==='Sample'&&current?fixtureSnapshot(current):loaded?.snapshot;
   const rushing=current&&(current.position==='RB'||current.position==='FB')?(source==='Sample'?sampleRushing:file?.rushing?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
   const receiving=current&&['WR','TE','RB','FB'].includes(current.position)?(source==='Sample'?(current.position==='WR'?sampleReceiving:undefined):file?.receiving?.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)):undefined;
+  const redzone=source==='Sample'?sampleRedZone:file?.season===season?file.redzone:undefined;
   const basePlayer=current?(source==='Sample'?current:loaded?.player??{...current,stats:[]}):undefined;
   const shownPlayer=basePlayer?(rushing?{...basePlayer,stats:rushStats(rushing)}:receiving?{...basePlayer,stats:receivingStats(receiving)}:basePlayer):undefined;
   return <main className="bi-root">
@@ -66,6 +69,7 @@ export default function Studio(){
         {snapshot.thirdDown&&<ThirdDown downs={snapshot.thirdDown} sample={source==='Sample'}/>}
         </>}
       </div>
+      {redzone?<><section className="bi-section-title"><div><small>05 / SITUATIONAL INTELLIGENCE</small><h2>The scoring zone</h2></div><p>Team scoring efficiency and individual opportunities inside the 20.</p></section><div className="bi-grid"><RedZoneField key={'rz-field-'+season+'-'+source} data={redzone}/><RedZoneOpportunities data={redzone} player={current}/><RedZonePlayMix data={redzone}/></div></>:source==='nflverse'&&file?<section className="bi-panel bi-rz-unavailable"><h2>Red-zone intelligence</h2><p>Regenerate this season dataset to unlock the new scoring analysis.</p></section>:null}
       </>}
     </div>
     <footer className="bi-footer">{source==='Sample'?'Design prototype · Sample statistics':'Data: nflverse / nflfastR · CC BY 4.0 · Regular season'} · Independent, unofficial Bears project</footer>
