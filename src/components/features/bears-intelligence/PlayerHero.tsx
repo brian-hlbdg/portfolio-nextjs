@@ -3,20 +3,32 @@ import { useState } from 'react';
 import type { Player } from './data';
 
 export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean}) {
-  const [artFailed,setArtFailed] = useState(false);
-  const [headshotFailed,setHeadshotFailed] = useState(false);
+  return <PlayerHeroContent key={player.id+':'+player.name+':'+player.number} player={player} sample={sample}/>;
+}
+
+function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
+  const [imageIndex,setImageIndex] = useState(0);
   const [first,...last] = player.name.split(' ');
-  const isQB = player.name === 'Caleb Williams';
-  const cinematic=isQB&&!artFailed;
-  const hasPhoto=cinematic||(!player.id.startsWith('gsis:')&&!headshotFailed);
+  const slug=player.name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const base='/images/bears-intelligence/';
+  const images=[
+    ...(slug&&player.number>=0?[{src:base+slug+'-'+player.number+'.webp',cinematic:true}]:[]),
+    ...(slug?[{src:base+slug+'.webp',cinematic:true}]:[]),
+    ...(player.name==='Caleb Williams'?[{src:base+'cw18-hero.webp',cinematic:true}]:[]),
+    ...(/^\d+$/.test(player.id)?[{src:'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png',cinematic:false}]:[])
+  ];
+  const current=images[imageIndex];
+  const cinematic=current?.cinematic??false;
+  const hasPhoto=Boolean(current);
   return <section className="bi-hero">
     <span className="bi-watermark" aria-hidden="true">{player.number>=0?player.number:""}</span>
     <div className="bi-art">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {hasPhoto?<img className={cinematic?'bi-art-cinematic':'bi-art-fallback'}
-        src={cinematic?'/images/bears-intelligence/cw18-hero.webp':player.id.startsWith('gsis:')?undefined:'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png'}
-        alt={cinematic?'AI-generated quarterback concept artwork':player.name+' headshot'}
-        onError={()=>cinematic?setArtFailed(true):setHeadshotFailed(true)}/>:<div className="bi-art-empty"><strong aria-hidden="true">{player.number>=0?player.number:player.position}</strong><small>Portrait unavailable</small></div>}
+        key={current?.src}
+        src={current?.src}
+        alt={cinematic?'Custom concept artwork for '+player.name:player.name+' headshot'}
+        onError={()=>setImageIndex(i=>i===imageIndex?i+1:i)}/>:<div className="bi-art-empty"><strong aria-hidden="true">{player.number>=0?player.number:player.position}</strong><small>Portrait unavailable</small></div>}
     </div>
     <div className="bi-hero-copy">
       <small>PLAYER SPOTLIGHT / CHICAGO</small>
