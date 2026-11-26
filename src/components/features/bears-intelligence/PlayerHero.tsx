@@ -13,6 +13,7 @@ function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
   const base='/images/bears-intelligence/';
   const images=[
     ...(slug&&player.number>=0?[{src:base+slug+'-'+player.number+'.webp',cinematic:true}]:[]),
+    ...(slug&&player.number>=0&&player.number<10?[{src:base+slug+'-'+String(player.number).padStart(2,'0')+'.webp',cinematic:true}]:[]),
     ...(slug?[{src:base+slug+'.webp',cinematic:true}]:[]),
     ...(player.name==='Caleb Williams'?[{src:base+'cw18-hero.webp',cinematic:true}]:[]),
     ...(/^\d+$/.test(player.id)?[{src:'https://a.espncdn.com/i/headshots/nfl/players/full/'+player.id+'.png',cinematic:false}]:[])
