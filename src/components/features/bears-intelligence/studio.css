@@ -136,3 +136,26 @@
 .bi-receiver-pair span{font-size:12px;color:var(--muted)}
 .bi-receiver-pair small{letter-spacing:.05em}
 @container (max-width:500px){.bi-receiver-kpis strong{font-size:20px}.bi-receiver-kpis>div{padding:10px}}
+
+/* Red-zone intelligence */
+.bi-redzone-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.bi-redzone-top>div:last-child{padding:10px 12px;border-left:2px solid var(--line)}
+.bi-redzone-top>div:last-child strong{display:block;font-size:26px}
+.bi-redzone-top .bi-highlight{align-items:center}
+.bi-redzone-top .bi-highlight span{line-height:1.5}
+.bi-redzone-field{border:1px solid #819c8a;padding:8px;background:repeating-linear-gradient(0deg,#193c2d 0 34px,#214b37 34px 68px);border-radius:6px}
+.bi-root .bi-redzone-band{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:8px;width:100%;padding:13px 10px;border:1px solid #ffffff48;border-radius:0;min-height:52px;color:white}
+.bi-root .bi-redzone-band[aria-pressed=true]{outline:2px solid white;outline-offset:-2px}
+.bi-redzone-band>span{text-align:left;font-size:11px;letter-spacing:.08em}
+.bi-redzone-band strong{font-size:25px;line-height:1.1}
+.bi-redzone-band small{text-align:right;color:#f4f0e6;letter-spacing:0}
+.bi-redzone-player-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:12px 0}
+.bi-redzone-row{padding:13px 0;border-bottom:1px solid var(--line)}
+.bi-redzone-row>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.bi-redzone-row span{font-size:12px;color:var(--muted)}
+.bi-redzone-row>small{display:block;margin-top:6px;letter-spacing:.04em}
+.bi-redzone-mix{height:12px;display:flex;background:#26374b;overflow:hidden}
+.bi-redzone-mix i,.bi-redzone-mix b{display:block;height:100%;background:var(--accent)}
+.bi-redzone-mix b{background:#84b6eb}
+.bi-rz-unavailable{margin-top:16px}
+@container (max-width:500px){.bi-redzone-band strong{font-size:20px}.bi-root .bi-redzone-band{padding:11px 5px;gap:4px}.bi-redzone-band small{font-size:9px}.bi-redzone-top>div:last-child{padding:5px 8px}}
