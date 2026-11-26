@@ -1,5 +1,6 @@
 'use client';
-import {useState,useId} from 'react';
+import {useState,useId,useRef} from 'react';
+import SeasonSchedule from './SeasonSchedule';
 import {fieldPosition,driveOutcome,type BearsGame,type GameDrive,type GamePlay} from './gameData';
 const signed=(n:number|null,d=0)=>n===null?'—':(n>0?'+':'')+n.toFixed(d);
 const kindLabel=(k:string)=>k.replaceAll('_',' ');
@@ -47,9 +48,11 @@ function GameDetail({game}:{game:BearsGame}){
  <p className="bi-insight">Possession totals are observed drive groups, not official drive-chart totals. Net yards and EPA summarize recorded scrimmage plays; EPA coverage may be incomplete. Special-teams returns and conversion attempts are not reconstructed.</p>
  </>
 }
-export function GameExperience({games}:{games:BearsGame[]|undefined}){
+export function GameExperience({games,season,onMatchup,lab=false}:{games:BearsGame[]|undefined;season:number;onMatchup:(id:string)=>void;lab?:boolean}){
  const [gameId,setGameId]=useState<string|null>(null);
  const game=games?.find(g=>g.id===gameId)??games?.[games.length-1];
- if(!game)return <section className="bi-panel"><h2>Game intelligence unavailable</h2><p>Regenerate the season dataset to load recorded games and drives.</p></section>;
- return <><div className="bi-game-select"><label htmlFor="bi-game-select">Select a game</label><select id="bi-game-select" value={game.id} onChange={e=>setGameId(e.target.value)}>{games?.map(g=><option key={g.id} value={g.id}>Week {g.week} · {g.away} at {g.home} · {g.date??''}</option>)}</select></div><GameDetail key={game.id} game={game}/></>
+ const detail=useRef<HTMLDivElement>(null);
+ const selectGame=(id:string)=>{setGameId(id);detail.current?.focus();detail.current?.scrollIntoView({block:'start'});};
+ return <>{!lab&&<SeasonSchedule season={season} recorded={games??[]} selectedId={game?.id} onGame={selectGame} onMatchup={onMatchup}/>}
+ <div ref={detail} tabIndex={-1} className="bi-game-analysis">{!game?<section className="bi-panel"><h2>Game intelligence unavailable</h2><p>No recorded game or drive analysis is available for this season.</p></section>:<><div className="bi-game-select"><label htmlFor="bi-game-select">Select a game</label><select id="bi-game-select" value={game.id} onChange={e=>setGameId(e.target.value)}>{games?.map(g=><option key={g.id} value={g.id}>Week {g.week} · {g.away} at {g.home} · {g.date??''}</option>)}</select></div><GameDetail key={game.id} game={game}/></>}</div></>
 }
