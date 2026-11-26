@@ -16,7 +16,7 @@ def blank():return {k:0 for k in FIELDS}
 def valid(pid):return pid not in ("",None,"NA")
 class Defense:
  def __init__(self,columns):
-    self.available=[k for k,fields in FIELDS.items() if all(f in columns for f in fields)]
+    self.available=[k for k,fields in FIELDS.items() if all(f in columns for f in fields) and (k not in ("solo","assists","forcedFumbles","recoveries") or all(f.replace("_player_id","_team") in columns or f.replace("_player_id","_player_team") in columns for f in fields))]
     self.players=defaultdict(lambda:defaultdict(blank))
     self.team=defaultdict(lambda:[0,0,0,0,0])
     self.league=defaultdict(lambda:[0,0,0,0,0])
@@ -46,6 +46,7 @@ class Defense:
     if week is None:return
     week=int(week)
     for metric in self.available:
+        if metric=="hits" and num(r,"sack")==1:continue
         seen=set()
         for field in FIELDS[metric]:
             pid=r.get(field)
