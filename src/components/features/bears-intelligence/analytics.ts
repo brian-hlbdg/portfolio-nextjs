@@ -33,10 +33,10 @@ export function signed(value:number, digits=1):string {
   return (value > 0 ? '+' : '') + value.toFixed(digits);
 }
 export function passingInsight(rows: readonly Zone[]): string {
-  const eligible=rows.filter(r=>r.attempts>=10);
+  const eligible=rows.filter(r=>r.attempts>=10&&r.benchmark!==null);
   if (!eligible.length) return 'Not enough attempts for a territory comparison.';
-  const best=eligible.reduce((a,b)=>b.completions/b.attempts-b.benchmark>a.completions/a.attempts-a.benchmark?b:a);
-  const delta=(best.completions/best.attempts-best.benchmark)*100;
+  const best=eligible.reduce((a,b)=>b.completions/b.attempts-(b.benchmark??0)>a.completions/a.attempts-(a.benchmark??0)?b:a);
+  const delta=(best.completions/best.attempts-(best.benchmark??0))*100;
   return delta>0 ? 'Largest completion-rate advantage: '+best.depth+' · '+best.direction+' ('+signed(delta)+' pp vs reference; '+best.attempts+' attempts).' : 'No eligible territory exceeds its completion-rate benchmark.';
 }
 export function conversionInsight(rows: readonly ConversionBucket[]):string {
