@@ -1,5 +1,6 @@
 'use client';
 import {useState} from 'react';
+import UpcomingOpponents from './UpcomingOpponents';
 import {teamMetrics,teamLabels,teamValue,type TeamIdentityData,type TeamMetric,type TeamSplit} from './teamIdentity';
 import type {SeasonFile} from './seasonData';
 import {ThirdDown} from './Charts';
@@ -33,10 +34,14 @@ function Situations({data}:{data:TeamIdentityData}){
  const [metric,setMetric]=useState<TeamMetric>('epa');
  return <section className="bi-panel"><header className="bi-heading"><div><small>DOWN INTELLIGENCE</small><h2>Situational identity</h2><p>Efficiency on each down</p></div><div className="bi-controls">{(['epa','success','yardsPerPlay'] as const).map(m=><button key={m} aria-pressed={metric===m} onClick={()=>setMetric(m)}>{teamLabels[m]}</button>)}</div></header><div className="bi-team-downs"><div><small>DOWN</small><small>CHI OFF</small><small>OPP OFF</small><small>NFL</small></div>{data.downs.map(d=><div key={d.down}><strong>{d.down}</strong><strong>{teamValue(d.offense[metric],metric)}</strong><strong>{teamValue(d.defense[metric],metric)}</strong><span>{teamValue(d.league[metric],metric)}</span></div>)}</div><p className="bi-insight">Opponent metrics reflect Chicago defense; lower opponent production is generally better.</p></section>
 }
+function TraditionalStats({data,side,ppg}:{data:TeamIdentityData;side:'offense'|'defense';ppg:number|null}){
+ const split=data[side],allowed=side==='defense';
+ return <section className="bi-panel"><header className="bi-heading"><div><small>{allowed?'DEFENSIVE':'OFFENSIVE'} PRODUCTION</small><h2>{allowed?'Keeping points off the board':'Putting points on the board'}</h2><p>Traditional statistics alongside advanced efficiency</p></div></header><div className="bi-highlight"><strong>{ppg===null?'—':ppg.toFixed(1)}</strong><span>{allowed?'Opponent points / game':'Points / game'} · recorded final games</span></div><div className="bi-traditional-grid"><div><small>{allowed?'OPP ':''}PASS PLAY %</small><strong>{pct(split.passShare)}</strong></div><div><small>{allowed?'OPP ':''}RUSH PLAY %</small><strong>{pct(split.passShare===null?null:1-split.passShare)}</strong></div><div><small>{allowed?'OPP ':''}YARDS / PLAY</small><strong>{teamValue(split.yardsPerPlay,'yardsPerPlay')}</strong></div><div><small>{allowed?'OPP ':''}SCRIMMAGE TD</small><strong>{split.plays?split.touchdowns:'—'}</strong></div></div><p className="bi-insight">Pass and rush shares describe recorded plays, not passing and rushing yards per game. Points include all scoring in games marked final.</p></section>
+}
 function ChapterBanner({eyebrow,first,last,mark,description,stats,defensive=false}:{eyebrow:string;first:string;last:string;mark:string;description:string;stats:[string,string][];defensive?:boolean}){
  return <section className={'bi-team-hero bi-chapter-banner'+(defensive?' bi-defense-chapter':'')}><div><small>{eyebrow}</small>{defensive?<h2>{first} <em>{last}</em></h2>:<h1>{first} <em>{last}</em></h1>}<p>{description}</p></div><div className="bi-team-hero-mark" aria-hidden="true">{mark}</div><div className="bi-stats">{stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div></section>
 }
-export function TeamExperience({file}:{file:SeasonFile}){
+export function TeamExperience({file,onMatchup}:{file:SeasonFile;onMatchup?:(id:string)=>void}){
  const data=file.teamIdentity;
  if(!data)return <section className="bi-panel"><h2>Team intelligence unavailable</h2><p>Regenerate this season dataset with the latest analytics script.</p></section>;
  const finals=(file.games??[]).filter(g=>g.final&&g.homeScore!==null&&g.awayScore!==null&&(g.home==='CHI'||g.away==='CHI')).map(g=>({for:g.home==='CHI'?g.homeScore!:g.awayScore!,against:g.home==='CHI'?g.awayScore!:g.homeScore!}));
@@ -44,14 +49,15 @@ export function TeamExperience({file}:{file:SeasonFile}){
  const points=finals.reduce((n,g)=>n+g.for,0),diff=finals.reduce((n,g)=>n+g.for-g.against,0);
  const signed=(v:number)=>v>0?'+'+v:String(v);
  return <>
- <ChapterBanner eyebrow={'TEAM INTELLIGENCE / '+file.season+' REGULAR SEASON'} first="CHICAGO" last="BEARS" mark="CHI" description="Overall team performance · recorded final games" stats={[[ 'RECORD',finals.length?wins+'-'+losses+(ties?'-'+ties:''):'—'],['WIN %',finals.length?((wins+ties*.5)/finals.length*100).toFixed(1)+'%':'—'],['POINTS SCORED',finals.length?String(points):'—'],['POINT DIFFERENTIAL',finals.length?signed(diff):'—']]}/>
+ <ChapterBanner eyebrow={'TEAM INTELLIGENCE / '+file.season+' REGULAR SEASON'} first="CHICAGO" last="BEARS" mark="CHI" description="Overall team performance · recorded final games" stats={[[ 'RECORD',finals.length?wins+'-'+losses+(ties?'-'+ties:''):'—'],['WIN %',finals.length?((wins+ties*.5)/finals.length*100).toFixed(1)+'%':'—'],['POINTS / GAME',finals.length?(points/finals.length).toFixed(1):'—'],['POINT DIFFERENTIAL',finals.length?signed(diff):'—']]}/>
  <p className="bi-chapter-note">{finals.length} games marked final in the selected nflverse snapshot. Totals may be incomplete if final-game markers are missing.</p>
  <section className="bi-section-title"><div><small>01 / TEAM PROFILE</small><h2>The identity of a team</h2></div><p>League ranks and situational performance from {file.season} play-by-play.</p></section>
- <div className="bi-grid"><Fingerprint data={data} side="offense"/><Balance data={data}/><TeamTrend data={data}/><Situations data={data}/><ThirdDown downs={file.thirdDown} sample={false}/></div>
+ <div className="bi-grid"><TraditionalStats data={data} side="offense" ppg={finals.length?points/finals.length:null}/><Fingerprint data={data} side="offense"/><Balance data={data}/><TeamTrend data={data}/><Situations data={data}/><ThirdDown downs={file.thirdDown} sample={false}/></div>
  {file.redzone&&<><section className="bi-section-title"><div><small>02 / SCORING</small><h2>The scoring zone</h2></div></section><div className="bi-grid"><RedZoneField data={file.redzone}/><RedZonePlayMix data={file.redzone}/></div></>}
  <ChapterBanner defensive eyebrow={'DEFENSIVE INTELLIGENCE / '+file.season+' REGULAR SEASON'} first="MONSTERS OF" last="THE MIDWAY" mark="D" description="Defensive identity · limiting opponent production" stats={[[ 'OPP EPA / PLAY',teamValue(data.defense.epa,'epa')],['OPP YARDS / PLAY',teamValue(data.defense.yardsPerPlay,'yardsPerPlay')],['SCRIMMAGE TAKEAWAYS',data.defense.plays?String(data.defense.turnovers):'—'],['SACKS',data.defense.plays?String(data.defense.sacks):'—']]}/>
  <section className="bi-section-title"><div><small>03 / DEFENSIVE PROFILE</small><h2>Protecting Chicago</h2></div><p>Opponent efficiency, league rankings and field territory.</p></section>
- <div className="bi-grid"><Fingerprint data={data} side="defense"/>{file.defense&&<><CoverageTerritory data={file.defense}/><RunDefense data={file.defense}/></>}</div>
+ <div className="bi-grid"><TraditionalStats data={data} side="defense" ppg={finals.length?(points-diff)/finals.length:null}/><Fingerprint data={data} side="defense"/>{file.defense&&<><CoverageTerritory data={file.defense}/><RunDefense data={file.defense}/></>}</div>
+ {onMatchup&&<UpcomingOpponents season={file.season} onMatchup={onMatchup}/>}
  <p className="bi-insight">Scope: recorded regular-season pass plays and rushes, excluding kneels, spikes, no-plays and two-point attempts. Success is positive EPA on measured plays. Explosive: 20+ pass yards or 10+ rush yards. Scrimmage takeaways count opponent interceptions and lost fumbles on qualifying plays.</p>
  </>;
 }
