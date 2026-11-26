@@ -61,6 +61,13 @@ def run(year):
     rush_names={}
     rush_columns={"rush_attempt","rusher_player_id","rushing_yards","rush_touchdown","run_location","run_gap","qb_kneel"}
     if not rush_columns.issubset(rows[0]):raise ValueError("Missing rushing columns")
+    receiving=defaultdict(lambda:[0,0,0,0,0,0,0,0,0,0])
+    rec_weeks=defaultdict(lambda:defaultdict(lambda:[0,0,0]))
+    rec_zones=defaultdict(lambda:defaultdict(lambda:[0,0,0,0,0]))
+    rec_league=defaultdict(lambda:[0,0])
+    connections=defaultdict(lambda:defaultdict(lambda:[0,0,0,0]))
+    rec_names={}
+    if not {"receiver_player_id","receiving_yards","yards_after_catch","first_down_pass"}.issubset(rows[0]):raise ValueError("Missing receiving columns")
     for r in rows:
         if r["season_type"]!="REG" or r["play_type"]=="no_play" or num(r,"two_point_attempt")==1: continue
         chi=r["posteam"]=="CHI"
@@ -98,6 +105,32 @@ def run(year):
         if not pid or pid=="NA": continue
         c=int(num(r,"complete_pass")==1); yards=num(r,"passing_yards") or 0
         t=int(num(r,"pass_touchdown")==1); i=int(num(r,"interception")==1)
+        receiver=r.get("receiver_player_id")
+        if receiver and receiver!="NA":
+            air_rec=num(r,"air_yards"); loc_rec=r["pass_location"]
+            classified=air_rec is not None and loc_rec in ("left","middle","right")
+            if classified:
+                rk=(depth(air_rec),loc_rec)
+                rec_league[rk][0]+=c;rec_league[rk][1]+=1
+            if chi:
+                rec_names[receiver]=r.get("receiver_player_name","")
+                rv=receiving[receiver]
+                gain=(num(r,"receiving_yards") or 0) if c else 0
+                rv[0]+=1;rv[1]+=c;rv[2]+=gain;rv[3]+=t
+                rv[4]+=int(c and num(r,"first_down_pass")==1)
+                yac=num(r,"yards_after_catch")
+                if c and yac is not None:rv[5]+=yac;rv[6]+=1
+                if air_rec is not None:rv[7]+=air_rec;rv[8]+=1
+                rv[9]+=int(c and gain>=20)
+                w=num(r,"week")
+                if w is not None:
+                    v=rec_weeks[receiver][int(w)];v[0]+=1;v[1]+=c;v[2]+=gain
+                if classified:
+                    v=rec_zones[receiver][rk];v[0]+=1;v[1]+=c;v[2]+=gain
+                    e=num(r,"epa")
+                    if e is not None:v[3]+=e;v[4]+=1
+                pair=connections[receiver][pid]
+                pair[0]+=1;pair[1]+=c;pair[2]+=gain;pair[3]+=t
         values=[1,c,yards,t,i]
         for j,v in enumerate(values):
             all_pass[j]+=v
@@ -157,6 +190,20 @@ def run(year):
                 "leagueYpc":rush_league[lane][1]/rush_league[lane][0] if rush_league[lane][0] else None}
                 for lane in lanes]})
 
+    result["receiving"]=[]
+    for rid,v in receiving.items():
+        a,c,y,td,fd,yac,yac_count,air,air_count,explosive=v
+        p={"gsisId":rid,"espnId":ids.get(rid),"name":rec_names[rid],
+           "targets":a,"receptions":c,"yards":y,"touchdowns":td,"firstDowns":fd,
+           "yac":yac if yac_count else None,"yacReceptions":yac_count,
+           "adot":air/air_count if air_count else None,"explosive20":explosive,
+           "weeks":[{"week":w,"targets":x[0],"receptions":x[1],"yards":x[2]} for w,x in sorted(rec_weeks[rid].items())],
+           "zones":[],"connections":[{"id":pid,"name":names.get(pid,pid),"targets":x[0],"receptions":x[1],"yards":x[2],"touchdowns":x[3]} for pid,x in sorted(connections[rid].items(),key=lambda item:-item[1][0])]}
+        for d,label in enumerate(["20+","10–19","0–9","Behind LOS"]):
+            for j,direction in enumerate(["left","middle","right"]):
+                a,c,y,e,ec=rec_zones[rid][(d,direction)];lc,la=rec_league[(d,direction)]
+                p["zones"].append({"id":f"{d}-{j}","depth":label,"direction":direction.title(),"attempts":a,"completions":c,"yards":y,"epa":e/ec if ec else None,"benchmark":lc/la if la else None})
+        result["receiving"].append(p)
     result["roster"]=[]
     seen=set()
     for r in roster:
