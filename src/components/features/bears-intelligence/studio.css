@@ -392,3 +392,15 @@
 .bi-forecast-bar b{background:var(--defense)}
 .bi-game-forecast p{font-size:11px}
 @container(max-width:400px){.bi-gameday-details{grid-template-columns:1fr 1fr}.bi-gameday-details>div:nth-child(2){grid-column:1/-1;grid-row:2}.bi-gameday-details strong{font-size:13px}}
+
+/* Live context refinements and traditional production */
+.bi-opponent-title{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0}
+.bi-opponent-title h3,.bi-opponent-title strong{min-width:0;overflow-wrap:anywhere}
+.bi-opponent-title img{flex:0 0 auto;width:clamp(56px,23cqw,112px);height:auto;max-height:112px;object-fit:contain}
+.bi-schedule-card .bi-opponent-title img{width:48px;max-height:48px}
+.bi-home-away,.bi-traditional-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0;padding:12px 0;border-block:1px solid var(--line)}
+.bi-home-away>div,.bi-traditional-grid>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.bi-home-away strong,.bi-traditional-grid strong{font-family:var(--display);font-size:clamp(24px,5cqw,36px);font-variant-numeric:tabular-nums}
+.bi-home-away small,.bi-traditional-grid small{font-size:10px;letter-spacing:.06em}
+.bi-upcoming-opponents{margin-top:24px}
+@container(max-width:340px){.bi-opponent-title{gap:8px}.bi-opponent-title img{width:56px}.bi-schedule-card .bi-opponent-title img{width:36px}}
