@@ -24,9 +24,13 @@ export default function Studio(){
     loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
     return ()=>controller.abort();
   },[source,season]);
-  const loaded=source==='nflverse'&&file?.season===season?liveSnapshot(file,players[player]):null;
-  const snapshot=source==='Sample'?fixtureSnapshot(players[player]):loaded?.snapshot;
-  const shownPlayer=source==='Sample'?players[player]:loaded?.player??{...players[player],stats:[]};
+  const roster=source==='nflverse'&&file?.season===season&&file.roster?.length?file.roster.map(p=>({id:p.espnId??'gsis:'+p.gsisId,name:p.name,number:p.number??-1,position:p.position,stats:[]})):players;
+  const selected=Math.min(player,roster.length-1);
+  const current=roster[selected];
+  const loaded=source==='nflverse'&&file?.season===season?liveSnapshot(file,current):null;
+  const ranks=file?.players.find(p=>p.espnId===current.id||'gsis:'+p.gsisId===current.id)?.ranks;
+  const snapshot=source==='Sample'?fixtureSnapshot(current):loaded?.snapshot;
+  const shownPlayer=source==='Sample'?current:loaded?.player??{...current,stats:[]};
   return <main className="bi-root">
     <nav className="bi-nav">
       <div className="bi-brand"><span>BIL</span><div><b>BEARS <em>INTELLIGENCE</em></b><small>CHICAGO / FOOTBALL ANALYTICS</small></div></div>
@@ -34,21 +38,21 @@ export default function Studio(){
       <Link href="/chicago-sports/bears/">Back to dashboard ↗</Link>
     </nav>
     <div className="bi-toolbar">
-      <PlayerPicker players={players} selected={player} onSelect={setPlayer}/>
+      <PlayerPicker players={roster} selected={selected} onSelect={setPlayer} sample={source==='Sample'||!file?.roster?.length}/>
       <div className="bi-controls" aria-label="Preview width">{['Desktop','Tablet','Mobile'].map(d=><button key={d} aria-pressed={device===d} onClick={()=>setDevice(d)}>{d}</button>)}</div>
-      <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setError(null);setFile(null)}}><option>Sample</option><option>nflverse</option></select></label>
-      {source==='nflverse'&&<label>Season <select value={season} onChange={e=>{setSeason(Number(e.target.value));setError(null);setFile(null)}}>{[2026,2025,2024].map(y=><option key={y}>{y}</option>)}</select></label>}
+      <label>Data <select value={source} onChange={e=>{setSource(e.target.value);setPlayer(0);setError(null);setFile(null)}}><option>Sample</option><option>nflverse</option></select></label>
+      {source==='nflverse'&&<label>Season <select value={season} onChange={e=>{setSeason(Number(e.target.value));setPlayer(0);setError(null);setFile(null)}}>{[2026,2025,2024].map(y=><option key={y}>{y}</option>)}</select></label>}
       <span className="bi-sample">{source==='Sample'?'SAMPLE DATA':'NFLVERSE / '+season}</span>
       {mode==='Components'&&<label>State <select value={state} onChange={e=>setState(e.target.value)}>{['Ready','Loading','Empty','Error'].map(s=><option key={s}>{s}</option>)}</select></label>}
     </div>
     <div className="bi-preview" style={{maxWidth:device==='Mobile'?390:device==='Tablet'?768:1440}}>
       {mode==='Components'&&state!=='Ready'?<section className="bi-panel" role="status"><h2>{state==='Loading'?'Loading analytics…':state==='Empty'?'No opportunities recorded':'Analytics unavailable'}</h2><p>Simulated preview state.</p><button onClick={()=>setState('Ready')}>Reset</button></section>:<>
-      <PlayerHero key={players[player].id} player={shownPlayer} sample={source==='Sample'}/>
+      <PlayerHero key={current.id} player={shownPlayer} sample={source==='Sample'}/>
       <section className="bi-section-title"><div><small>02 / SEASON INTELLIGENCE</small><h2>Reading the season</h2></div><p>{source==='Sample'?'Performance, tendencies and context. All numbers are illustrative.':file?.season===season?'Regular season · nflverse · retrieved '+file.retrievedAt.slice(0,10):'Regular season analytics'}</p></section>
       <div className={'bi-grid '+(mode==='Components'?'bi-stack':'')}>
         {!snapshot?<section className="bi-panel" role="status"><h2>{error?'Dataset unavailable':'Loading analytics'}</h2><p>{error??'Retrieving season data…'}</p></section>:<>
         {snapshot.weeklyRatings?.length&&snapshot.leagueRating!==null?<Trend key={snapshot.playerId+'-'+snapshot.season} ratings={snapshot.weeklyRatings} benchmark={snapshot.leagueRating} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Weekly performance</h2><p>No matching passing data available.</p></section>}
-        {source==='Sample'&&snapshot.weeklyRatings&&<League/>}
+        {source==='Sample'&&snapshot.weeklyRatings?<League/>:ranks?.length&&file?.qualifiedPassers?<League actual={ranks} count={file.qualifiedPassers}/>:null}
         {snapshot.passing?<Field zones={snapshot.passing} sample={source==='Sample'}/>:<section className="bi-panel"><h2>Passing territory</h2><p>Complete zone data unavailable for this player.</p></section>}
         {snapshot.thirdDown&&<ThirdDown downs={snapshot.thirdDown} sample={source==='Sample'}/>}
         </>}
