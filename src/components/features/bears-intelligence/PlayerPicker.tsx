@@ -2,7 +2,7 @@
 import { useRef,useState } from 'react';
 import type { Player } from './data';
 
-export function PlayerPicker({players,selected,onSelect}:{players:readonly Player[];selected:number;onSelect:(index:number)=>void}){
+export function PlayerPicker({players,selected,onSelect,sample=true}:{players:readonly Player[];selected:number;onSelect:(index:number)=>void;sample?:boolean}){
   const dialog=useRef<HTMLDialogElement>(null);
   const trigger=useRef<HTMLButtonElement>(null);
   const [query,setQuery]=useState('');
@@ -15,14 +15,14 @@ export function PlayerPicker({players,selected,onSelect}:{players:readonly Playe
     </button>
     <dialog ref={dialog} className="bi-picker-dialog" aria-label="Choose a player" onClose={()=>trigger.current?.focus()} onClick={e=>{if(e.target===e.currentTarget)close();}}>
       <div className="bi-picker-inner">
-        <header><div><small>CHICAGO / SAMPLE ROSTER</small><h2>Choose a player</h2></div><button type="button" onClick={close} aria-label="Close player selector">×</button></header>
+        <header><div><small>CHICAGO / {sample?'SAMPLE ROSTER':'SEASON ROSTER'}</small><h2>Choose a player</h2></div><button type="button" onClick={close} aria-label="Close player selector">×</button></header>
         <label htmlFor="bi-player-search">Search by name, position or number</label>
         <input id="bi-player-search" autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search players"/>
         <div className="bi-picker-results">{matches.map(({p,i})=><button key={p.id} type="button" aria-pressed={selected===i} onClick={()=>{onSelect(i);close();}}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={'https://a.espncdn.com/i/headshots/nfl/players/full/'+p.id+'.png'} alt="" loading="lazy" onError={e=>{e.currentTarget.style.visibility='hidden';}}/>
+          <img src={p.id.startsWith('gsis:')?undefined:'https://a.espncdn.com/i/headshots/nfl/players/full/'+p.id+'.png'} alt="" loading="lazy" onError={e=>{e.currentTarget.style.visibility='hidden';}}/>
           <span><strong>{p.name}</strong><small>#{p.number} / {p.position}</small></span><span aria-hidden="true">{i===selected?'✓':'→'}</span>
-        </button>)}{!matches.length&&<p>No matching sample players.</p>}</div>
+        </button>)}{!matches.length&&<p>No matching players.</p>}</div>
       </div>
     </dialog>
   </div>;
