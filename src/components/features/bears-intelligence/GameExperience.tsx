@@ -48,8 +48,10 @@ function GameDetail({game}:{game:BearsGame}){
  <p className="bi-insight">Possession totals are observed drive groups, not official drive-chart totals. Net yards and EPA summarize recorded scrimmage plays; EPA coverage may be incomplete. Special-teams returns and conversion attempts are not reconstructed.</p>
  </>
 }
-export function GameExperience({games,season,onMatchup,lab=false}:{games:BearsGame[]|undefined;season:number;onMatchup:(id:string)=>void;lab?:boolean}){
- const [gameId,setGameId]=useState<string|null>(null);
+export function GameExperience({games,season,onMatchup,lab=false,selectedGameId,onGameChange}:{games:BearsGame[]|undefined;season:number;onMatchup:(id:string)=>void;lab?:boolean;selectedGameId?:string;onGameChange?:(id:string)=>void}){
+ const [localGameId,setLocalGameId]=useState<string|null>(null);
+ const gameId=onGameChange?selectedGameId:localGameId;
+ const setGameId=(id:string)=>onGameChange?onGameChange(id):setLocalGameId(id);
  const ordered=[...(games??[])].sort((a,b)=>a.week-b.week||(a.date??'').localeCompare(b.date??''));
  const game=ordered.find(g=>g.id===gameId)??ordered.filter(g=>g.final).at(-1)??ordered.at(-1);
  const index=ordered.findIndex(g=>g.id===game?.id);
