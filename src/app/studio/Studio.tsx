@@ -9,43 +9,48 @@ const destinations=[
 {title:'About',desc:'The person behind the work.',href:'/about/',note:'A career shaped by curiosity, people and practical impact.'}
 ];
 
-// Visual-only decoding; assistive technology receives the final phrase immediately.
-function Scramble({target}:{target:string}){
+// Morph the existing phrase in place, using staggered, gently faded glyph changes.
+function Scramble({target,base,note}:{target:string;base:string;note:string}){
  const [display,setDisplay]=useState(target);
- const previous=useRef(target);
+ const [opacity,setOpacity]=useState(1);
  const current=useRef(target);
+ const previous=useRef(target);
  useEffect(()=>{
   if(previous.current===target)return;
   previous.current=target;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-   current.current=target;
-   const frame=requestAnimationFrame(()=>setDisplay(target));
-   return ()=>cancelAnimationFrame(frame);
-  }
   const from=current.current;
-  const glyphs='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const start=performance.now();
   let frame=0,last=-100;
+  const glyphs='abcdefghijklmnopqrstuvwxyz';
+  const length=Math.max(from.length,target.length);
+  const offsets=Array.from({length},(_,i)=>((i*17+11)%31)/31*.18);
   function tick(now:number){
-   const progress=Math.min((now-start)/560,1);
-   if(progress===1){current.current=target;setDisplay(target);return;}
-   if(now-last>=45){
+   const p=reduced?1:Math.min((now-start)/950,1);
+   if(p===1){current.current=target;setDisplay(target);setOpacity(1);return;}
+   if(now-last>=65){
     last=now;
-    const count=Math.max(target.length,Math.ceil(from.length+(target.length-from.length)*progress));
-    const resolved=Math.floor(target.length*progress);
-    const next=Array.from({length:count},(_,i)=>{
-     if(i<resolved)return target[i]??'';
-     if(target[i]===' ')return ' ';
-     return glyphs[Math.floor(Math.random()*glyphs.length)];
-    }).join('');
+    const next=Array.from({length},(_,i)=>{
+     const a=from[i]??' ',b=target[i]??' ';
+     const local=(p-offsets[i])/.78;
+     if(local<.12)return a;
+     if(local>.82)return b;
+     if(a===' '&&b===' ')return ' ';
+     if(a===b&&a!==' '&&local<.35)return a;
+     if(a===' '&&local<.34)return ' ';
+     if(b===' '&&local>.58)return ' ';
+     const g=glyphs[Math.floor(Math.random()*glyphs.length)];
+     return /[A-Z]/.test(a)||/[A-Z]/.test(b)?g.toUpperCase():g;
+    }).join('').trimEnd();
     current.current=next;setDisplay(next);
    }
+   setOpacity(1-.24*Math.sin(Math.PI*p));
    frame=requestAnimationFrame(tick);
   }
   frame=requestAnimationFrame(tick);
   return ()=>cancelAnimationFrame(frame);
  },[target]);
- return <><span className={s.srOnly}>{target}</span><span aria-hidden="true" className={s.scrambleText}>{display}</span></>;
+ return <span className={s.scrambleBox}><span className={s.srOnly}>{target}</span><span aria-hidden="true" className={s.reserve}>{base}</span><span aria-hidden="true" className={s.reserve}>{note}</span><span aria-hidden="true" className={s.scrambleText} style={{opacity}}>{display}</span></span>;
 }
 
 export default function Studio(){
@@ -74,6 +79,6 @@ export default function Studio(){
  <div className={s.canvas}>
  <div className={s.art} aria-hidden="true"><svg viewBox="0 0 900 760" preserveAspectRatio="xMidYMid slice"><defs><pattern id="studio-grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 H 0 V 100" fill="none" stroke="#93877c" strokeWidth=".65" opacity=".24"/></pattern></defs><rect x="260" width="640" height="760" fill="url(#studio-grid)"/><circle cx="820" cy="-35" r="250" fill="#243e49"/><path d="M820 -285 A250 250 0 0 1 820 215 Z" fill="#a74318"/><path d="M360 760 A300 300 0 0 1 960 760Z" fill="#d6c6b1"/><path d="M600 760 V465 A295 295 0 0 1 895 760Z" fill="#243e49"/><path d="M250 470 C250 120 620 110 790 290 S900 620 1030 635" fill="none" stroke="#233c48" strokeWidth="1.8"/><path d="M530 0 C380 220 470 510 900 625" fill="none" stroke="#ab451b" strokeWidth="1.4"/><circle cx="515" cy="470" r="115" fill="none" stroke="#9b8e80" strokeDasharray="5 7"/><circle cx="515" cy="470" r="28" fill="#ac471c"/><g stroke="#273b43" fill="none" strokeWidth="1.2"><path d="M250 470 L240 350 M530 205 L390 180 M515 470 L365 530 L290 610 M515 470 L675 335"/><path d="M540 145 H790 M540 137 V153 M790 137 V153 M540 145 V205 M790 145 V290"/></g><g fill="#263d48"><circle cx="240" cy="350" r="4"/><circle cx="390" cy="180" r="4"/><circle cx="365" cy="530" r="5"/><circle cx="290" cy="610" r="4"/><circle cx="675" cy="335" r="4"/></g><g fill="#f4eee5" stroke="#263d48" strokeWidth="1.5"><rect x="245" y="465" width="10" height="10"/><rect x="525" y="200" width="10" height="10"/></g><text x="665" y="134" textAnchor="middle" fontSize="12" fill="#4b4b45" fontFamily="monospace">250 px</text></svg><pre className={s.code}><span>type</span> Contribution = {'{'}{'\n'}  listen: boolean;{'\n'}  connect: Idea[];{'\n'}  create: Experience;{'\n'}{'}'};</pre></div>
  <section className={s.intro} aria-label="Introduction"><p className={s.eyebrow}>DESIGN × TECHNOLOGY × PEOPLE</p><h1>Ideas that work<br/> for <em>people.</em></h1><p className={s.description}>I bring people, design and technology together to understand problems and turn ideas into meaningful experiences.</p><button ref={trigger} className={s.action} aria-expanded={open} aria-controls="studio-index" onClick={toggle}><span>{open?'←':'→'}</span>{open?'Return to introduction':'Explore the portfolio'}</button></section>
- <section id="studio-index" ref={index} tabIndex={-1} hidden={!visible} inert={!open} aria-hidden={!open} className={s.index} aria-label="Explore the portfolio"><p className={s.eyebrow}>01 / THE INDEX</p><h2>{practice?'The practice':'My Peccadilloes'}</h2>{practice?<div className={s.practice}><p>Understand. Connect. Create.</p><p>I enjoy figuring things out, sharing what I learn and helping people turn ideas into reality. Leadership means contributing, not always being in front.</p><button onClick={()=>setPractice(false)}>← Back to index</button></div>:<div className={s.entries}>{destinations.map((d,i)=><div key={d.title} onMouseEnter={()=>setActive(i)} onMouseLeave={()=>setActive(null)}>{i===1?<button onFocus={()=>setActive(i)} onBlur={()=>setActive(null)} onClick={()=>setPractice(true)}><small>0{i+1}</small><strong>{d.title}</strong><span>↗</span></button>:<Link onFocus={()=>setActive(i)} onBlur={()=>setActive(null)} href={d.href}><small>0{i+1}</small><strong>{d.title}</strong><span>↗</span></Link>}<p><Scramble target={active===i?d.note:d.desc}/></p></div>)}</div>}</section>
+ <section id="studio-index" ref={index} tabIndex={-1} hidden={!visible} inert={!open} aria-hidden={!open} className={s.index} aria-label="Explore the portfolio"><p className={s.eyebrow}>01 / THE INDEX</p><h2>{practice?'The practice':'My Peccadilloes'}</h2>{practice?<div className={s.practice}><p>Understand. Connect. Create.</p><p>I enjoy figuring things out, sharing what I learn and helping people turn ideas into reality. Leadership means contributing, not always being in front.</p><button onClick={()=>setPractice(false)}>← Back to index</button></div>:<div className={s.entries}>{destinations.map((d,i)=><div key={d.title} onMouseEnter={()=>setActive(i)} onMouseLeave={()=>setActive(null)}>{i===1?<button onFocus={()=>setActive(i)} onBlur={()=>setActive(null)} onClick={()=>setPractice(true)}><small>0{i+1}</small><strong>{d.title}</strong><span>↗</span></button>:<Link onFocus={()=>setActive(i)} onBlur={()=>setActive(null)} href={d.href}><small>0{i+1}</small><strong>{d.title}</strong><span>↗</span></Link>}<p><Scramble target={active===i?d.note:d.desc} base={d.desc} note={d.note}/></p></div>)}</div>}</section>
  </div><footer className={s.footer}><span aria-label="HLB maker’s mark">H<b>l</b>B</span><span>CHICAGO · DESIGN & TECHNOLOGY</span><a href="mailto:brian@hlbdesigngroup.com">Get in touch ↗</a></footer></div>;
 }
