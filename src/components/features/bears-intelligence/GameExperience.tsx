@@ -1,6 +1,7 @@
 'use client';
 import {useState,useId,useRef} from 'react';
 import SeasonSchedule from './SeasonSchedule';
+import {orderedGames,activeGame} from './GamePicker';
 import {fieldPosition,driveOutcome,type BearsGame,type GameDrive,type GamePlay} from './gameData';
 const signed=(n:number|null,d=0)=>n===null?'—':(n>0?'+':'')+n.toFixed(d);
 const kindLabel=(k:string)=>k.replaceAll('_',' ');
@@ -52,20 +53,15 @@ export function GameExperience({games,season,onMatchup,lab=false,selectedGameId,
  const [localGameId,setLocalGameId]=useState<string|null>(null);
  const gameId=onGameChange?selectedGameId:localGameId;
  const setGameId=(id:string)=>onGameChange?onGameChange(id):setLocalGameId(id);
- const ordered=[...(games??[])].sort((a,b)=>a.week-b.week||(a.date??'').localeCompare(b.date??''));
- const game=ordered.find(g=>g.id===gameId)??ordered.filter(g=>g.final).at(-1)??ordered.at(-1);
- const index=ordered.findIndex(g=>g.id===game?.id);
+ const ordered=orderedGames(games);
+ const game=activeGame(ordered,gameId);
  const detail=useRef<HTMLDivElement>(null);
  const selectGame=(id:string)=>{setGameId(id);detail.current?.focus({preventScroll:true});detail.current?.scrollIntoView({block:'start'});};
  return <>
  <div ref={detail} tabIndex={-1} className="bi-game-analysis">
  <section className="bi-section-title"><div><small>GAME / {season}</small><h2>Game Intelligence</h2></div><p>Explore game results, possessions and recorded plays.</p></section>
  {!game?<section className="bi-panel"><h2>{games===undefined?'Game intelligence loading or unavailable':'Game intelligence unavailable'}</h2><p>No recorded game or drive analysis is currently available for this season.</p></section>:<>
- <div className="bi-game-select" role="group" aria-label="Game navigation">
- <button type="button" disabled={index<=0} onClick={()=>setGameId(ordered[index-1].id)} aria-label="Previous recorded game">‹ Previous</button>
- <label htmlFor="bi-game-select">Select a game</label><select id="bi-game-select" value={game.id} onChange={e=>setGameId(e.target.value)}>{ordered.map(g=><option key={g.id} value={g.id}>Week {g.week} · {g.away} at {g.home} · {g.date??''}{g.final?' · Final':''}</option>)}</select>
- <button type="button" disabled={index>=ordered.length-1} onClick={()=>setGameId(ordered[index+1].id)} aria-label="Next recorded game">Next ›</button>
- </div><GameDetail key={game.id} game={game}/></>}
+ <GameDetail key={game.id} game={game}/></>}
  </div>
  {!lab&&<SeasonSchedule season={season} recorded={ordered} selectedId={game?.id} onGame={selectGame} onMatchup={onMatchup}/>}
  </>
