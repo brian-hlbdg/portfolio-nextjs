@@ -1,4 +1,3 @@
-import Link from 'next/link';
-import s from '../studio.module.css';
+import Practice from './Practice';
 export const metadata={title:'Practice | B. Hall',robots:{index:false,follow:false}};
-export default function Practice(){return <div className={s.studio}><header className={s.header}><Link href="/studio/" className={s.brand}>B. Hall</Link><nav className={s.destinationNav} aria-label="Portfolio navigation"><Link href="/case-studies/">Work</Link><Link href="/studio/practice/" aria-current="page">Practice</Link><Link href="/blog/">Journal</Link><Link href="/about/">About</Link><a href="mailto:brian@hlbdesigngroup.com">Let’s talk ↗</a></nav></header><section className={s.destination}><p className={s.eyebrow}>THE PRACTICE</p><h1>Understanding before creating.</h1><p>I enjoy figuring things out, sharing what I learn and helping people turn ideas into reality. Leadership means contributing, not always being in front.</p><Link href="/studio/">← Return to the studio</Link></section><footer className={s.footer}><span aria-label="HLB maker’s mark">H<b>l</b>B</span><span>CHICAGO · DESIGN & TECHNOLOGY</span><a href="mailto:brian@hlbdesigngroup.com">Get in touch ↗</a></footer></div>}
+export default function Page(){return <Practice/>;}
