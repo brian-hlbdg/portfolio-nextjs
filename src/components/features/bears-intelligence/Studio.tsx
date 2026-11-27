@@ -38,7 +38,7 @@ export default function Studio({lab=false}:{lab?:boolean}){
     if(!lab){const url=navigationUrl(window.location.href,next);if(url.href!==window.location.href)window.history.pushState(null,'',url);}
     setNavigation(next);
   }
-  function changeView(next:NavigationState['view']){navigate({view:next,opponent:next==='Matchup'?undefined:opponent});}
+  function changeView(next:NavigationState['view']){navigate({view:next});}
   function openMatchup(id:string){navigate({view:'Matchup',opponent:id});}
   const [device,setDevice]=useState('Desktop');
   const [mode,setMode]=useState('Experience');
@@ -50,6 +50,7 @@ export default function Studio({lab=false}:{lab?:boolean}){
   useEffect(()=>{
     if(source!=='nflverse'||!navigationReady) return;
     const controller=new AbortController();
+    setError(null);
     loadSeason(season,controller.signal).then(d=>{if(!controller.signal.aborted)setFile(d)}).catch(e=>{if(!controller.signal.aborted)setError(e instanceof Error?e.message:'Unable to load dataset')});
     return ()=>controller.abort();
   },[source,season,retry,navigationReady]);
