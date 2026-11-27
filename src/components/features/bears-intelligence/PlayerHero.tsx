@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
 import type { Player } from './data';
+import {playerIdentity,type PlayerSeasonProfile} from './playerIdentity';
 
-export function PlayerHero({player,sample=true}:{player:Player;sample?:boolean}) {
-  return <PlayerHeroContent key={player.id+':'+player.name+':'+player.number} player={player} sample={sample}/>;
+export function PlayerHero({player,sample=true,season,profile}:{player:Player;sample?:boolean;season?:number;profile?:PlayerSeasonProfile}) {
+  return <PlayerHeroContent key={player.id+':'+player.name+':'+player.number} player={player} sample={sample} season={season} profile={profile}/>;
 }
 
-function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
+function PlayerHeroContent({player,sample,season,profile}:{player:Player;sample:boolean;season?:number;profile?:PlayerSeasonProfile}) {
   const [imageIndex,setImageIndex] = useState(0);
   const [first,...last] = player.name.split(' ');
   const slug=player.name.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
@@ -21,6 +22,7 @@ function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
   const current=images[imageIndex];
   const cinematic=current?.cinematic??false;
   const hasPhoto=Boolean(current);
+  const facts=!sample&&season?playerIdentity(player.id,season,profile):[];
   return <section className="bi-hero">
     <span className="bi-watermark" aria-hidden="true">{player.number>=0?player.number:""}</span>
     <div className="bi-art">
@@ -33,7 +35,7 @@ function PlayerHeroContent({player,sample}:{player:Player;sample:boolean}) {
     </div>
     <div className="bi-hero-copy">
       <small>PLAYER SPOTLIGHT / CHICAGO</small>
-      <h1><span>{first}</span><em>{last.join(' ')}</em></h1>
+      <div className={'bi-hero-title'+(facts.length?' has-identity':'')}><h1><span>{first}</span><em>{last.join(' ')}</em></h1>{facts.length>0&&<dl className="bi-player-bio" aria-label={'Player identity for '+season}>{facts.map(f=><div key={f.label}><dt>{f.label}</dt><dd><a href={f.source} target="_blank" rel="noreferrer" aria-label={f.value+' — '+f.label+' source (opens in new tab)'}>{f.value}</a></dd></div>)}</dl>}</div>
       <p className="bi-identity">#{player.number>=0?player.number:"—"} / {player.position} / CHICAGO BEARS</p>
       {!player.stats.length&&<p>Player statistics unavailable.</p>}<div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
       <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season player data'} · {cinematic?'AI concept art':hasPhoto?'Headshot via ESPN':'Portrait unavailable'}</p>
