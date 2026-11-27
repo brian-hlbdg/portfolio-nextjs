@@ -13,6 +13,6 @@ export function navigationUrl(href:string,state:NavigationState):URL{
  const url=new URL(href);
  url.searchParams.set('view',state.view.toLowerCase());
  url.searchParams.set('season',String(state.season));
- for(const key of ['player','game','opponent'] as const){const value=state[key];if(value&&state.view.toLowerCase()===(key==='opponent'?'matchup':key))url.searchParams.set(key,value);else url.searchParams.delete(key);}
+ for(const key of ['player','game','opponent'] as const){const value=state[key];if(value)url.searchParams.set(key,value);else url.searchParams.delete(key);}
  return url;
 }
