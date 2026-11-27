@@ -30,3 +30,27 @@
 .header::before,.footer::before{transition:backdrop-filter 1.6s cubic-bezier(.42,0,.58,1),-webkit-backdrop-filter 1.6s cubic-bezier(.42,0,.58,1)}
 @media(max-width:760px){.art{inset:0 -120px 0 22%}}
 @media(prefers-reduced-motion:reduce){.header::before,.footer::before{transition:none}}
+
+/* Unframed footer and adaptive contrast over the shared artwork. */
+.footer::after{display:none}
+.header{isolation:auto}
+.nav{position:relative;z-index:1;mix-blend-mode:difference;color:#fff}
+.studio .nav a,.studio .nav button{color:inherit;transition:opacity .2s}
+.studio .nav a:hover,.studio .nav button:hover{color:inherit;opacity:.72}
+.studio .nav :focus-visible{outline-color:currentColor}
+/* Pieces separate rather than rotating or shaking. */
+.studio[data-leaving=true]{pointer-events:none}
+.studio[data-leaving=true] .header{animation:exitUp .42s cubic-bezier(.42,0,.58,1) both}
+.studio[data-leaving=true] .footer{animation:exitDown .42s cubic-bezier(.42,0,.58,1) both}
+.studio[data-leaving=true] .intro{animation:exitIntro .42s cubic-bezier(.42,0,.58,1) both}
+.studio[data-leaving=true][data-open=true] .intro{animation-name:exitIntroRight}
+.studio[data-leaving=true] .index:not([hidden]){animation:exitIndex .42s cubic-bezier(.42,0,.58,1) both}
+.studio[data-leaving=true] .art{animation:exitArt .42s cubic-bezier(.42,0,.58,1) both}
+@keyframes exitUp{to{transform:translateY(-44px);opacity:0}}
+@keyframes exitDown{to{transform:translateY(44px);opacity:0}}
+@keyframes exitIntro{to{transform:translateX(90px);opacity:0}}
+@keyframes exitIntroRight{from{transform:translateX(117%)}to{transform:translateX(145%);opacity:0}}
+@keyframes exitIndex{from{opacity:1;translate:0 0}to{opacity:0;translate:-65px 0}}
+@keyframes exitArt{to{transform:translate(65px,-25px);opacity:0}}
+@media(max-width:760px){.studio[data-leaving=true][data-open=true] .intro{animation-name:exitUp}}
+@media(prefers-reduced-motion:reduce){.studio[data-leaving=true] *{animation:none!important}}
