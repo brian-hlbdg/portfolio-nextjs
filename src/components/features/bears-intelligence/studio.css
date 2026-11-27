@@ -415,3 +415,5 @@
 .bi-game-select button:disabled{opacity:.42;cursor:default}
 .bi-game-analysis+.bi-season-schedule{margin-top:28px}
 @container(max-width:500px){.bi-game-select{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bi-game-select label{grid-column:1/-1;grid-row:1}.bi-game-select select{grid-column:1/-1;grid-row:2;width:100%}.bi-game-select button{grid-row:3}}
+
+.bi-picker-navigation{display:flex;align-items:stretch;gap:6px;min-width:0}.bi-root .bi-picker-navigation .bi-player-step{min-width:44px;min-height:44px;flex:0 0 44px;font-size:24px;padding:4px}.bi-picker-navigation .bi-picker-trigger{min-width:0;flex:1 1 auto}.bi-player-step:disabled{opacity:.38;cursor:default}.bi-picker-results button[aria-pressed=true]{border-color:var(--accent)}
