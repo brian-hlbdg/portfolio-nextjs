@@ -9,4 +9,6 @@ Independent, unofficial football intelligence product hosted inside the portfoli
 - [Decision records](decisions/README.md) · [Quality](quality/TESTING-STRATEGY.md) · [Accessibility](quality/ACCESSIBILITY.md) · [Performance](quality/PERFORMANCE.md)
 - [Release process](RELEASE-PROCESS.md) · [Changelog](CHANGELOG.md) · [Retrospective](retrospective/AFTER-ACTION-REPORT.md) · [Lessons](retrospective/LESSONS-LEARNED.md)
 
+- [Feature issue template](templates/ISSUE.md) · [Pull request template](templates/PULL-REQUEST.md)
+
 Original experiment notes: [historical document](../bears-intelligence-chatgpt.md). Issues are authoritative for work status; this handbook describes intent and architecture, not a guarantee of deployed behavior. Snapshot: November 27, 2026. Update affected documents in each substantive PR.
