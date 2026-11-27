@@ -39,7 +39,7 @@ export default function Studio({lab=false}:{lab?:boolean}){
     setNavigation(next);
   }
   function changeView(next:NavigationState['view']){navigate({view:next});}
-  function openMatchup(id:string){navigate({view:'Matchup',opponent:id});}
+  function openMatchup(id?:string){navigate({view:'Matchup',opponent:id});}
   const [device,setDevice]=useState('Desktop');
   const [mode,setMode]=useState('Experience');
   const [state,setState]=useState('Ready');
