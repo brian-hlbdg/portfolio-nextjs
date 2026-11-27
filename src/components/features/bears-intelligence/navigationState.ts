@@ -4,7 +4,8 @@ const views:Record<string,IntelligenceView>={team:'Team',player:'Player',game:'G
 const identifier=(value:string|null)=>value&&/^[A-Za-z0-9:_-]{1,100}$/.test(value)?value:undefined;
 export function readNavigation(search:string,defaultSeason:number):NavigationState{
  const p=new URLSearchParams(search);
- const view=views[(p.get('view')??'').toLowerCase()];
+ const key=(p.get('view')??'').toLowerCase();
+ const view=Object.prototype.hasOwnProperty.call(views,key)?views[key]:undefined;
  const season=Number(p.get('season'));
  return {view:view??'Team',season:[2024,2025,2026].includes(season)?season:defaultSeason,player:identifier(p.get('player')),game:identifier(p.get('game')),opponent:identifier(p.get('opponent'))};
 }
