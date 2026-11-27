@@ -35,12 +35,14 @@ function RecentForm({chi,opp}:{chi:MatchupTeam;opp:MatchupTeam}){
  {([[chi.id,a],[opp.id,b]] as const).map(([id,weeks])=>{return <div key={String(id)} className="bi-match-form"><strong>{String(id)}</strong><div className="bi-match-form-grid">{weeks.map(w=>{const v=w[side][metric];return <div key={w.week}><strong>{teamValue(v,metric)}</strong><div className="bi-team-week-bars"><div className={'bi-team-signed '+(id==='CHI'?'offense':'defense')}><i style={{height:(v===null?0:Math.abs(v)/max*50)+'%',bottom:v!==null&&v<0?'auto':'50%',top:v!==null&&v<0?'50%':'auto'}}/></div></div><small>W{w.week}</small></div>})}</div></div>})}
  <p className="bi-legend">Shared scale and zero baseline. Weeks may differ because of bye weeks or data coverage.</p></section>
 }
-export function MatchupExperience({file,initialOpponent}:{file:SeasonFile;initialOpponent?:string}){
+export function MatchupExperience({file,initialOpponent,onOpponentChange}:{file:SeasonFile;initialOpponent?:string;onOpponentChange?:(id:string|undefined)=>void}){
  const teams=file.matchupTeams??[];
  const chicago=teams.find(t=>t.id==='CHI');
  const opponents=teams.filter(t=>t.id!=='CHI');
  const {scheduleData,loading:scheduleLoading}=useTeamSchedule('bears',undefined,file.season);
- const [choice,setChoice]=useState<string|undefined>(normalizeTeam(initialOpponent));
+ const [localChoice,setLocalChoice]=useState<string|undefined>(normalizeTeam(initialOpponent));
+ const choice=onOpponentChange?normalizeTeam(initialOpponent):localChoice;
+ const setChoice=(id:string|undefined)=>onOpponentChange?onOpponentChange(id):setLocalChoice(id);
  const fixtures=(scheduleData?.games??[]).filter(g=>g.gameType==='regular'||g.gameType==='postseason').sort((a,b)=>(a.kickoff??'').localeCompare(b.kickoff??''));
  const next=fixtures.find(g=>g.status==='live')??fixtures.find(g=>g.status==='scheduled');
  const latest=(file.games??[]).filter(g=>g.final).at(-1);
