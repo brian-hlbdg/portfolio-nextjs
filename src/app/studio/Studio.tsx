@@ -50,7 +50,7 @@ function Scramble({target,base,note}:{target:string;base:string;note:string}){
   frame=requestAnimationFrame(tick);
   return ()=>cancelAnimationFrame(frame);
  },[target]);
- return <span className={s.scrambleBox}><span className={s.srOnly}>{target}</span><span aria-hidden="true" className={s.reserve}>{base}</span><span aria-hidden="true" className={s.reserve}>{note}</span><span aria-hidden="true" className={s.scrambleText} style={{opacity}}>{display}</span></span>;
+ return <span style={{display:'grid',position:'relative',margin:0,color:'inherit',lineHeight:1.55,minHeight:'3.1em',overflow:'hidden'}}><span style={{position:'absolute',width:1,height:1,padding:0,margin:-1,overflow:'hidden',clip:'rect(0,0,0,0)',whiteSpace:'nowrap',border:0}}>{target}</span><span aria-hidden="true" style={{gridArea:'1 / 1',opacity:0,margin:0,color:'inherit',overflowWrap:'anywhere',pointerEvents:'none'}}>{base}</span><span aria-hidden="true" style={{gridArea:'1 / 1',opacity:0,margin:0,color:'inherit',overflowWrap:'anywhere',pointerEvents:'none'}}>{note}</span><span aria-hidden="true" style={{position:'absolute',inset:0,margin:0,color:'inherit',overflowWrap:'anywhere',lineHeight:'inherit',opacity}}>{display}</span></span>;
 }
 
 export default function Studio(){
