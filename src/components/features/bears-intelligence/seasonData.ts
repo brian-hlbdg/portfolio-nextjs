@@ -1,3 +1,4 @@
+import type { PlayerSeasonProfile } from './playerIdentity';
 import type { MatchupTeam } from './matchupData';
 import type { BearsGame } from './gameData';
 import type { TeamIdentityData } from './teamIdentity';
@@ -11,7 +12,7 @@ import type { AnalyticsSnapshot, ConversionBucket, WeeklyRating } from './analyt
 export interface SeasonFile {
   season: number; source: 'nflverse'; retrievedAt: string; sourceModified: string|null;
   leagueRating: number|null; thirdDown: ConversionBucket[];
-  roster?: {gsisId:string;espnId:string|null;name:string;number:number|null;position:string;depth?:{rank:number;position:string|null;group:string|null}|null}[];
+  roster?: {gsisId:string;espnId:string|null;name:string;number:number|null;position:string;profile?:PlayerSeasonProfile;depth?:{rank:number;position:string|null;group:string|null}|null}[];
   depthChart?:{source:string;asOf:string}|null;
   qualifiedPassers?:number;
   rushing?:RushingProfile[];
