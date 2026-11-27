@@ -34,6 +34,20 @@ def num(row, key):
     except (ValueError, TypeError):
         return None
 
+def roster_profile(row):
+    height=num(row,"height")
+    weight=num(row,"weight")
+    birth=row.get("birth_date")
+    try:
+        birth=datetime.strptime(birth,"%Y-%m-%d").date().isoformat()
+    except (ValueError,TypeError):
+        birth=None
+    college=(row.get("college") or "").strip()
+    return {"heightInches":int(height) if height is not None and height.is_integer() and 48<=height<=96 else None,
+            "weightLbs":int(weight) if weight is not None and weight.is_integer() and 100<=weight<=500 else None,
+            "birthDate":birth,
+            "college":college if college not in ("","NA","N/A") else None}
+
 def rating(a,c,y,t,i):
     if not a: return None
     clamp=lambda v:max(0,min(2.375,v))
@@ -242,7 +256,7 @@ def run(year):
         if not name or name=="NA":continue
         seen.add(pid)
         jersey=num(r,"jersey_number")
-        result["roster"].append({"gsisId":pid,"espnId":ids.get(pid),"name":name,"number":int(jersey) if jersey is not None else None,"position":r.get("position") or "POS","depth":depth_ranks.get("gsis:"+pid) or depth_ranks.get("espn:"+str(ids.get(pid)))})
+        result["roster"].append({"gsisId":pid,"espnId":ids.get(pid),"name":name,"number":int(jersey) if jersey is not None else None,"position":r.get("position") or "POS","profile":roster_profile(r),"depth":depth_ranks.get("gsis:"+pid) or depth_ranks.get("espn:"+str(ids.get(pid)))})
     if not result["roster"]:raise ValueError("No Chicago roster entries; verify roster schema")
     dest=Path("public/data/bears-intelligence")/f"{year}.json"
     dest.parent.mkdir(parents=True,exist_ok=True)
