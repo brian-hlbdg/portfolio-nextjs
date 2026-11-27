@@ -61,3 +61,14 @@
 .destination>a{color:var(--rust)}
 .destinationNav{display:flex;gap:clamp(12px,3vw,44px);flex-wrap:wrap;font-size:14px}
 @keyframes destinationIn{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+
+/* Return journey mirrors the departure, using the same geometry in reverse. */
+.studio[data-returning=true]{pointer-events:none;animation:practiceReturn .38s ease-in both}
+@keyframes practiceReturn{from{opacity:1}to{opacity:0}}
+.studio[data-arriving=true] .header{animation:exitUp .42s cubic-bezier(.42,0,.58,1) reverse both}
+.studio[data-arriving=true] .footer{animation:exitDown .42s cubic-bezier(.42,0,.58,1) reverse both}
+.studio[data-arriving=true] .intro{animation:exitIntroRight .42s cubic-bezier(.42,0,.58,1) reverse both}
+.studio[data-arriving=true] .index:not([hidden]){animation:exitIndex .42s cubic-bezier(.42,0,.58,1) reverse both;transition:none}
+.studio[data-arriving=true] .art{animation:exitArt .42s cubic-bezier(.42,0,.58,1) reverse both;transition:none}
+@media(max-width:760px){.studio[data-arriving=true] .intro{animation-name:exitUp}}
+@media(prefers-reduced-motion:reduce){.studio[data-arriving=true] *,.studio[data-returning=true]{animation:none!important;transition:none!important}}
