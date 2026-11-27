@@ -3,6 +3,7 @@ export interface PlayerSeasonProfile {
  weightLbs?:number|null;
  birthDate?:string|null;
  college?:string|null;
+ yearsExperience?:number|null;
 }
 const rosterSource='https://nflreadr.nflverse.com/articles/dictionary_rosters.html';
 const calebSource='https://www.chicagobears.com/team/players-roster/caleb-williams/';
@@ -17,14 +18,16 @@ export function playerIdentity(id:string,season:number,profile?:PlayerSeasonProf
  const college=profile?.college??(fallback?'USC':undefined);
  if(height&&Number.isInteger(height)&&height>=48&&height<=96)facts.push({label:'Height',value:Math.floor(height/12)+"′ "+height%12+"″",source:profile?.heightInches?rosterSource:calebSource});
  if(weight&&Number.isInteger(weight)&&weight>=100&&weight<=500)facts.push({label:'Weight',value:weight+' lbs',source:profile?.weightLbs?rosterSource:calebSource});
- const birth=profile?.birthDate??(caleb?'2001-11-18':undefined);
- if(birth&&/^\d{4}-\d{2}-\d{2}$/.test(birth)){
-   const [year,month,day]=birth.split('-').map(Number);
-   const age=season-year-(month>9||(month===9&&day>1)?1:0);
-   if(age>=18&&age<=65)facts.push({label:'Age · Sep 1',value:String(age),source:profile?.birthDate?rosterSource:nicknameSource});
- }
  if(college&&college!=='NA')facts.push({label:'College',value:college,source:profile?.college?rosterSource:calebSource});
- if(caleb)facts.push({label:'Hometown',value:'Washington, D.C.',source:'https://usctrojans.com/sports/football/roster/caleb-williams/15820/'});
- if(fallback)facts.push({label:'Nickname',value:'Iceman',source:nicknameSource});
+ const experience=profile?.yearsExperience;
+ if(caleb&&season>=2024&&season<=2026){
+   facts.push({label:'Experience',value:season===2024?'Rookie':season===2025?'2nd season':'3rd season',source:calebSource});
+ }else if(typeof experience==='number'&&Number.isInteger(experience)&&experience>=0&&experience<=30){
+   facts.push({label:'Experience',value:experience===0?'Rookie':experience+' '+(experience===1?'yr':'yrs'),source:rosterSource});
+ }
  return facts;
+}
+
+export function playerNickname(id:string):IdentityFact|undefined{
+ return ['00-0039918','4431611','gsis:00-0039918'].includes(id)?{label:'Nickname',value:'The Iceman',source:nicknameSource}:undefined;
 }
