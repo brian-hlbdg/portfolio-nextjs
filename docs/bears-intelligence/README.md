@@ -4,7 +4,7 @@ Independent, unofficial football intelligence product hosted inside the portfoli
 
 ## Start here
 - [Product charter](PRODUCT-CHARTER.md) · [Roadmap](ROADMAP.md) · [Requirements](REQUIREMENTS.md)
-- [System architecture](architecture/SYSTEM-ARCHITECTURE.md) · [Data model](architecture/DATA-MODEL.md) · [Pipeline](architecture/DATA-PIPELINE.md) · [Dictionary](architecture/DATA-DICTIONARY.md)
+- [System architecture](architecture/SYSTEM-ARCHITECTURE.md) · [Data model](architecture/DATA-MODEL.md) · [Pipeline](architecture/DATA-PIPELINE.md) · [Dictionary](architecture/DATA-DICTIONARY.md) · [Product analytics](architecture/PRODUCT-ANALYTICS.md)
 - [Design system](design/DESIGN-SYSTEM.md) · [Information architecture](design/INFORMATION-ARCHITECTURE.md) · [Art direction](design/ART-DIRECTION.md) · [Interaction patterns](design/INTERACTION-PATTERNS.md)
 - [Decision records](decisions/README.md) · [Quality](quality/TESTING-STRATEGY.md) · [Accessibility](quality/ACCESSIBILITY.md) · [Performance](quality/PERFORMANCE.md)
 - [Release process](RELEASE-PROCESS.md) · [Changelog](CHANGELOG.md) · [Retrospective](retrospective/AFTER-ACTION-REPORT.md) · [Lessons](retrospective/LESSONS-LEARNED.md)
