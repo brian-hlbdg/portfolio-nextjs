@@ -35,7 +35,7 @@ function PlayerHeroContent({player,sample,season,profile}:{player:Player;sample:
     </div>
     <div className="bi-hero-copy">
       <small>PLAYER SPOTLIGHT / CHICAGO</small>
-      <div className={'bi-hero-title'+(facts.length?' has-identity':'')}><h1><span>{first}</span><em>{last.join(' ')}</em></h1>{facts.length>0&&<dl className="bi-player-bio" aria-label={'Player identity for '+season}>{facts.map(f=><div key={f.label}><dt>{f.label}</dt><dd><a href={f.source} target="_blank" rel="noreferrer" aria-label={f.value+' — '+f.label+' source (opens in new tab)'}>{f.value}</a></dd></div>)}</dl>}</div>
+      <div className={'bi-hero-title'+(facts.length?' has-identity':'')}><h1><span>{first}</span><em>{last.join(' ')}</em></h1>{facts.length>0&&<dl className="bi-player-bio" aria-label={'Player identity for '+season}>{facts.map(f=><div key={f.label} className={f.label==='Nickname'?'bi-bio-nickname':undefined}><dt>{f.label}</dt><dd><a href={f.source} target="_blank" rel="noreferrer" aria-label={f.value+' — '+f.label+' source (opens in new tab)'}>{f.value}</a></dd></div>)}</dl>}</div>
       <p className="bi-identity">#{player.number>=0?player.number:"—"} / {player.position} / CHICAGO BEARS</p>
       {!player.stats.length&&<p>Player statistics unavailable.</p>}<div className="bi-stats">{player.stats.map(([label,value])=><div key={label}><strong>{value}</strong><small>{label}</small></div>)}</div>
       <p className="bi-credit">{sample?'Illustrative statistics':'Regular-season player data'} · {cinematic?'AI concept art':hasPhoto?'Headshot via ESPN':'Portrait unavailable'}</p>
