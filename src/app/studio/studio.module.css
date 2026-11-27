@@ -8,3 +8,9 @@
 /* Scope the existing root chrome only while this isolated route is mounted. */
 :global(body):has(.studio) > :global(div > header){display:none}
 :global(body):has(.studio) > :global(div > main){padding-top:0}
+
+/* Both real phrases participate in sizing; animated glyphs never affect layout. */
+.entries .scrambleBox{display:grid;position:relative;margin:0;color:inherit;line-height:1.55;min-height:3.1em;overflow:hidden}
+.entries .reserve{grid-area:1/1;visibility:hidden;margin:0;color:inherit;overflow-wrap:anywhere}
+.entries .scrambleText{position:absolute;inset:0;margin:0;color:inherit;overflow-wrap:anywhere;line-height:inherit}
+.entries p{min-height:3.1em}
