@@ -33,3 +33,6 @@ Traffic, engaged visitors, feature use, navigation sequence, returning browser e
 
 ## Open decisions
 Provider account/project, current free limits and cost controls, consent UX and geographic scope, retention period, owner traffic exclusion and deployment configuration. #93 depends on these decisions; #94 and #95 follow. No provider or tracking code activated by this document.
+
+## Provider review — November 27, 2026
+PostHog selected as proposed explicit-event provider; Vercel Speed Insights for performance, subject to activation review. PostHog lists 1M free analytics events/month and per-product billing limits (https://posthog.com/pricing); Vercel Hobby lists 10k Speed Insights data points and 50k Web Analytics events (https://vercel.com/docs/plans/hobby). Verify actual plan and set zero-dollar limits before enabling. Vercel project details retrieved but do not expose analytics enablement; dashboard inspection required. No tracking currently activated by this change.
