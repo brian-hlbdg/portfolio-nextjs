@@ -37,6 +37,7 @@ def num(row, key):
 def roster_profile(row):
     height=num(row,"height")
     weight=num(row,"weight")
+    experience=num(row,"years_exp")
     birth=row.get("birth_date")
     try:
         birth=datetime.strptime(birth,"%Y-%m-%d").date().isoformat()
@@ -46,6 +47,7 @@ def roster_profile(row):
     return {"heightInches":int(height) if height is not None and height.is_integer() and 48<=height<=96 else None,
             "weightLbs":int(weight) if weight is not None and weight.is_integer() and 100<=weight<=500 else None,
             "birthDate":birth,
+            "yearsExperience":int(experience) if experience is not None and experience.is_integer() and 0<=experience<=30 else None,
             "college":college if college not in ("","NA","N/A") else None}
 
 def rating(a,c,y,t,i):
