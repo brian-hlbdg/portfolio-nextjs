@@ -10,20 +10,21 @@ const navLinks = [
   { label: 'Chicago Sports', href: '/chicago-sports' },
 ];
 
-export function Header() {
+export function Header({ studio = false }: { studio?: boolean } = {}) {
   const [open, setOpen] = useState(false);
+  const links = studio ? navLinks.map(link => link.href === '/#work' ? {...link, href: '/studio/#work'} : link) : navLinks;
 
   return (
     <header className="fixed top-0 inset-x-0 z-40 h-[60px] bg-bone-50/95 backdrop-blur-sm border-b border-black/[0.07]">
       <div className="col h-full flex items-center justify-between gap-6">
 
-        <Link href="/" onClick={() => setOpen(false)} className="shrink-0 font-sans font-bold text-[15px] tracking-[-0.01em] text-ink hover:opacity-75 transition-opacity">
-          Brian Hall
+        <Link href={studio ? "/studio/" : "/"} onClick={() => setOpen(false)} className="shrink-0 font-sans font-bold text-[15px] tracking-[-0.01em] text-ink hover:opacity-75 transition-opacity">
+          {studio ? 'B. Hall' : 'Brian Hall'}
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden min-[760px]:flex items-center gap-7">
-          {navLinks.map(({ label, href }) => (
+          {links.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
@@ -50,7 +51,7 @@ export function Header() {
       {/* Mobile dropdown */}
       {open && (
         <div className="min-[760px]:hidden absolute top-[60px] inset-x-0 bg-bone-50 border-b border-black/[0.07] py-2 shadow-sm">
-          {navLinks.map(({ label, href }) => (
+          {links.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
