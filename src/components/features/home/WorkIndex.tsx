@@ -72,7 +72,7 @@ const filters: { id: Discipline; label: string }[] = [
   { id: 'data-viz',       label: 'Data viz' },
 ];
 
-export function WorkIndex() {
+export function WorkIndex({ studio = false }: { studio?: boolean } = {}) {
   const [active, setActive] = useState<Discipline>('all');
   const [hovered, setHovered] = useState<number | null>(null);
 
@@ -97,7 +97,7 @@ export function WorkIndex() {
               Selected work
             </p>
             <h2 className="text-[40px] font-extrabold leading-[1.1] tracking-[-0.01em] text-ink">
-              Projects
+              {studio ? 'Making things better.' : 'Projects'}
             </h2>
           </Reveal>
 
@@ -133,7 +133,7 @@ export function WorkIndex() {
               className="group flex items-baseline gap-4 py-5 border-b border-black/10 no-underline"
               style={{
                 opacity: rowOpacity(item, idx),
-                transform: rowShift(idx),
+                transform: studio ? 'none' : rowShift(idx),
                 transition: 'opacity 240ms, transform 240ms var(--ease-site)',
               }}
             >
@@ -147,7 +147,7 @@ export function WorkIndex() {
                 </span>
                 {item.outcome && (
                   <span className="font-mono text-[12px] text-brass mt-0.5 block">
-                    {item.outcome}
+                    {studio ? item.outcome.replace(/^→ /, "") : item.outcome}
                   </span>
                 )}
               </span>
@@ -158,7 +158,7 @@ export function WorkIndex() {
               {/* Year + arrow */}
               <span className="flex items-center gap-2 shrink-0">
                 <span className="font-mono text-[12px] text-ink/40">{item.year}</span>
-                <span
+                {!studio && <span
                   className="font-mono text-[14px] text-brass"
                   style={{
                     opacity: hovered === idx ? 1 : 0,
@@ -168,7 +168,7 @@ export function WorkIndex() {
                   aria-hidden="true"
                 >
                   →
-                </span>
+                </span>}
               </span>
             </Link>
           ))}
