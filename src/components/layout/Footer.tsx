@@ -6,7 +6,7 @@ const social = [
   { label: 'GitHub',   href: 'https://github.com/brian-hlbdg' },
 ];
 
-export function Footer() {
+export function Footer({ studio = false }: { studio?: boolean } = {}) {
   return (
     <footer className="bg-ink-950 text-white/80">
 
@@ -18,7 +18,7 @@ export function Footer() {
           className="font-sans font-black leading-[1.05] tracking-[-0.02em] text-white mb-8 max-w-[620px]"
           style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}
         >
-          Need someone who can research it, design it and ship it?
+          {studio ? 'It starts with a conversation.' : 'Need someone who can research it, design it and ship it?'}
         </h2>
 
         {/* CTAs */}
@@ -28,14 +28,14 @@ export function Footer() {
             href="mailto:brian@hlbdesigngroup.com?subject=Resume%20Request&body=Hi%20Brian%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20love%20to%20see%20your%20resume.%0A%0AThanks"
             className="inline-flex items-center gap-2 font-mono text-[13px] text-white/80 border border-white/25 px-5 py-3 rounded-[2px] hover:border-white/50 hover:text-white transition-colors duration-200"
           >
-            Request résumé ↗
+            {studio ? 'Request résumé' : 'Request résumé ↗'}
           </a>
         </div>
 
         {/* Base row */}
         <div className="border-t border-white/10 pt-8 flex flex-wrap items-center justify-between gap-4">
           <p className="font-mono text-[11px] tracking-[0.1em] text-white/40 uppercase">
-            HLB Design Group · Chicago
+            {studio ? <><span data-studio-mark>H<b>l</b>B</span> · Chicago · Design & technology</> : 'HLB Design Group · Chicago'}
           </p>
           <div className="flex items-center gap-6">
             {social.map(({ label, href }) => (
@@ -56,7 +56,7 @@ export function Footer() {
               About
             </Link>
             <Link
-              href="/#work"
+              href={studio ? "/studio/#work" : "/#work"}
               className="font-mono text-[11px] tracking-[0.05em] text-white/40 hover:text-white/80 transition-colors duration-200"
             >
               Work
