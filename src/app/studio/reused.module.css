@@ -1,0 +1,15 @@
+.preview{--color-bone-50:#f7f1e7;--color-bone-100:#eae1d2;--color-ink:#202c27;--color-ink-950:#202c27;--color-brass:#a74318;--color-brass-500:#e9a675;--color-sports-ink:#244b3d;--color-sports-accent:#ffcead;background:var(--color-bone-50);color:var(--color-ink);min-height:100svh;padding-top:60px}
+.preview h1,.preview h2,.preview h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.045em}
+.preview h1{line-height:1.04;max-width:850px}.preview h1 em{color:var(--color-brass);font-weight:400}
+.preview header{background:#f7f1e7;backdrop-filter:none}.preview header>div>a:first-child{font-family:Georgia,serif;font-size:27px;letter-spacing:-.05em}
+.preview :global(.reveal){transition-duration:260ms;translate:0 5px;transition-delay:0ms!important}
+.preview :global(.reveal-visible){translate:0 0}
+.preview #work,.preview #experience,.preview #sports{scroll-margin-top:60px}
+.preview #work a:hover :global(.font-bold),.preview #work a:focus-visible :global(.font-bold){color:var(--color-brass);text-decoration:underline;text-underline-offset:4px}
+.preview #experience h3{font-size:30px;line-height:1.2}
+.preview [data-studio-mark]{font:400 26px/1 Arial,sans-serif;letter-spacing:0;color:#f7f1e7;text-transform:none;vertical-align:middle}.preview [data-studio-mark] b{color:#e9a675}
+.preview footer a{color:#f7f1e7}.preview :focus-visible{outline-color:var(--color-brass)}
+:global(body):has(.preview)>:global(div>header){display:none}
+:global(body):has(.preview)>:global(div>main){padding-top:0}
+@media(max-width:759px){.preview h1{line-height:1.04}.preview #experience h3{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.preview :global(.reveal){opacity:1!important;translate:0 0!important;transition:none!important}}
