@@ -47,7 +47,7 @@ const chapters: Chapter[] = [
   },
 ];
 
-export function ExperienceChapters() {
+export function ExperienceChapters({ studio = false }: { studio?: boolean } = {}) {
   const [activeId, setActiveId] = useState('ahead');
   const active = chapters.find(c => c.id === activeId) ?? chapters[0];
 
@@ -60,7 +60,7 @@ export function ExperienceChapters() {
             Experience
           </p>
           <h2 className="text-[40px] font-extrabold leading-[1.1] tracking-[-0.01em] text-ink mb-10">
-            Fifteen years, four chapters.
+            {studio ? 'Different chapters. One curiosity.' : 'Fifteen years, four chapters.'}
           </h2>
         </Reveal>
 
@@ -71,6 +71,7 @@ export function ExperienceChapters() {
             {chapters.map(ch => (
               <button
                 key={ch.id}
+                aria-pressed={ch.id === activeId}
                 onClick={() => setActiveId(ch.id)}
                 className={`text-left px-3 py-3 rounded-[2px] transition-colors duration-150 flex items-center gap-3 min-h-[44px] ${
                   ch.id === activeId
