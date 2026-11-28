@@ -24,7 +24,7 @@ function useChicagoTime() {
   return time;
 }
 
-export function HeroSection() {
+export function HeroSection({ studio = false }: { studio?: boolean } = {}) {
   const time = useChicagoTime();
 
   return (
@@ -33,7 +33,7 @@ export function HeroSection() {
 
         <Reveal delay={0} as="p" className="font-mono text-[11px] tracking-[0.1em] text-ink/50 mb-8 flex items-center gap-2">
           <span className="inline-block w-[7px] h-[7px] rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
-          SENIOR SOFTWARE ENGINEER · AHEAD / CHICAGO
+          {studio ? 'DESIGN & TECHNOLOGY · AHEAD / CHICAGO' : 'SENIOR SOFTWARE ENGINEER · AHEAD / CHICAGO'}
           {time && <span className="ml-1">{time} CT</span>}
         </Reveal>
 
@@ -42,22 +42,20 @@ export function HeroSection() {
             className="font-sans font-black leading-[0.98] tracking-[-0.02em] mb-8 text-ink"
             style={{ fontSize: 'clamp(40px, 6vw, 72px)' }}
           >
-            I build software that matches<br className="hidden sm:block" /> how people actually think.
+            {studio ? <>I enjoy figuring things <em>out.</em></> : <>I build software that matches<br className="hidden sm:block" /> how people actually think.</>}
           </h1>
         </Reveal>
 
         <Reveal delay={220}>
           <p className="text-[17px] leading-[1.6] text-ink/70 max-w-[600px] mb-10">
-            Full-stack engineer with an M.S. in HCI. Fifteen years from contextual
-            inquiry and cognitive task analysis to production Elixir and React — with
-            no handoff chain in between.
+            {studio ? 'Understanding why things work, why they don’t, and what we can do to make them better. I bring people, design and technology together to solve complex problems and create experiences that feel good to use. M.S. in Human-Computer Interaction, DePaul University.' : 'Full-stack engineer with an M.S. in HCI. Fifteen years from contextual inquiry and cognitive task analysis to production Elixir and React — with no handoff chain in between.'}
           </p>
         </Reveal>
 
         <Reveal delay={330}>
           <div className="flex flex-wrap items-center gap-4">
             <Link
-              href="/#work"
+              href={studio ? "/studio/#work" : "/#work"}
               className="inline-flex items-center gap-2 px-5 py-3 bg-ink text-bone-50 text-[13px] font-medium rounded-[2px] hover:bg-ink/85 transition-colors duration-200"
             >
               Selected work
