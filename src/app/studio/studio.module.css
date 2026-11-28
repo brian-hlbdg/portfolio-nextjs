@@ -153,3 +153,35 @@
  .studio .header::before,.studio .footer::before{backdrop-filter:none;-webkit-backdrop-filter:none}
  .studio .art .mobileDrawing{opacity:.85}
 }
+
+/* Mobile editorial palette: fixed contrast zones, no blur or blend modes. */
+@media(max-width:760px){
+ .studio{--paper:#f8f1e3;--ink:#101916;--rust:#a74318;background:var(--paper)}
+ .studio .art{filter:none!important}
+ .studio .art .mobileColor{filter:none!important;background:
+ radial-gradient(ellipse 95% 40% at 115% 100%,#ffad55 0%,transparent 76%),
+ radial-gradient(ellipse 85% 45% at 110% 79%,#71351d 0%,#a9471c 42%,transparent 43%),
+ radial-gradient(ellipse 85% 46% at 112% 69%,#e87823 0%,#f4a343 55%,transparent 56%),
+ linear-gradient(180deg,#f8f1e3 0%,#f8f1e3 29%,#e9d9b9 39%,#a4ad8c 48%,#174d3d 59%,#082f28 77%,#174d3d 90%,#e9d9b9 100%)}
+ .studio .art .mobileDrawing{opacity:.45;bottom:28px}
+ .studio .art .code{color:#fff9ee;opacity:.85;bottom:78px}
+ .studio .art .code span{color:#ffd49a}
+ .studio .canvas{padding-bottom:190px}
+ /* Keep readable foreground zones independent of viewport height and copy wrapping. */
+ .studio .canvas .index{color:#101916}
+ .studio .index .entries{position:relative;isolation:isolate;color:#fff9ee;margin-inline:-24px;padding:24px 24px 12px}
+ .studio .index .entries::before{content:'';position:absolute;z-index:-1;inset:0 -1px -72px;background:linear-gradient(105deg,#123e32 0%,#082f28 67%,#71351d 100%);mask-image:linear-gradient(#000 0%,#000 85%,transparent 100%);pointer-events:none}
+ .studio .entries>div{border-top:0}
+ .studio .entries small,.studio .entries a span,.studio .entries button span{color:#ffd49a}
+ .studio .entries a:hover,.studio .entries button:hover{color:#fff9ee}
+ .studio .entries :focus-visible{outline-color:#ffd49a}
+ .studio .mobileReturn{color:#fff9ee}
+ .studio .mobileReturn span{background:#71351d}
+ .studio .footer{background:#f8f1e3;color:#101916}
+ .studio .header .mobileNav a{color:#a74318}
+ .studio .canvas .intro{color:#101916}
+ .studio[data-open=false] .art .mobileColor{background:
+ radial-gradient(ellipse 90% 36% at 112% 100%,#f4a343 0%,#c4541b 42%,transparent 43%),
+ radial-gradient(ellipse 100% 40% at 105% 100%,#082f28 0%,#174d3d 72%,transparent 73%),
+ linear-gradient(180deg,#f8f1e3 0%,#f8f1e3 57%,#a4ad8c 76%,#174d3d 100%)}
+}
