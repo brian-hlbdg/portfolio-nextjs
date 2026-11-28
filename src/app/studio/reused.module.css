@@ -7,9 +7,14 @@
 .preview #work,.preview #experience,.preview #sports{scroll-margin-top:60px}
 .preview #work a:hover :global(.font-bold),.preview #work a:focus-visible :global(.font-bold){color:var(--color-brass);text-decoration:underline;text-underline-offset:4px}
 .preview #experience h3{font-size:30px;line-height:1.2}
-.preview [data-studio-mark]{font:400 26px/1 Arial,sans-serif;letter-spacing:0;color:#f7f1e7;text-transform:none;vertical-align:middle}.preview [data-studio-mark] b{color:#e9a675}
+.preview [data-studio-mark]{font:400 26px/1 var(--font-archivo),sans-serif;letter-spacing:0;color:#f7f1e7;text-transform:none;vertical-align:middle}.preview [data-studio-mark] b{color:#e9a675}
 .preview footer a{color:#f7f1e7}.preview :focus-visible{outline-color:var(--color-brass)}
 :global(body):has(.preview)>:global(div>header){display:none}
 :global(body):has(.preview)>:global(div>main){padding-top:0}
 @media(max-width:759px){.preview h1{line-height:1.04}.preview #experience h3{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.preview :global(.reveal){opacity:1!important;translate:0 0!important;transition:none!important}}
+
+/* Two typefaces only: editorial headings/figures and practical interface text. */
+.preview{--font-mono:var(--font-archivo),system-ui,sans-serif}
+.preview :global(.font-mono){font-family:var(--font-archivo),system-ui,sans-serif}
+.preview [data-studio-proof] :global(.font-bold){font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.04em;line-height:1.15;font-size:clamp(30px,4vw,42px)!important}
