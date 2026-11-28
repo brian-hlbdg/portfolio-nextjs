@@ -140,3 +140,16 @@
 }
 @media(min-width:761px){.studio .mobileNav,.studio .mobileReturn,.studio .mobileColor,.studio .art .mobileDrawing{display:none!important}}
 @media(max-width:760px) and (prefers-reduced-motion:reduce){.studio .canvas .intro,.studio .canvas .index{animation:none!important;transition:none!important}}
+
+/* Mobile artwork is in focus on arrival; only the parent canvas blurs on exploration. */
+@media(max-width:760px){
+ .studio .art .mobileColor{filter:none!important;background:
+ radial-gradient(circle at 108% 103%,#a74318 0 23%,transparent 23.15%),
+ radial-gradient(ellipse 96% 39% at 104% 107%,#204b3b 0 87%,transparent 87.3%),
+ radial-gradient(ellipse 100% 42% at 108% 109%,#9da88b 0 92%,transparent 92.3%),
+ radial-gradient(ellipse 106% 46% at 112% 111%,#d7cbb8 0 96%,transparent 96.3%)}
+ .studio[data-open=false] .art{filter:blur(0)!important}
+ .studio[data-open=true] .art{filter:blur(14px)!important}
+ .studio .header::before,.studio .footer::before{backdrop-filter:none;-webkit-backdrop-filter:none}
+ .studio .art .mobileDrawing{opacity:.85}
+}
