@@ -8,7 +8,7 @@ const stats = [
 
 export function ProofStrip() {
   return (
-    <div className="border-t-[1.5px] border-ink border-b border-black/10">
+    <div data-studio-proof className="border-t-[1.5px] border-ink border-b border-black/10">
       <div className="col">
         <div className="grid grid-cols-1 min-[560px]:grid-cols-3 divide-y min-[560px]:divide-y-0 min-[560px]:divide-x divide-black/10">
           {stats.map(({ figure, label }, i) => (
