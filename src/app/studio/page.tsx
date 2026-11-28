@@ -1,3 +1,3 @@
-import Studio from './Studio';
-export const metadata={title:'B. Hall — Studio prototype',robots:{index:false,follow:false}};
-export default function Page(){return <Studio/>;}
+import Editorial from './editorial';
+export const metadata={title:'B. Hall — Design and technology',robots:{index:false,follow:false}};
+export default function Page(){return <Editorial view="home"/>;}
